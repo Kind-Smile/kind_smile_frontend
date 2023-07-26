@@ -1,104 +1,105 @@
 <template>
-  <card-with-image>
-    <div slot="rightPart">
-      <v-toolbar class="elevation-0 mb-3">
-        <v-toolbar-title
-          class="mx-auto"
-          style="font-size: 1.47rem; font-weight: 400"
-          >خوش آمدید</v-toolbar-title
-        >
-      </v-toolbar>
+  <div>
+    <AppBar></AppBar>
+    <card-with-image>
+      <div slot="rightPart">
+        <v-toolbar class="elevation-0 mb-3">
+          <v-toolbar-title
+            class="mx-auto"
+            style="font-size: 1.47rem; font-weight: 400"
+            >خوش آمدید</v-toolbar-title
+          >
+        </v-toolbar>
 
-      <!-- <p class="text-center text--secondary">
+        <!-- <p class="text-center text--secondary">
           <small
             >لطفا جزئیات خود را برای ثبت نام وارد کرده و عضوی از جامعه عالی ما
             شوید.</small
           >
         </p> -->
 
-      <v-form @submit.prevent="onSubmit">
-        <Input
-          outlined
-          dense
-          name="email"
-          type="email"
-          v-model.trim="formData.email"
-          labelTag
-          labelText="آدرس ایمیل"
-          placeholder="آدرس ایمیل"
-          hide_details
-          class="mb-3"
-        />
-        <Input
-          outlined
-          dense
-          name="password"
-          type="password"
-          v-model.trim="formData.password"
-          labelTag
-          labelText="رمز عبور"
-          placeholder="رمز عبور"
-          hide_details
-        />
+        <v-form @submit.prevent="onSubmit">
+          <Input
+            outlined
+            dense
+            name="email"
+            type="email"
+            v-model.trim="formData.email"
+            labelTag
+            labelText="آدرس ایمیل"
+            placeholder="آدرس ایمیل"
+            hide_details
+            class="mb-3"
+          />
+          <Input
+            outlined
+            dense
+            name="password"
+            type="password"
+            v-model.trim="formData.password"
+            labelTag
+            labelText="رمز عبور"
+            placeholder="رمز عبور"
+            hide_details
+          />
 
-        <vue-recaptcha ref="recaptcha" sitekey="Your key here" class="mt-6"/>
+          <v-row class="my-2">
+            <v-col cols="12" sm="12" md="6">
+              <v-checkbox
+                v-model.trim="formData.rememberMe"
+                label="مرا به خاطر بسپار"
+                color="info"
+                hide-details
+              ></v-checkbox>
+            </v-col>
 
-        <v-row class="my-2">
-          <v-col cols="12" sm="12" md="6">
-            <v-checkbox
-              v-model.trim="formData.rememberMe"
-              label="مرا به خاطر بسپار"
-              color="info"
-              hide-details
-            ></v-checkbox>
-          </v-col>
+            <v-col cols="12" sm="12" md="6" class="mt-5 mb-0">
+              <p class="text-left text-sm-center">
+                <small>
+                  <a
+                    href="/forget-password"
+                    style="color: #5a8dee"
+                    title="Forget Password"
+                  >
+                    رمز عبورتان را فراموش کرده اید؟
+                  </a>
+                </small>
+              </p>
+            </v-col>
+          </v-row>
 
-          <v-col cols="12" sm="12" md="6" class="mt-5 mb-0">
-            <p class="text-left text-sm-center">
-              <small>
-                <a
-                  href="/forgetPassword"
-                  style="color: #5a8dee"
-                  title="Forget Password"
-                >
-                  رمز عبورتان را فراموش کرده اید؟
-                </a>
-              </small>
-            </p>
-          </v-col>
-        </v-row>
+          <Button
+            input_value="ورود"
+            type="submit"
+            color="#5a8dee"
+            dark
+            block
+            large
+            class="mb-3"
+          >
+            <v-icon small left slot="buttonSlotAfter"> mdi-arrow-left </v-icon>
+          </Button>
+        </v-form>
+        <v-divider class="mt-1 mb-5"></v-divider>
 
-        <Button
-          input_value="ورود"
-          type="submit"
-          color="#5a8dee"
-          dark
-          block
-          large
-          class="mb-3"
-        >
-          <v-icon small left slot="buttonSlotAfter"> mdi-arrow-left </v-icon>
-        </Button>
-      </v-form>
-      <v-divider class="mt-1 mb-5"></v-divider>
-
-      <p class="mb-8 text-center text--secondary">
-        <small>حسابی ندارید؟</small>
-        <small>
-          <a href="/register" style="color: #5a8dee" title="Register">
-            ثبت نام
-          </a>
-        </small>
-      </p>
-    </div>
-  </card-with-image>
+        <p class="mb-8 text-center text--secondary">
+          <small>حسابی ندارید؟</small>
+          <small>
+            <a href="/register" style="color: #5a8dee" title="Register">
+              ثبت نام
+            </a>
+          </small>
+        </p>
+      </div>
+    </card-with-image>
+  </div>
 </template>
 
 <script>
-import CardWithImage from "@/components/CardWithImage.vue";
-import Button from "@/components/Button.vue";
-import Input from "@/components/Input.vue";
-import { VueRecaptcha } from 'vue-recaptcha';
+import CardWithImage from "@/components/basics/CardWithImage.vue";
+import Button from "@/components/basics/Button.vue";
+import Input from "@/components/basics/Input.vue";
+import AppBar from "@/components/basics/AppBar.vue";
 import router from "@/router";
 export default {
   name: "Login",
@@ -106,7 +107,7 @@ export default {
     CardWithImage,
     Button,
     Input,
-    VueRecaptcha,
+    AppBar,
   },
   data() {
     return {
@@ -117,13 +118,13 @@ export default {
       },
       items: [
         {
-          src: require("../assets/images/1.jpg"),
+          src: require("../assets/images/clothes.png"),
         },
         {
-          src: require("../assets/images/2.jpg"),
+          src: require("../assets/images/food.png"),
         },
         {
-          src: require("../assets/images/3.jpg"),
+          src: require("../assets/images/money.png"),
         },
       ],
     };

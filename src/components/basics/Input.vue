@@ -79,7 +79,11 @@ export default {
     messages: String,
     hint: String,
 
-    rules: String,
+    // rules: String,
+    rules: {
+      type: Array,
+      required: false,
+    },
     //array
 
     loading: Boolean,

@@ -101,6 +101,7 @@
 <script>
 import AppBar from "@/components/basics/AppBar.vue";
 import Card from "@/components/basics/Card.vue";
+import Dialog from "@/components/basics/Dialog.vue";
 
 export default {
   name: "Home",
@@ -108,6 +109,7 @@ export default {
   components: {
     AppBar,
     Card,
+    Dialog,
   },
 
   computed: {

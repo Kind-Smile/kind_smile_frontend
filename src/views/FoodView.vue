@@ -10,7 +10,7 @@
               :style="{ color: $vuetify.theme.currentTheme.primary }"
               class="bold"
             >
-              پوشاک مهربانی
+              سفره مهربانی
             </div>
 
             <v-row slot="cardText">

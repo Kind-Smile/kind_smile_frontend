@@ -3,6 +3,12 @@ import VueRouter from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import FoodView from '@/views/FoodView.vue'
 
+import Map from '@/views/Map.vue'
+
+import Login from '@/views/LoginView.vue'
+import Register from '@/views/RegisterView.vue'
+import ForgetPassword from '@/views/ForgetPasswordView.vue'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -16,6 +22,33 @@ const routes = [
     path: '/food',
     name: 'food',
     component: FoodView
+  },
+
+  {
+    path: '/map',
+    name: 'map',
+    component: Map
+  },
+
+  
+  {
+    path: '/login',
+    name: 'login',
+    component: Login
+  },
+
+  
+  {
+    path: '/register',
+    name: 'register',
+    component: Register
+  },
+
+  
+  {
+    path: '/forget-password',
+    name: 'forget-password',
+    component: ForgetPassword
   },
 ]
 

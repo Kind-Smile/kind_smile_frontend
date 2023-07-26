@@ -8,7 +8,10 @@
   },
   "dependencies": {
     "@mdi/font": "^7.2.96",
+    "axios": "^1.4.0",
     "core-js": "^3.8.3",
+    "mapbox-gl": "^2.15.0",
+    "mapir-vue": "^2.2.11",
     "register-service-worker": "^1.7.2",
     "vue": "^2.6.14",
     "vue-router": "^3.5.1",
@@ -16,6 +19,7 @@
     "vuex": "^3.6.2"
   },
   "devDependencies": {
+    "@types/mapbox-gl": "^2.7.12",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-pwa": "~5.0.0",
     "@vue/cli-plugin-router": "~5.0.0",
