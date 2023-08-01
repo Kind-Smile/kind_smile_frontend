@@ -7,17 +7,18 @@
 <script>
 export default {
   name: "App",
-
-  data: () => ({
-    //
-  }),
 };
 </script>
 
 <style>
 @import "./font.css";
 .app {
-  font-family: "IranSanse";
+  font-family: "IranSanse" !important;
+  height: 100%;
+}
+
+.textColor, label, h1, h2, h3, h4, h5, h6, small, b, strong, div, a, .v-toolbar-title{
+  color: #312E2E ;
 }
 
 .h2,
@@ -45,13 +46,13 @@ h6 {
   font-size: 1rem;
 }
 
-.semiSmall{
-  font-size: .9rem;
+.semiSmall {
+  font-size: 0.9rem;
 }
 
 .small,
 small {
-  font-size: .8rem;
+  font-size: 0.8rem;
 }
 
 .a,
@@ -61,5 +62,9 @@ a {
 
 .bold {
   font-weight: bold;
+}
+
+.semi-larg {
+  font-size: 1.47rem !important;
 }
 </style>

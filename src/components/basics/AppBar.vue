@@ -21,35 +21,33 @@
 
       <div class="pt-3 mr-2 ml-3">
         <a href="/">
-          <v-icon size="22" :color="$vuetify.theme.currentTheme.textColor"
-            >mdi-home-outline</v-icon
+          <v-icon :color="$vuetify.theme.currentTheme.text" size="22">mdi-home-outline</v-icon
           >
         </a>
       </div>
 
-      <div v-if="isAuthenticate" class="pt-3 mr-2">
+      <div v-if="this.$store.state.isAuthenticate" class="pt-3 mr-2">
         <a>
-          <v-icon size="22" :color="$vuetify.theme.currentTheme.textColor"
-            >mdi-account-outline</v-icon
+          <v-icon :color="$vuetify.theme.currentTheme.text" size="22">mdi-account-outline</v-icon
           >
         </a>
       </div>
 
-      <div v-else class="pt-3 mr-2">
-        <a
-          :style="{ color: $vuetify.theme.currentTheme.textColor }"
-          class="ml-3"
-          @click="openDialog"
-        >
-          <small>ثبت‌نام</small>
-        </a>
+      <div v-else class="pt-3 mr-2 d-flex justify-between">
+        <div>
+          <a
+            class="ml-3"
+            @click="openDialog"
+          >
+            <small>ثبت‌نام</small>
+          </a>
+        </div>
 
-        <a
-          :style="{ color: $vuetify.theme.currentTheme.textColor }"
-          href="/login"
-        >
-          <small>ورود</small>
-        </a>
+        <div>
+          <a href="/login">
+            <small>ورود</small>
+          </a>
+        </div>
       </div>
 
       <Dialog
@@ -59,38 +57,30 @@
       >
         <div slot="dialogText" class="ma-n4">
           <v-list>
-            <v-list-item class="py-1" link to="#">
-              <v-list-item-avatar size="37">
-                <v-img src="https://avatars0.githubusercontent.com/u/9064066?v=4&s=460"></v-img>
+            <v-list-item class="py-1" link to="/register-benefactor">
+              <v-list-item-avatar size="100">
+                <v-img src="@/assets/images/user_1.png"></v-img>
               </v-list-item-avatar>
 
               <v-list-item-content>
                 <v-list-item-title>
-                  <h6>نیکوکار</h6>
+                  <h6>
+                    نیکوکار
+                  </h6>
                 </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
 
-            <v-list-item class="py-1" link to="/login">
-              <v-list-item-avatar size="37">
-                <v-img src="https://avatars0.githubusercontent.com/u/9064066?v=4&s=460"></v-img>
+            <v-list-item class="py-1" link to="/register-charity">
+              <v-list-item-avatar size="100">
+                <v-img src="@/assets/images/user_2.png"></v-img>
               </v-list-item-avatar>
 
               <v-list-item-content>
                 <v-list-item-title>
-                  <h6>خیریه</h6>
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-
-            <v-list-item class="py-1" link to="/register">
-              <v-list-item-avatar size="37">
-                <v-img src="https://avatars0.githubusercontent.com/u/9064066?v=4&s=460"></v-img>
-              </v-list-item-avatar>
-
-              <v-list-item-content>
-                <v-list-item-title>
-                  <h6>نماینده خیریه</h6>
+                  <h6>
+                    خیریه
+                  </h6>
                 </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
@@ -126,10 +116,6 @@ export default {
     return {
       dialogOpen: false,
     };
-  },
-
-  props: {
-    isAuthenticate: Boolean,
   },
 
   methods: {

@@ -1,4 +1,9 @@
 export default {
+  isAuthenticate: false,
+
+  benefactor: { isClick: false, isSetAddress: false, address: "" },
+  charity: { isClick: false, isSetAddress: false, address: "" },
+
   charityList: [
     {
       id: 1,
@@ -8,32 +13,32 @@ export default {
       foodRequiredLeft: "۱۴",
     },
     {
-        id: 2,
-        charityName: "کانون خدمت دوم",
-        collectionTime: "سه‌شنبه ساعت ۱۲:۰۰",
-        foodRequired: "۵۰",
-        foodRequiredLeft: "۱۴",
-      },
-      {
-        id: 3,
-        charityName: "کانون خدمت سوم",
-        collectionTime: "چهارشنبه ساعت ۱۲:۰۰",
-        foodRequired: "۵۰",
-        foodRequiredLeft: "۱۴",
-      },
-      {
-        id: 4,
-        charityName: "کانون خدمت چهارم",
-        collectionTime: "چهارشنبه ساعت ۱۲:۰۰",
-        foodRequired: "۵۰",
-        foodRequiredLeft: "۱۴",
-      },
-      {
-        id: 5,
-        charityName: "کانون خدمت پنجم",
-        collectionTime: "چهارشنبه ساعت ۱۲:۰۰",
-        foodRequired: "۵۰",
-        foodRequiredLeft: "۱۴",
-      },
+      id: 2,
+      charityName: "کانون خدمت دوم",
+      collectionTime: "سه‌شنبه ساعت ۱۲:۰۰",
+      foodRequired: "۵۰",
+      foodRequiredLeft: "۱۴",
+    },
+    {
+      id: 3,
+      charityName: "کانون خدمت سوم",
+      collectionTime: "چهارشنبه ساعت ۱۲:۰۰",
+      foodRequired: "۵۰",
+      foodRequiredLeft: "۱۴",
+    },
+    {
+      id: 4,
+      charityName: "کانون خدمت چهارم",
+      collectionTime: "چهارشنبه ساعت ۱۲:۰۰",
+      foodRequired: "۵۰",
+      foodRequiredLeft: "۱۴",
+    },
+    {
+      id: 5,
+      charityName: "کانون خدمت پنجم",
+      collectionTime: "چهارشنبه ساعت ۱۲:۰۰",
+      foodRequired: "۵۰",
+      foodRequiredLeft: "۱۴",
+    },
   ],
 };

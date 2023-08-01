@@ -3,20 +3,9 @@
     <AppBar></AppBar>
     <card-with-image>
       <div slot="rightPart">
-        <v-toolbar class="elevation-0 mb-3">
-          <v-toolbar-title
-            class="mx-auto"
-            style="font-size: 1.47rem; font-weight: 400"
-            >خوش آمدید</v-toolbar-title
-          >
+        <v-toolbar class="elevation-0 ma-0">
+          <v-toolbar-title class="mx-auto semi-larg">خوش آمدید</v-toolbar-title>
         </v-toolbar>
-
-        <!-- <p class="text-center text--secondary">
-          <small
-            >لطفا جزئیات خود را برای ثبت نام وارد کرده و عضوی از جامعه عالی ما
-            شوید.</small
-          >
-        </p> -->
 
         <v-form @submit.prevent="onSubmit">
           <Input
@@ -43,8 +32,8 @@
             hide_details
           />
 
-          <v-row class="my-2">
-            <v-col cols="12" sm="12" md="6">
+          <v-row class="ma-1">
+            <v-col cols="12" sm="12" md="12" lg="6">
               <v-checkbox
                 v-model.trim="formData.rememberMe"
                 label="مرا به خاطر بسپار"
@@ -53,12 +42,12 @@
               ></v-checkbox>
             </v-col>
 
-            <v-col cols="12" sm="12" md="6" class="mt-5 mb-0">
-              <p class="text-left text-sm-center">
+            <v-col cols="12" sm="12" md="12" lg="6" class="mt-5 mb-0">
+              <p class="text-lg-left">
                 <small>
                   <a
                     href="/forget-password"
-                    style="color: #5a8dee"
+                    :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
                     title="Forget Password"
                   >
                     رمز عبورتان را فراموش کرده اید؟
@@ -71,21 +60,24 @@
           <Button
             input_value="ورود"
             type="submit"
-            color="#5a8dee"
+            :color="$vuetify.theme.currentTheme.thirdColor"
             dark
             block
             large
             class="mb-3"
           >
-            <v-icon small left slot="buttonSlotAfter"> mdi-arrow-left </v-icon>
           </Button>
         </v-form>
         <v-divider class="mt-1 mb-5"></v-divider>
 
-        <p class="mb-8 text-center text--secondary">
+        <p class="ma-0 text-center text--secondary">
           <small>حسابی ندارید؟</small>
           <small>
-            <a href="/register" style="color: #5a8dee" title="Register">
+            <a
+              href="/register"
+              :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
+              title="Register"
+            >
               ثبت نام
             </a>
           </small>
@@ -116,17 +108,6 @@ export default {
         password: "",
         rememberMe: false,
       },
-      items: [
-        {
-          src: require("../assets/images/clothes.png"),
-        },
-        {
-          src: require("../assets/images/food.png"),
-        },
-        {
-          src: require("../assets/images/money.png"),
-        },
-      ],
     };
   },
   methods: {

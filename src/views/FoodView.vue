@@ -25,12 +25,7 @@
                       <a @click="showDialog">{{ charity.charityName }}</a>
                     </div>
 
-                    <div
-                      slot="cardText"
-                      :style="{
-                        color: $vuetify.theme.currentTheme.textColor,
-                      }"
-                    >
+                    <div slot="cardText">
                       <div class="mb-1">
                         <p style="display: inline" class="ml-1">
                           زمان جمع‌آوری:

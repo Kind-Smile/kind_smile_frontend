@@ -2,7 +2,7 @@
   <div>
     <label v-if="labelTag"> {{ labelText }} </label>
     <v-text-field
-      class="mt-2"
+      class="mt-2 custom-input"
       :name="name"
       :value="value"
       :type="type"
@@ -115,7 +115,7 @@ export default {
   > .v-input__control
   > .v-input__slot
   fieldset {
-  border: 1px solid #dfe3e7;
+  border: 1px solid #e6e3df;
   padding: 0.47rem 0.8rem;
   font-size: 1rem;
   line-height: 1.4;
@@ -124,11 +124,22 @@ export default {
 }
 
 .v-text-field--outlined.v-input--is-focused fieldset {
-  color: #475f7b;
-  border-color: #5a8dee;
-  border-width: 1px;
+  color: #ffe9c0;
+  border-color: #FFCC66;
   outline: 0;
-  box-shadow: 0 3px 8px 0 rgb(0 0 0 / 10%);
+  box-shadow: 0 3px 8px 0 rgba(190, 179, 138, 0.1);
   padding-left: 30px;
+}
+
+.v-input input:focus,
+.v-input input:active,
+.v-input textarea:focus,
+.v-input textarea:active{
+  caret-color: #FFCC66;
+}
+
+.custom-input input[type="number"]::-webkit-inner-spin-button,
+.custom-input input[type="number"]::-webkit-outer-spin-button {
+  display: none;
 }
 </style>

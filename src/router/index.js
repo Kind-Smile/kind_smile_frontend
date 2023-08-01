@@ -6,7 +6,8 @@ import FoodView from '@/views/FoodView.vue'
 import Map from '@/views/Map.vue'
 
 import Login from '@/views/LoginView.vue'
-import Register from '@/views/RegisterView.vue'
+import RegisterBenefactor from '@/views/RegisterBenefactor.vue'
+import RegisterCharity from '@/views/RegisterCharity.vue'
 import ForgetPassword from '@/views/ForgetPasswordView.vue'
 
 Vue.use(VueRouter)
@@ -39,9 +40,15 @@ const routes = [
 
   
   {
-    path: '/register',
-    name: 'register',
-    component: Register
+    path: '/register-benefactor',
+    name: 'register-benefactor',
+    component: RegisterBenefactor
+  },
+
+  {
+    path: '/register-charity',
+    name: 'register-charity',
+    component: RegisterCharity
   },
 
   

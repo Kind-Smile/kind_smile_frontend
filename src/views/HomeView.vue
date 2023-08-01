@@ -24,7 +24,7 @@
 
                 <div
                   slot="cardText"
-                  :style="{ color: $vuetify.theme.currentTheme.textColor }"
+                  class="textColor"
                 >
                   شما می‌توانید با ثبت غذای خود، در اطعام چندین نیازمند سهیم
                   شوید.
@@ -54,7 +54,7 @@
 
                 <div
                   slot="cardText"
-                  :style="{ color: $vuetify.theme.currentTheme.textColor }"
+                  class="textColor"
                 >
                   شما می‌توانید با ثبت لباس‌های مناسب خود، در تامین پوشاک چندین
                   نیازمند سهیم شوید.
@@ -84,7 +84,7 @@
 
                 <div
                   slot="cardText"
-                  :style="{ color: $vuetify.theme.currentTheme.textColor }"
+                  class="textColor"
                 >
                   شما می‌توانید با کمک‌های نقدی خود، در رفع نیازهای چندین
                   نیازمند سهیم شوید.
