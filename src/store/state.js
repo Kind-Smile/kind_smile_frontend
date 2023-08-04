@@ -1,8 +1,15 @@
 export default {
   isAuthenticate: false,
+  token: "",
 
-  benefactor: { isClick: false, isSetAddress: false, address: "" },
-  charity: { isClick: false, isSetAddress: false, address: "" },
+  benefactor: { isClickAddress: false, isSetAddress: false, address: "" },
+  charity: {
+    isClickAddress: false,
+    isSetAddress: false,
+    isSetPolygon: false,
+    address: "",
+    polygonPoints: [],
+  },
 
   charityList: [
     {

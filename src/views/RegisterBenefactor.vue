@@ -50,12 +50,14 @@
               v-if="!this.$store.state.benefactor.isSetAddress"
               class="my-3"
             >
-              <a
-                href="/map"
-                :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
-                @click="this.$store.state.benefactor.isClick=true"
-                >انتخاب آدرس از روی نقشه</a
-              >
+              <router-link to="/map">
+                <div
+                  @click="clickAddress"
+                  :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
+                >
+                  انتخاب آدرس از روی نقشه
+                </div>
+              </router-link>
             </v-col>
 
             <v-col cols="12" sm="12" md="12" lg="12" v-else>
@@ -76,14 +78,19 @@
               </v-col>
 
               <v-col cols="12" sm="12" md="12" lg="12">
-                <a
-                  href="/map"
-                  :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
+                <router-link
+                  to="/map"
                   style="font-size: 0.8rem"
                   class="mb-2"
-                  @click="this.$store.state.benefactor.isClick=true"
-                  >برای تغییر آدرس اینجا کلیک کنید.</a
+                  @click="clickAddress"
                 >
+                  <div
+                    @click="clickAddress"
+                    :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
+                  >
+                    برای تغییر آدرس اینجا کلیک کنید.
+                  </div>
+                </router-link>
               </v-col>
             </v-col>
 
@@ -107,7 +114,6 @@
               <Button
                 input_value="ثبت نام"
                 type="submit"
-                :color="$vuetify.theme.currentTheme.thirdColor"
                 dark
                 block
                 large
@@ -177,16 +183,16 @@ export default {
   },
 
   methods: {
+    clickAddress() {
+      this.$updateBenefactorProperty("isClickAddress", true);
+    },
+
     onSubmit() {
       console.log(this.formData);
       const data = this.formData;
       // this.$store.dispatch('login', {data})
-      this.$store.commit("login", "absdf");
-      router.push("/");
-    },
-    logout() {
-      this.$store.commit("logout");
-      router.push("/");
+      // this.$store.commit("login", "absdf");
+      // router.push("/");
     },
   },
 

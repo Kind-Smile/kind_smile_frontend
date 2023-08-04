@@ -1,20 +1,17 @@
 <template>
-  <div style="width: 100%; height: 100%" class="pb-10">
-    <mapir :apiKey="mapirToken" :center="coordinates" @click="mapOnClick" ref="mapir">
+  <div style="width: 100%; height: 100%">
+    <mapir :apiKey="mapirToken" :center="coordinates" @click="mapOnClick">
       <mapMarker
-        v-for="(point, index) in points"
-        :key="index"
-        :coordinates="point"
+        v-if="markerCoordinates"
+        :coordinates="markerCoordinates"
         color="#0"
         :draggable="true"
-        @dragend="onMarkerDragEnd(index)"
+        @dragend="onMarkerDragEnd"
       ></mapMarker>
     </mapir>
 
     <div class="point-panel">
-      <button @click="addPoint">Add Point</button>
-      <button @click="removeLastPoint">Remove Last Point</button>
-      <button @click="removeAllPoints">Remove All Points</button>
+      <Button input_value="ثبت" @click="saveMap"></Button>
     </div>
   </div>
 </template>
@@ -22,6 +19,8 @@
 <script>
 import { mapir, mapMarker } from "mapir-vue";
 import axios from "axios";
+import Button from "@/components/basics/Button.vue";
+import router from "@/router";
 
 export default {
   name: "Map",
@@ -29,122 +28,77 @@ export default {
   components: {
     mapir,
     mapMarker,
+    Button,
   },
   data() {
     return {
       coordinates: [51.655306, 32.656192],
-      points: [],
+      markerCoordinates: null,
+      address: "",
       mapirToken: process.env.VUE_APP_MAPIR_API_KEY,
-      mapInstance: null,
-      polygonLayerAdded: false,
     };
-  },
-  watch: {
-    points: {
-      handler() {
-        this.drawPolygon();
-      },
-      deep: true,
-    },
   },
   methods: {
     async mapOnClick(e) {
-      const newPoint = [e.actualEvent.lngLat.lng, e.actualEvent.lngLat.lat];
-      this.addPointToMap(newPoint);
-      await this.reverseGeocode(newPoint);
-    },
+      this.markerCoordinates = [
+        e.actualEvent.lngLat.lng,
+        e.actualEvent.lngLat.lat,
+      ];
 
-    onMarkerDragEnd(index) {
-      const updatedPoint = [this.points[index][0], this.points[index][1]];
-      this.points.splice(index, 1, updatedPoint);
-      // Optionally, you can perform reverse geocoding here if needed.
-    },
-
-    async reverseGeocode(point) {
       try {
         const response = await axios.get(
-          `https://map.ir/reverse?lat=${point[1]}&lon=${point[0]}`,
+          `https://map.ir/reverse?lat=${this.markerCoordinates[1]}&lon=${this.markerCoordinates[0]}`,
           {
             headers: {
               "x-api-key": this.mapirToken,
             },
           }
         );
-        const address = response.data.address;
-        alert(`${address}`);
+
+        this.address = response.data.address;
+        alert(`${this.address}`);
       } catch (error) {
         console.error("Error fetching reverse geocoding data:", error);
       }
     },
 
-    addPoint() {
-      // Logic to add a new point at a specific location (e.g., center of the map)
-      const newPoint = [...this.coordinates];
-      this.addPointToMap(newPoint);
-    },
-
-    addPointToMap(point) {
-      this.points.push(point);
-    },
-
-    removeLastPoint() {
-      this.points.pop();
-    },
-
-    removeAllPoints() {
-      this.points = [];
-    },
-
-    drawPolygon() {
-      if (this.mapInstance && this.points.length >= 3) {
-        if (!this.polygonLayerAdded) {
-          this.mapInstance.addLayer({
-            id: "polygon-layer",
-            type: "fill",
-            source: {
-              type: "geojson",
-              data: {
-                type: "Feature",
-                geometry: {
-                  type: "Polygon",
-                  coordinates: [this.points],
-                },
-              },
+    async onMarkerDragEnd(e) {
+      this.markerCoordinates = [
+        e.actualEvent.target._lngLat.lng,
+        e.actualEvent.target._lngLat.lat,
+      ];
+      try {
+        const response = await axios.get(
+          `https://map.ir/reverse?lat=${this.markerCoordinates[1]}&lon=${this.markerCoordinates[0]}`,
+          {
+            headers: {
+              "x-api-key": this.mapirToken,
             },
-            paint: {
-              "fill-color": "#00F",
-              "fill-opacity": 0.3,
-            },
-          });
-          this.polygonLayerAdded = true;
-        } else {
-          this.mapInstance.getSource("polygon-layer").setData({
-            type: "Feature",
-            geometry: {
-              type: "Polygon",
-              coordinates: [this.points],
-            },
-          });
-        }
-      } else if (this.polygonLayerAdded) {
-        this.mapInstance.removeLayer("polygon-layer");
-        this.mapInstance.removeSource("polygon-layer");
-        this.polygonLayerAdded = false;
+          }
+        );
+
+        this.address = response.data.address;
+        alert(`${this.address}`);
+      } catch (error) {
+        console.error("Error fetching reverse geocoding data:", error);
       }
     },
-  },
-  mounted() {
-    this.mapInstance = this.$refs.mapir.mapInstance;
+
+    saveMap() {
+      if (this.$store.state.benefactor.isClickAddress) {
+        this.$updateBenefactorProperty("isClickAddress", false);
+        this.$updateBenefactorProperty("isSetAddress", true);
+        this.$updateBenefactorProperty("address", this.address);
+      } 
+      
+      else if (this.$store.state.charity.isClickAddress) {
+        this.$updateCharityProperty("isClickAddress", false);
+        this.$updateCharityProperty("isSetAddress", true);
+        this.$updateCharityProperty("address", this.address);
+      }
+
+      router.back();
+    },
   },
 };
 </script>
-
-<style>
-.point-panel {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  display: flex;
-  flex-direction: column;
-}
-</style>

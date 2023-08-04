@@ -4,6 +4,7 @@ import HomeView from '@/views/HomeView.vue'
 import FoodView from '@/views/FoodView.vue'
 
 import Map from '@/views/Map.vue'
+import Polygon from '@/views/Polygon.vue'
 
 import Login from '@/views/LoginView.vue'
 import RegisterBenefactor from '@/views/RegisterBenefactor.vue'
@@ -29,6 +30,12 @@ const routes = [
     path: '/map',
     name: 'map',
     component: Map
+  },
+
+  {
+    path: '/polygon',
+    name: 'polygon',
+    component: Polygon
   },
 
   

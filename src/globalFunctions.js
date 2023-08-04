@@ -7,3 +7,11 @@ export function hexToRgba(hex, opacity = 1) {
 
   return `rgba(${r},${g},${b},${opacity})`;
 }
+
+export function updateBenefactorProperty(property, newVal) {
+  this.$store.commit("updateBenefactor", { property, newVal });
+}
+
+export function updateCharityProperty(property, newVal) {
+  this.$store.commit("updateCharity", { property, newVal });
+}

@@ -159,7 +159,7 @@
                 hide-details
                 clear-icon="mdi-close-circle"
                 v-model="formData.institute"
-                class="ma-2"
+                class="my-2"
               ></v-textarea>
             </v-col>
 
@@ -171,27 +171,29 @@
                 hide-details
                 clear-icon="mdi-close-circle"
                 v-model="formData.description"
-                class="ma-2"
+                class="my-2"
               ></v-textarea>
             </v-col>
 
             <v-col
               cols="12"
               sm="12"
-              md="12"
-              lg="6"
+              md="4"
+              lg="4"
               v-if="!this.$store.state.charity.isSetAddress"
-              class="ma-2"
+              class="ma-2 mr-0"
             >
-              <a
-                href="/map"
-                :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
-                @click="this.$store.state.charity.isClick = true"
-                >انتخاب آدرس خیریه از روی نقشه</a
-              >
+              <router-link to="/map">
+                <div
+                  @click="clickAddress"
+                  :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
+                >
+                  انتخاب آدرس خیریه از روی نقشه
+                </div>
+              </router-link>
             </v-col>
 
-            <v-col cols="12" sm="12" md="12" lg="12" v-else>
+            <v-col cols="12" sm="12" md="4" lg="4" v-else class="pa-0">
               <v-col cols="12" sm="12" md="12" lg="12">
                 <Input
                   outlined
@@ -208,16 +210,42 @@
                 />
               </v-col>
 
-              <v-col cols="12" sm="12" md="12" lg="12">
-                <a
-                  href="/map"
-                  :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
-                  style="font-size: 0.8rem"
-                  class="mb-2"
-                  @click="this.$store.state.charity.isClick = true"
-                  >برای تغییر آدرس اینجا کلیک کنید.</a
-                >
+              <v-col cols="12" sm="12" md="12" lg="12" class="pt-0">
+                <router-link to="/map" style="font-size: 0.8rem" class="mb-2">
+                  <div
+                    @click="clickAddress"
+                    :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
+                  >
+                    برای تغییر آدرس اینجا کلیک کنید.
+                  </div>
+                </router-link>
               </v-col>
+            </v-col>
+
+            <v-col
+              cols="12"
+              sm="12"
+              md="4"
+              lg="4"
+              v-if="!this.$store.state.charity.isSetPolygon"
+              class="ma-2 mr-0"
+            >
+              <router-link
+                to="/polygon"
+                :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
+                >انتخاب محدوده سرویس خیریه از روی نقشه</router-link
+              >
+            </v-col>
+
+            <v-col cols="12" sm="12" md="12" lg="12" v-else>
+              <router-link
+                to="/polygon"
+                :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
+                style="font-size: 0.8rem"
+                class="mb-2"
+                >برای نمایش یا تغییر محدوده سرویس خیریه اینجا کلیک
+                کنید.</router-link
+              >
             </v-col>
 
             <v-col cols="12" sm="12" md="12" lg="12">
@@ -231,16 +259,15 @@
                 labelText="رمز عبور"
                 placeholder="رمز عبور"
                 hint="حداقل 8 کاراکتر"
-                :rules="[rules.password]"
                 class="mb-n2"
               />
+              <!-- :rules="[rules.password]" -->
             </v-col>
 
             <v-col cols="12" sm="12" md="12">
               <Button
                 input_value="ثبت نام"
                 type="submit"
-                :color="$vuetify.theme.currentTheme.thirdColor"
                 dark
                 block
                 large
@@ -301,6 +328,7 @@ export default {
         institute: "",
         description: "",
         address: this.$store.state.charity.address,
+        polygon: this.$store.state.charity.polygonPoints,
         password: "",
       },
 
@@ -328,18 +356,19 @@ export default {
   },
 
   methods: {
+    clickAddress() {
+      this.$updateCharityProperty("isClickAddress", true);
+    },
+
     onSubmit() {
       console.log(this.formData);
       const data = this.formData;
       // this.$store.dispatch('login', {data})
-      this.$store.commit("login", "absdf");
-      router.push("/");
-    },
-    logout() {
-      this.$store.commit("logout");
-      router.push("/");
+      // this.$store.commit("login", "absdf");
+      // router.push("/");
     },
   },
+
 
   computed: {
     getCardColor() {

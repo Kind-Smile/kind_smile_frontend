@@ -11,13 +11,14 @@
           <Input
             outlined
             dense
-            name="email"
-            type="email"
-            v-model.trim="formData.email"
+            name="phoneNumber"
+            type="number"
+            v-model.trim="formData.phoneNumber"
             labelTag
-            labelText="آدرس ایمیل"
-            placeholder="آدرس ایمیل"
+            labelText="تلفن همراه"
+            placeholder="تلفن همراه"
             hide_details
+            suffix="| 98+"
             class="mb-3"
           />
           <Input
@@ -60,7 +61,6 @@
           <Button
             input_value="ورود"
             type="submit"
-            :color="$vuetify.theme.currentTheme.thirdColor"
             dark
             block
             large
@@ -104,7 +104,7 @@ export default {
   data() {
     return {
       formData: {
-        email: "",
+        phoneNumber: "",
         password: "",
         rememberMe: false,
       },
@@ -115,8 +115,8 @@ export default {
       console.log(this.formData);
       const data = this.formData;
       // this.$store.dispatch('login', {data})
-      this.$store.commit("login", "absdf");
-      router.push("/");
+      // this.$store.commit("login", "absdf");
+      // router.push("/");
     },
     logout() {
       this.$store.commit("logout");

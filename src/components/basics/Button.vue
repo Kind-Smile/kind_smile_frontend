@@ -53,7 +53,12 @@ export default {
     text: Boolean,
     block: Boolean,
     rounded: Boolean,
-    color: String,
+    color: {
+      type: String,
+      default: function () {
+        return this.$vuetify.theme.currentTheme.thirdColor
+      },
+    },
     dark: Boolean,
     light: Boolean,
     depressed: Boolean,

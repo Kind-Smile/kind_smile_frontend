@@ -76,8 +76,10 @@ export default {
 
 <style>
 .background {
-  background-image: url("@/assets/images/app_bar.jpg");
+  background-image: url("@/assets/images/background.jpg");
+  background-size: cover;
+  background-position: center center;
   width: 100%;
   height: 100%;
-}
+  }
 </style>
