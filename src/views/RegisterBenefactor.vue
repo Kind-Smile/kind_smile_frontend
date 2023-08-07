@@ -9,7 +9,7 @@
           >
         </v-toolbar>
 
-        <v-form @submit.prevent="onSubmit">
+        <v-form @submit.prevent="onSubmit" ref="benefactorForm">
           <v-row class="mb-2 mt-4 justify-space-between">
             <v-col cols="12" sm="12" md="12" lg="6">
               <Input
@@ -105,9 +105,9 @@
                 labelText="رمز عبور"
                 placeholder="رمز عبور"
                 hint="حداقل 8 کاراکتر"
-                :rules="[rules.password]"
                 class="mb-n2"
               />
+              <!-- :rules="[rules.password]" -->
             </v-col>
 
             <v-col cols="12" sm="12" md="12">
@@ -126,15 +126,15 @@
         <v-divider class="mt-1 mb-5"></v-divider>
 
         <p class="ma-0 text-center text--secondary">
-          <small>حسابی ندارید؟</small>
+          <small>حساب کاربری دارید؟</small>
           <small>
-            <a
-              href="/register"
-              title="Register"
+            <router-link
+              to="/login"
+              title="login"
               :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
             >
-              ثبت نام
-            </a>
+              ورود
+            </router-link>
           </small>
         </p>
       </div>
@@ -184,14 +184,19 @@ export default {
 
   methods: {
     clickAddress() {
+      localStorage.setItem("benefactorFormData", JSON.stringify(this.formData));
       this.$updateBenefactorProperty("isClickAddress", true);
     },
 
     onSubmit() {
+      localStorage.removeItem("benefactorFormData");
+      this.$refs.benefactorForm.reset();
+      this.$updateBenefactorProperty("isSetAddress", false);
+      this.$updateBenefactorProperty("address", "");
+      console.log(JSON.parse(localStorage.getItem("benefactorFormData")));
       console.log(this.formData);
       const data = this.formData;
-      // this.$store.dispatch('login', {data})
-      // this.$store.commit("login", "absdf");
+      // this.$store.dispatch('registerBenefactor', {data})
       // router.push("/");
     },
   },
@@ -200,6 +205,14 @@ export default {
     getCardColor() {
       return this.$hexToRgba(this.$vuetify.theme.currentTheme.secondary, 0.15);
     },
+  },
+
+  mounted() {
+    const formData = JSON.parse(localStorage.getItem("benefactorFormData"));
+    if (formData) {
+      this.formData = formData;
+      this.formData.address = this.$store.state.benefactor.address;
+    }
   },
 };
 </script>

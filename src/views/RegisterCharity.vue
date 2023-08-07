@@ -9,7 +9,7 @@
           >
         </v-toolbar>
 
-        <v-form @submit.prevent="onSubmit">
+        <v-form @submit.prevent="onSubmit" ref="charityForm">
           <v-row class="mb-2 mt-4 justify-start">
             <v-col cols="12" sm="12" md="12" lg="4">
               <Input
@@ -75,17 +75,34 @@
             </v-col>
 
             <v-col cols="12" sm="12" md="12" lg="4">
-              <label> شهر </label>
+              <label> استان </label>
               <v-autocomplete
                 outlined
                 v-model="formData.selectedState"
-                :items="states"
+                :items="this.$store.state.states"
+                item-text="name"
+                item-value="id"
+                hide-details
+                placeholder="استان خود را انتخاب کنید"
+                @change="onStateSelect"
+                class="ma-2"
+              >
+              </v-autocomplete>
+            </v-col>
+
+            <v-col cols="12" sm="12" md="12" lg="4">
+              <label> شهر </label>
+              <v-autocomplete
+                outlined
+                v-model="formData.selectedRegion"
+                :items="this.$store.state.states"
                 item-text="name"
                 item-value="id"
                 hide-details
                 placeholder="شهر خود را انتخاب کنید"
                 class="ma-2"
               >
+                <!-- :items="regions" -->
               </v-autocomplete>
             </v-col>
 
@@ -183,7 +200,12 @@
               v-if="!this.$store.state.charity.isSetAddress"
               class="ma-2 mr-0"
             >
-              <router-link to="/map">
+              <router-link
+                :to="{
+                  path: '/map',
+                  query: { lat: this.latitude, lng: this.longitude },
+                }"
+              >
                 <div
                   @click="clickAddress"
                   :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
@@ -233,8 +255,14 @@
               <router-link
                 to="/polygon"
                 :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
-                >انتخاب محدوده سرویس خیریه از روی نقشه</router-link
               >
+                <div
+                  @click="clickPolygon"
+                  :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
+                >
+                  انتخاب محدوده سرویس خیریه از روی نقشه
+                </div>
+              </router-link>
             </v-col>
 
             <v-col cols="12" sm="12" md="12" lg="12" v-else>
@@ -243,8 +271,12 @@
                 :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
                 style="font-size: 0.8rem"
                 class="mb-2"
-                >برای نمایش یا تغییر محدوده سرویس خیریه اینجا کلیک
-                کنید.</router-link
+                ><div
+                  @click="clickPolygon"
+                  :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
+                >
+                  برای نمایش یا تغییر محدوده سرویس خیریه اینجا کلیک کنید.
+                </div></router-link
               >
             </v-col>
 
@@ -280,15 +312,15 @@
         <v-divider class="mt-1 mb-5"></v-divider>
 
         <p class="ma-0 text-center text--secondary">
-          <small>حسابی ندارید؟</small>
+          <small>حساب کاربری دارید؟</small>
           <small>
-            <a
-              href="/register"
-              title="Register"
+            <router-link
+              to="/login"
+              title="login"
               :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
             >
-              ثبت نام
-            </a>
+              ورود
+            </router-link>
           </small>
         </p>
       </div>
@@ -302,6 +334,7 @@ import Button from "@/components/basics/Button.vue";
 import Input from "@/components/basics/Input.vue";
 import AppBar from "@/components/basics/AppBar.vue";
 import router from "@/router";
+import axios from "axios";
 
 export default {
   name: "RegisterCharity",
@@ -321,6 +354,7 @@ export default {
         phoneNumber: "",
         correlation: "",
         selectedState: "",
+        selectedRegion: "",
         officer: "",
         officerPhone: "",
         cardNumber: "",
@@ -332,13 +366,9 @@ export default {
         password: "",
       },
 
-      states: [
-        { name: "اصفهان", id: 1 },
-        { name: "تهران", id: 2 },
-        { name: "شیراز", id: 3 },
-        { name: "بوشهر", id: 4 },
-        { name: "رشت", id: 5 },
-      ],
+      regions: [],
+      latitude: "",
+      longitude: "",
 
       rules: {
         required: (value) => {
@@ -356,24 +386,71 @@ export default {
   },
 
   methods: {
+    onStateSelect() {
+      const selectedStateObject = this.$store.state.states.find(
+        (state) => state.id == this.formData.selectedState
+      );
+
+      if (selectedStateObject) {
+        this.latitude = selectedStateObject.latitude;
+        this.longitude = selectedStateObject.longitude;
+      }
+    },
+
+    async fetchRegionsData() {
+      try {
+        const response = await axios.get(
+          "iran-locations-api.vercel.app/api/v1/cities?state=اصفهان"
+        );
+        this.regions = response.data;
+
+        localStorage.setItem("regionsData", JSON.stringify(response.data));
+      } catch (error) {
+        console.error("Error fetching regions data:", error);
+      }
+    },
+
     clickAddress() {
+      localStorage.setItem("charityFormData", JSON.stringify(this.formData));
       this.$updateCharityProperty("isClickAddress", true);
     },
 
+    clickPolygon() {
+      localStorage.setItem("charityFormData", JSON.stringify(this.formData));
+    },
+
     onSubmit() {
+      localStorage.removeItem("charityFormData");
+      this.$refs.charityForm.reset();
+      this.$updateCharityProperty("isSetAddress", false);
+      this.$updateCharityProperty("address", "");
       console.log(this.formData);
       const data = this.formData;
-      // this.$store.dispatch('login', {data})
-      // this.$store.commit("login", "absdf");
+      // this.$store.dispatch('registerCharity', {data})
       // router.push("/");
     },
   },
-
 
   computed: {
     getCardColor() {
       return this.$hexToRgba(this.$vuetify.theme.currentTheme.secondary, 0.15);
     },
+  },
+
+  mounted() {
+    const formData = JSON.parse(localStorage.getItem("charityFormData"));
+    if (formData) {
+      this.formData = formData;
+      this.formData.address = this.$store.state.charity.address;
+      this.formData.polygon = this.$store.state.charity.polygonPoints;
+    }
+
+    // const cachedData = localStorage.getItem("regionsData");
+    // if (cachedData) {
+    //   this.regions = JSON.parse(cachedData);
+    // } else {
+    //   this.fetchRegionsData();
+    // }
   },
 };
 </script>

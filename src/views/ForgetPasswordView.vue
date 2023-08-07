@@ -4,8 +4,7 @@
     <card-with-image>
       <div slot="rightPart">
         <v-toolbar class="elevation-0 mb-3">
-          <v-toolbar-title
-            class="mx-auto semi-larg" 
+          <v-toolbar-title class="mx-auto semi-larg"
             >رمز عبورتان را فراموش کرده اید؟</v-toolbar-title
           >
         </v-toolbar>

@@ -56,7 +56,7 @@ export default {
     color: {
       type: String,
       default: function () {
-        return this.$vuetify.theme.currentTheme.thirdColor
+        return this.$vuetify.theme.currentTheme.thirdColor;
       },
     },
     dark: Boolean,

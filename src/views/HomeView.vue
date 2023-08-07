@@ -22,10 +22,7 @@
                   سفره مهربانی
                 </div>
 
-                <div
-                  slot="cardText"
-                  class="textColor"
-                >
+                <div slot="cardText" class="textColor">
                   شما می‌توانید با ثبت غذای خود، در اطعام چندین نیازمند سهیم
                   شوید.
                 </div>
@@ -52,10 +49,7 @@
                   پوشاک مهربانی
                 </div>
 
-                <div
-                  slot="cardText"
-                  class="textColor"
-                >
+                <div slot="cardText" class="textColor">
                   شما می‌توانید با ثبت لباس‌های مناسب خود، در تامین پوشاک چندین
                   نیازمند سهیم شوید.
                 </div>
@@ -82,10 +76,7 @@
                   کمک‌های نقدی
                 </div>
 
-                <div
-                  slot="cardText"
-                  class="textColor"
-                >
+                <div slot="cardText" class="textColor">
                   شما می‌توانید با کمک‌های نقدی خود، در رفع نیازهای چندین
                   نیازمند سهیم شوید.
                 </div>

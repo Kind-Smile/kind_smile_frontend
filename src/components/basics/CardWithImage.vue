@@ -81,5 +81,5 @@ export default {
   background-position: center center;
   width: 100%;
   height: 100%;
-  }
+}
 </style>

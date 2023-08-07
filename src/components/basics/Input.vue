@@ -125,7 +125,7 @@ export default {
 
 .v-text-field--outlined.v-input--is-focused fieldset {
   color: #ffe9c0;
-  border-color: #FFCC66;
+  border-color: #ffcc66;
   outline: 0;
   box-shadow: 0 3px 8px 0 rgba(190, 179, 138, 0.1);
   padding-left: 30px;
@@ -134,8 +134,8 @@ export default {
 .v-input input:focus,
 .v-input input:active,
 .v-input textarea:focus,
-.v-input textarea:active{
-  caret-color: #FFCC66;
+.v-input textarea:active {
+  caret-color: #ffcc66;
 }
 
 .custom-input input[type="number"]::-webkit-inner-spin-button,

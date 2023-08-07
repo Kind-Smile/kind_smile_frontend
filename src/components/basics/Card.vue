@@ -13,7 +13,7 @@
         :sm="imageNewLine ? '7' : '3'"
         :cols="imageNewLine ? '7' : '3'"
         class="mx-auto"
-        :class="{'my-auto':!imageNewLine, 'mt-lg-5 mt-md-5':imageNewLine}"
+        :class="{ 'my-auto': !imageNewLine, 'mt-lg-5 mt-md-5': imageNewLine }"
         v-if="image"
       >
         <v-img :src="getImagePath(cardImage)" class="mr-3"></v-img>
@@ -22,11 +22,12 @@
       <v-col
         :lg="image ? '9' : '12'"
         :md="image ? '9' : '12'"
-        :sm="!image||imageNewLine ? '12' : '9'"
-        :cols="!image||imageNewLine ? '12' : '9'"
+        :sm="!image || imageNewLine ? '12' : '9'"
+        :cols="!image || imageNewLine ? '12' : '9'"
         :class="{
           'text-center':
-            (this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm)&&imageNewLine,
+            (this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm) &&
+            imageNewLine,
         }"
       >
         <v-card-title v-if="title" class="px-4 pb-3">

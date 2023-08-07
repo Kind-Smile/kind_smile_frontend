@@ -4,7 +4,7 @@ import Vuetify from "vuetify/lib/framework";
 import fa from "vuetify/es5/locale/fa";
 
 import "@mdi/font/css/materialdesignicons.css";
-import 'vuetify/dist/vuetify.min.css';
+import "vuetify/dist/vuetify.min.css";
 
 Vue.use(Vuetify);
 
@@ -23,10 +23,10 @@ export default new Vuetify({
   theme: {
     themes: {
       light: {
-        primary: '#EC6262', // red
-        secondary: '#FFCC66', // yellow
-        thirdColor: '#66CC99', // green
-        text: '#312E2E' //dark gray
+        primary: "#EC6262", // red
+        secondary: "#FFCC66", // yellow
+        thirdColor: "#66CC99", // green
+        text: "#312E2E", //dark gray
       },
     },
   },

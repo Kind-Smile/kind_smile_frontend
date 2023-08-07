@@ -7,6 +7,10 @@
 <script>
 export default {
   name: "App",
+
+  created() {
+    this.$store.commit("checkAuthState");
+  },
 };
 </script>
 
@@ -17,8 +21,21 @@ export default {
   height: 100%;
 }
 
-.textColor, label, h1, h2, h3, h4, h5, h6, small, b, strong, div, a, .v-toolbar-title{
-  color: #312E2E ;
+.textColor,
+label,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+small,
+b,
+strong,
+div,
+a,
+.v-toolbar-title {
+  color: #312e2e;
 }
 
 .h2,

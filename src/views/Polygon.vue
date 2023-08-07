@@ -147,9 +147,10 @@ export default {
     },
 
     savePolygon() {
-      this.$updateCharityProperty('isSetPolygon', true)
-      this.$updateCharityProperty('polygonPoints', this.points)
-      router.back()
+      this.$updateCharityProperty("isSetPolygon", true);
+      this.$updateCharityProperty("polygonPoints", this.points);
+      console.log(this.$store.state.charity.polygonPoints);
+      router.back();
     },
   },
 
@@ -157,6 +158,13 @@ export default {
     points(newPoints) {
       this.isAllowToAddPoints = newPoints.length < 10;
     },
+  },
+
+  mounted() {
+    if (this.$store.state.charity.isSetPolygon) {
+      this.points = this.$store.state.charity.polygonPoints;
+      this.updatePolygonGeoJson();
+    }
   },
 };
 </script>
@@ -171,6 +179,6 @@ export default {
 }
 
 .v-icon.notranslate.v-alert__icon.mdi.mdi-alert-circle-outline.theme--dark {
-  color: #EC6262;
+  color: #ec6262;
 }
 </style>

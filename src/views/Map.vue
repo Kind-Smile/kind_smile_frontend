@@ -10,9 +10,36 @@
       ></mapMarker>
     </mapir>
 
-    <div class="point-panel">
-      <Button input_value="ثبت" @click="saveMap"></Button>
-    </div>
+    <v-row no-gutters>
+      <v-col lg="12" md="12" sm="12" cols="12" class="map-panel px-7">
+        <v-row class="justify-space-between align-center">
+          <v-col
+            lg="10"
+            md="10"
+            sm="10"
+            cols="12"
+            class="pa-2 py-auto"
+            v-if="
+              this.$store.state.charity.isSetAddress ||
+              this.$store.state.benefactor.isSetAddress
+            "
+          >
+            <Input
+              filled
+              dense
+              name="address"
+              type="text"
+              v-model.trim="this.address"
+              label="آدرس"
+              hide_details
+              readonly
+            />
+          </v-col>
+          <v-col lg="2" md="2" sm="2" cols="12" class="pa-2 py-auto">
+            <Button input_value="ثبت" @click="saveMap" block></Button>
+          </v-col>
+        </v-row> </v-col
+    ></v-row>
   </div>
 </template>
 
@@ -20,6 +47,7 @@
 import { mapir, mapMarker } from "mapir-vue";
 import axios from "axios";
 import Button from "@/components/basics/Button.vue";
+import Input from "@/components/basics/Input.vue";
 import router from "@/router";
 
 export default {
@@ -29,6 +57,7 @@ export default {
     mapir,
     mapMarker,
     Button,
+    Input,
   },
   data() {
     return {
@@ -87,18 +116,57 @@ export default {
     saveMap() {
       if (this.$store.state.benefactor.isClickAddress) {
         this.$updateBenefactorProperty("isClickAddress", false);
-        this.$updateBenefactorProperty("isSetAddress", true);
-        this.$updateBenefactorProperty("address", this.address);
-      } 
-      
-      else if (this.$store.state.charity.isClickAddress) {
+      } else if (this.$store.state.charity.isClickAddress) {
         this.$updateCharityProperty("isClickAddress", false);
-        this.$updateCharityProperty("isSetAddress", true);
-        this.$updateCharityProperty("address", this.address);
       }
 
       router.back();
     },
   },
+
+  watch: {
+    address(newValue) {
+      if (this.$store.state.benefactor.isClickAddress) {
+        this.$updateBenefactorProperty("isSetAddress", true);
+        this.$updateBenefactorProperty("address", newValue);
+      } else if (this.$store.state.charity.isClickAddress) {
+        this.$updateCharityProperty("isSetAddress", true);
+        this.$updateCharityProperty("address", newValue);
+      }
+    },
+  },
+
+  created() {
+    // if (
+    //   this.$store.state.charity.isClickAddress &&
+    //   !this.$store.state.charity.isSetAddress
+    // ) {
+    //   this.coordinates[0] = this.$route.query.lng;
+    //   this.coordinates[1] = this.$route.query.lat;
+    // }
+  },
+
+  mounted() {
+    if (
+      this.$store.state.benefactor.isClickAddress &&
+      this.$store.state.benefactor.isSetAddress
+    ) {
+      this.address = this.$store.state.benefactor.address;
+    } else if (
+      this.$store.state.charity.isClickAddress &&
+      this.$store.state.charity.isSetAddress
+    ) {
+      this.address = this.$store.state.charity.address;
+    }
+  },
 };
 </script>
+
+<style>
+.map-panel {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+</style>

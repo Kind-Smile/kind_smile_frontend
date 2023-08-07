@@ -21,24 +21,31 @@
 
       <div class="pt-3 mr-2 ml-3">
         <a href="/">
-          <v-icon :color="$vuetify.theme.currentTheme.text" size="22">mdi-home-outline</v-icon
+          <v-icon :color="$vuetify.theme.currentTheme.text" size="22"
+            >mdi-home-outline</v-icon
           >
         </a>
       </div>
 
-      <div v-if="this.$store.state.isAuthenticate" class="pt-3 mr-2">
-        <a>
-          <v-icon :color="$vuetify.theme.currentTheme.text" size="22">mdi-account-outline</v-icon
+      <div v-if="this.$store.state.isAuthenticated" class="pt-3">
+        <router-link to="#" class="ml-3">
+          <v-icon :color="$vuetify.theme.currentTheme.text" size="22"
+            >mdi-account-outline</v-icon
           >
+        </router-link>
+
+        <a>
+          <div style="display: inline" @click="logoutHandler">
+            <v-icon :color="$vuetify.theme.currentTheme.text" size="22"
+              >mdi-logout-variant</v-icon
+            >
+          </div>
         </a>
       </div>
 
       <div v-else class="pt-3 mr-2 d-flex justify-between">
         <div>
-          <a
-            class="ml-3"
-            @click="openDialog"
-          >
+          <a class="ml-3" @click="openDialog">
             <small>ثبت‌نام</small>
           </a>
         </div>
@@ -64,9 +71,7 @@
 
               <v-list-item-content>
                 <v-list-item-title>
-                  <h6>
-                    نیکوکار
-                  </h6>
+                  <h6>نیکوکار</h6>
                 </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
@@ -78,9 +83,7 @@
 
               <v-list-item-content>
                 <v-list-item-title>
-                  <h6>
-                    خیریه
-                  </h6>
+                  <h6>خیریه</h6>
                 </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
@@ -124,6 +127,9 @@ export default {
     },
     updateDialogOpen(newVal) {
       this.dialogOpen = newVal;
+    },
+    logoutHandler() {
+      this.$store.commit("logout");
     },
   },
 
