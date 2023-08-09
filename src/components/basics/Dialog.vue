@@ -3,22 +3,22 @@
     <v-dialog v-model="dialog" persistent max-width="500px">
       <Card class="app" title text actions :image="false" cardColor="#ffffff">
         <div slot="cardTitle">
-          <small>{{ title }}</small>
+          <div><small>{{ title }}</small></div>
         </div>
 
         <div slot="cardText">
           <slot name="dialogText"></slot>
         </div>
 
-        <div slot="cardActions">
+        <div slot="cardActions" class="close-button">
           <Button
             large
-            text
+            icon
             @click="closeDialog"
-            input_value="بستن"
             :color="this.$vuetify.theme.currentTheme.primary"
-            class="mb-n3"
-          ></Button>
+          >
+          <v-icon slot="buttonSlotBefor" size="22">mdi-close</v-icon>
+          </Button>
 
           <!-- <Button
             text
@@ -80,3 +80,11 @@ export default {
   },
 };
 </script>
+
+<style>
+.close-button{
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+</style>

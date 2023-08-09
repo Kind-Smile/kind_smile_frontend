@@ -110,6 +110,21 @@
               <Input
                 outlined
                 dense
+                name="address"
+                type="text"
+                v-model.trim="formData.other"
+                labelTag
+                labelText="آدرس"
+                placeholder="آدرس خود را وارد نمایید"
+                hide_details
+                class="mb-2 mx-2"
+              />
+            </v-col>
+
+            <v-col cols="12" sm="12" md="12" lg="4">
+              <Input
+                outlined
+                dense
                 name="officer"
                 type="text"
                 v-model.trim="formData.officer"
@@ -244,7 +259,7 @@
               </v-col>
             </v-col>
 
-            <v-col
+            <!-- <v-col
               cols="12"
               sm="12"
               md="4"
@@ -263,9 +278,9 @@
                   انتخاب محدوده سرویس خیریه از روی نقشه
                 </div>
               </router-link>
-            </v-col>
+            </v-col> -->
 
-            <v-col cols="12" sm="12" md="12" lg="12" v-else>
+            <!-- <v-col cols="12" sm="12" md="12" lg="12" v-else>
               <router-link
                 to="/polygon"
                 :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
@@ -278,7 +293,7 @@
                   برای نمایش یا تغییر محدوده سرویس خیریه اینجا کلیک کنید.
                 </div></router-link
               >
-            </v-col>
+            </v-col> -->
 
             <v-col cols="12" sm="12" md="12" lg="12">
               <Input
@@ -355,6 +370,7 @@ export default {
         correlation: "",
         selectedState: "",
         selectedRegion: "",
+        other: "",
         officer: "",
         officerPhone: "",
         cardNumber: "",
@@ -362,7 +378,8 @@ export default {
         institute: "",
         description: "",
         address: this.$store.state.charity.address,
-        polygon: this.$store.state.charity.polygonPoints,
+        latitude: this.$store.state.charity.latitude,
+        longitude: this.$store.state.charity.longitude,
         password: "",
       },
 
@@ -397,37 +414,37 @@ export default {
       }
     },
 
-    async fetchRegionsData() {
-      try {
-        const response = await axios.get(
-          "iran-locations-api.vercel.app/api/v1/cities?state=اصفهان"
-        );
-        this.regions = response.data;
+    // async fetchRegionsData() {
+    //   try {
+    //     const response = await axios.get(
+    //       "iran-locations-api.vercel.app/api/v1/cities?state=اصفهان"
+    //     );
+    //     this.regions = response.data;
 
-        localStorage.setItem("regionsData", JSON.stringify(response.data));
-      } catch (error) {
-        console.error("Error fetching regions data:", error);
-      }
-    },
+    //     localStorage.setItem("regionsData", JSON.stringify(response.data));
+    //   } catch (error) {
+    //     console.error("Error fetching regions data:", error);
+    //   }
+    // },
 
     clickAddress() {
       localStorage.setItem("charityFormData", JSON.stringify(this.formData));
       this.$updateCharityProperty("isClickAddress", true);
     },
 
-    clickPolygon() {
-      localStorage.setItem("charityFormData", JSON.stringify(this.formData));
-    },
-
     onSubmit() {
+      console.log(this.formData);
+      const data = this.formData;
+      this.$store.dispatch('registerCharity', {data})
+
       localStorage.removeItem("charityFormData");
       this.$refs.charityForm.reset();
       this.$updateCharityProperty("isSetAddress", false);
       this.$updateCharityProperty("address", "");
-      console.log(this.formData);
-      const data = this.formData;
-      // this.$store.dispatch('registerCharity', {data})
-      // router.push("/");
+      this.$updateCharityProperty("latitude", 0.0);
+        this.$updateCharityProperty("longitude", 0.0);
+
+      router.push("/");
     },
   },
 
@@ -438,11 +455,13 @@ export default {
   },
 
   mounted() {
+    
     const formData = JSON.parse(localStorage.getItem("charityFormData"));
     if (formData) {
       this.formData = formData;
       this.formData.address = this.$store.state.charity.address;
-      this.formData.polygon = this.$store.state.charity.polygonPoints;
+      this.formData.latitude = this.$store.state.charity.latitude;
+      this.formData.longitude = this.$store.state.charity.longitude;
     }
 
     // const cachedData = localStorage.getItem("regionsData");

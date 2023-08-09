@@ -38,6 +38,7 @@
                 placeholder="شماره تماس"
                 suffix="| 98+"
                 hide_details
+                disabled
                 class="mb-2"
               />
             </v-col>
@@ -165,6 +166,8 @@ export default {
         name: "",
         phoneNumber: "",
         address: this.$store.state.benefactor.address,
+        latitude: this.$store.state.benefactor.latitude,
+        longitude: this.$store.state.benefactor.longitude,
         password: "",
       },
       rules: {
@@ -189,15 +192,19 @@ export default {
     },
 
     onSubmit() {
+      console.log(this.formData);
+      const data = this.formData;
+      this.$store.dispatch("registerBenefactor", { data });
+      
       localStorage.removeItem("benefactorFormData");
       this.$refs.benefactorForm.reset();
       this.$updateBenefactorProperty("isSetAddress", false);
       this.$updateBenefactorProperty("address", "");
-      console.log(JSON.parse(localStorage.getItem("benefactorFormData")));
-      console.log(this.formData);
-      const data = this.formData;
-      // this.$store.dispatch('registerBenefactor', {data})
-      // router.push("/");
+      this.$updateBenefactorProperty("latitude", 0.0);
+      this.$updateBenefactorProperty("longitude", 0.0);
+      this.$store.commit("updateVerificatedPhoneNumber", "");
+      
+      router.push("/");
     },
   },
 
@@ -208,10 +215,14 @@ export default {
   },
 
   mounted() {
+    this.formData.phoneNumber = this.$store.state.verificatedPhoneNumber;
+
     const formData = JSON.parse(localStorage.getItem("benefactorFormData"));
     if (formData) {
       this.formData = formData;
       this.formData.address = this.$store.state.benefactor.address;
+      this.formData.latitude = this.$store.state.benefactor.latitude;
+      this.formData.longitude = this.$store.state.benefactor.longitude;
     }
   },
 };

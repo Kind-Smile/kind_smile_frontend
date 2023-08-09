@@ -85,7 +85,7 @@ export default {
         );
 
         this.address = response.data.address;
-        alert(`${this.address}`);
+        alert(`${this.markerCoordinates}`);
       } catch (error) {
         console.error("Error fetching reverse geocoding data:", error);
       }
@@ -129,9 +129,13 @@ export default {
       if (this.$store.state.benefactor.isClickAddress) {
         this.$updateBenefactorProperty("isSetAddress", true);
         this.$updateBenefactorProperty("address", newValue);
+        this.$updateBenefactorProperty("latitude", this.coordinates[1]);
+        this.$updateBenefactorProperty("longitude", this.coordinates[0]);
       } else if (this.$store.state.charity.isClickAddress) {
         this.$updateCharityProperty("isSetAddress", true);
         this.$updateCharityProperty("address", newValue);
+        this.$updateCharityProperty("latitude", this.coordinates[1]);
+        this.$updateCharityProperty("longitude", this.coordinates[0]);
       }
     },
   },

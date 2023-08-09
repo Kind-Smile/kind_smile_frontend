@@ -21,6 +21,7 @@
             suffix="| 98+"
             class="mb-3"
           />
+          
           <Input
             outlined
             dense
@@ -94,6 +95,7 @@ import Button from "@/components/basics/Button.vue";
 import Input from "@/components/basics/Input.vue";
 import AppBar from "@/components/basics/AppBar.vue";
 import router from "@/router";
+
 export default {
   name: "Login",
   components: {
@@ -112,14 +114,10 @@ export default {
     };
   },
   methods: {
-    onSubmit() {
+    async onSubmit() {
       console.log(this.formData);
       const data = this.formData;
       this.$store.dispatch("login", { data });
-      router.push("/");
-    },
-    logout() {
-      this.$store.commit("logout");
       router.push("/");
     },
   },

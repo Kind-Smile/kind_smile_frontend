@@ -13,6 +13,10 @@ export default {
     }
   },
 
+  updateVerificatedPhoneNumber(state, newPhoneNumber) {
+    state.verificatedPhoneNumber = newPhoneNumber;
+  },
+
   login(state, token) {
     // handle authentication
     // console.log("here");

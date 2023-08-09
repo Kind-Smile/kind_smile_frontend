@@ -4,20 +4,30 @@ export default {
   benefactorUsers: [],
   charityUsers: [],
 
-  benefactor: { isClickAddress: false, isSetAddress: false, address: "" },
+  verificatedPhoneNumber: "",
+
+  benefactor: {
+    isClickAddress: false,
+    isSetAddress: false,
+    address: "",
+    latitude: 0.0,
+    longitude: 0.0,
+  },
   charity: {
     isClickAddress: false,
     isSetAddress: false,
     isSetPolygon: false,
     address: "",
     polygonPoints: {},
+    latitude: 0.0,
+    longitude: 0.0,
   },
 
   states: [
     {
       name: "آذربايجان شرقی",
-      latitude: "38.50",
-      longitude: "46.180",
+      latitude: "38.054825",
+      longitude: "46.300327",
       id: 1,
     },
     {

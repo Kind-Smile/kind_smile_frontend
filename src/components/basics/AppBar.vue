@@ -57,9 +57,9 @@
         </div>
       </div>
 
-      <Dialog
-        :dialogOpen="dialogOpen"
-        @update:dialogOpen="updateDialogOpen"
+      <!-- <Dialog
+        :dialogOpen="kindsOfUsersDialog"
+        @update:kindsOfUsersDialog="updateKindsOfUsersDialog"
         title="به عنوان یک نوع از کاربرهای زیر می‌توانید ثبت‌نام کنید:"
       >
         <div slot="dialogText" class="ma-n4">
@@ -89,6 +89,68 @@
             </v-list-item>
           </v-list>
         </div>
+      </Dialog> -->
+
+
+      <Dialog
+        :dialogOpen="dialogOpen"
+        @update:dialogOpen="updateDialogOpen"
+        title="برای دریافت کد  تایید، شماره تلفن همراه خود را وارد نمایید."
+      >
+        <div slot="dialogText" class="mb-n4">
+          <Input
+            outlined
+            dense
+            name="phoneNumber"
+            type="number"
+            v-model.trim="formData.phoneNumber"
+            labelTag
+            labelText="تلفن همراه"
+            placeholder="شماره تلفن همراه خود را وارد نمایید"
+            hide_details
+            :disabled="isSendVerifycode"
+            suffix="| 98+"
+            class="mb-3"
+          />
+
+          <div v-if="isSendVerifycode">
+            <Input
+              outlined
+              dense
+              name="verifycode"
+              type="number"
+              v-model.trim="formData.verifycode"
+              labelTag
+              labelText="کد تایید"
+              placeholder="کد تایید ارسال شده را وارد نمایید"
+              hide_details
+              class="mb-3"
+            />
+
+            <Button
+              input_value="تایید"
+              type="button"
+              dark
+              block
+              large
+              class="mb-3 mt-7"
+              @click="checkVerifycode"
+            >
+            </Button>
+          </div>
+
+          <Button
+            v-else
+            input_value="دریافت کد تایید"
+            type="button"
+            dark
+            block
+            large
+            class="mb-3 mt-7"
+            @click="getVerifycode"
+          >
+          </Button>
+        </div>
       </Dialog>
 
       <!-- <v-row no-gutters class="fill-height justify-end my-auto mx-5">
@@ -106,6 +168,9 @@
 <script>
 import Dialog from "@/components/basics/Dialog.vue";
 import Card from "@/components/basics/Card.vue";
+import Input from "@/components/basics/Input.vue";
+import Button from "@/components/basics/Button.vue";
+import router from "@/router";
 
 export default {
   name: "AppBAr",
@@ -113,11 +178,21 @@ export default {
   components: {
     Dialog,
     Card,
+    Input,
+    Button,
   },
 
   data() {
     return {
       dialogOpen: false,
+      // kindsOfUsersDialog: false,
+
+
+      formData: {
+        phoneNumber: "",
+        verifycode: "",
+      },
+      isSendVerifycode: false,
     };
   },
 
@@ -125,11 +200,36 @@ export default {
     openDialog() {
       this.dialogOpen = !this.dialogOpen;
     },
+
     updateDialogOpen(newVal) {
       this.dialogOpen = newVal;
     },
+
+    // openKindsOfUsersDialog(){
+    //   this.kindsOfUsersDialog = !this.kindsOfUsersDialog
+    // },
+
+    // updateKindsOfUsersDialog(newVal){
+    //   this.kindsOfUsersDialog= newVal
+    // },
+
     logoutHandler() {
       this.$store.commit("logout");
+    },
+
+    async getVerifycode() {
+      const data = this.formData.phoneNumber;
+      this.$store.dispatch("getVerifycode", { data });
+      this.isSendVerifycode= true
+    },
+
+    async checkVerifycode() {
+      this.$store.commit("updateVerificatedPhoneNumber", this.formData.phoneNumber);
+
+      const data = this.formData;
+      this.$store.dispatch("checkVerifycode", { data });
+      router.push("/register-benefactor")
+      // this.openKindsOfUsersDialog()
     },
   },
 
