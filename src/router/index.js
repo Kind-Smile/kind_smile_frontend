@@ -1,7 +1,10 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+
 import HomeView from "@/views/HomeView.vue";
-import FoodView from "@/views/FoodView.vue";
+import FoodCharities from "@/views/FoodCharitiesView.vue";
+import NotificationCharities from "@/views/NotificationCharitiesView.vue";
+import Money from "@/views/Money.vue"
 
 import Map from "@/views/Map.vue";
 import Polygon from "@/views/Polygon.vue";
@@ -21,9 +24,21 @@ const routes = [
   },
 
   {
-    path: "/food",
+    path: "/food-charities",
     name: "food",
-    component: FoodView,
+    component: FoodCharities,
+  },
+
+  {
+    path: "/notification-charities",
+    name: "notification",
+    component: NotificationCharities,
+  },
+
+  {
+    path: "/money",
+    name: "money",
+    component: Money,
   },
 
   {

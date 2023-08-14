@@ -5,7 +5,7 @@
       <div slot="rightPart">
         <v-toolbar class="elevation-0 ma-0">
           <v-toolbar-title class="mx-auto semi-larg"
-            >ثبت‌نام فرد نیکوکار</v-toolbar-title
+            >ثبت‌نام نیکوکار مهربان</v-toolbar-title
           >
         </v-toolbar>
 
@@ -191,20 +191,26 @@ export default {
       this.$updateBenefactorProperty("isClickAddress", true);
     },
 
-    onSubmit() {
+    async onSubmit() {
       console.log(this.formData);
       const data = this.formData;
-      this.$store.dispatch("registerBenefactor", { data });
-      
-      localStorage.removeItem("benefactorFormData");
-      this.$refs.benefactorForm.reset();
-      this.$updateBenefactorProperty("isSetAddress", false);
-      this.$updateBenefactorProperty("address", "");
-      this.$updateBenefactorProperty("latitude", 0.0);
-      this.$updateBenefactorProperty("longitude", 0.0);
-      this.$store.commit("updateVerificatedPhoneNumber", "");
-      
-      router.push("/");
+
+      try {
+        await this.$store.dispatch("registerBenefactor", { data });
+
+        localStorage.removeItem("benefactorFormData");
+        this.$refs.benefactorForm.reset();
+        this.$updateBenefactorProperty("isSetAddress", false);
+        this.$updateBenefactorProperty("address", "");
+        this.$updateBenefactorProperty("latitude", 0.0);
+        this.$updateBenefactorProperty("longitude", 0.0);
+        this.$store.commit("updateVerificatedPhoneNumber", "");
+
+        router.push("/");
+      } catch (error) {
+        console.error("Error during benefactor register:", error);
+        // Handle error, show error message, etc.
+      }
     },
   },
 

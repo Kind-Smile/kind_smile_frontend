@@ -183,6 +183,21 @@
               />
             </v-col>
 
+            <v-col cols="12" sm="12" md="4" lg="4">
+              <label class="mr-3"> لوگوی خیریه </label>
+              <v-file-input
+                v-model="formData.logo"
+                :rules="rules.fileInput"
+                outlined
+                color="#ffcc66"
+                accept="image/png, image/jpeg, image/jpg"
+                placeholder="لوگوی خود را بارگزاری کنید"
+                prepend-icon="mdi-camera"
+                @change="handleLogoChange"
+                class="my-2"
+              ></v-file-input
+            ></v-col>
+
             <v-col cols="12" sm="12" md="12" lg="4">
               <label> هیئت امنا </label>
               <v-textarea
@@ -375,6 +390,7 @@ export default {
         officerPhone: "",
         cardNumber: "",
         code: "",
+        logo: null,
         institute: "",
         description: "",
         address: this.$store.state.charity.address,
@@ -388,16 +404,31 @@ export default {
       longitude: "",
 
       rules: {
-        required: (value) => {
-          return !!value || "Required.";
-        },
-        email: (value) => {
-          const pattern = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
-          return pattern.test(value) || "Invalid e-mail.";
-        },
-        password: (value) => {
-          return value.length >= 8;
-        },
+        required: [
+          (value) => {
+            return !!value || "Required.";
+          },
+        ],
+        email: [
+          (value) => {
+            const pattern = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
+            return pattern.test(value) || "Invalid e-mail.";
+          },
+        ],
+        password: [
+          (value) => {
+            return value.length >= 8;
+          },
+        ],
+        fileInput: [
+          (value) => {
+            return (
+              !value ||
+              value.size < 5000000 ||
+              "حجم فایل لوگوی شما باید کمتر از ۵ مگابایت باشد."
+            );
+          },
+        ],
       },
     };
   },
@@ -432,19 +463,32 @@ export default {
       this.$updateCharityProperty("isClickAddress", true);
     },
 
-    onSubmit() {
-      console.log(this.formData);
-      const data = this.formData;
-      this.$store.dispatch('registerCharity', {data})
+    handleLogoChange(event) {
+      // console.log(event.target);
+      const file = event;
+      if (file) {
+        this.formData.logo = file;
+      }
+    },
 
-      localStorage.removeItem("charityFormData");
-      this.$refs.charityForm.reset();
-      this.$updateCharityProperty("isSetAddress", false);
-      this.$updateCharityProperty("address", "");
-      this.$updateCharityProperty("latitude", 0.0);
+    async onSubmit() {
+      // console.log(this.formData);
+      const data = this.formData;
+
+      try {
+        this.$store.dispatch("registerCharity", { data });
+
+        localStorage.removeItem("charityFormData");
+        // this.$refs.charityForm.reset();
+        this.$updateCharityProperty("isSetAddress", false);
+        this.$updateCharityProperty("address", "");
+        this.$updateCharityProperty("latitude", 0.0);
         this.$updateCharityProperty("longitude", 0.0);
 
-      router.push("/");
+        router.push("/");
+      } catch (error) {
+        console.error("Error during charity register:", error);
+      }
     },
   },
 
@@ -455,7 +499,6 @@ export default {
   },
 
   mounted() {
-    
     const formData = JSON.parse(localStorage.getItem("charityFormData"));
     if (formData) {
       this.formData = formData;

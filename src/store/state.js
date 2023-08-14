@@ -1,6 +1,8 @@
 export default {
   isAuthenticated: false,
   token: "",
+  role: "",
+
   benefactorUsers: [],
   charityUsers: [],
 
@@ -22,6 +24,10 @@ export default {
     latitude: 0.0,
     longitude: 0.0,
   },
+
+  isLoading: false,
+  // ToDo: it should be true by default
+  responseData: null,
 
   states: [
     {

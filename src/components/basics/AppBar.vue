@@ -51,46 +51,17 @@
         </div>
 
         <div>
-          <a href="/login">
+          <a class="ml-3" href="/login">
             <small>ورود</small>
           </a>
         </div>
-      </div>
 
-      <!-- <Dialog
-        :dialogOpen="kindsOfUsersDialog"
-        @update:kindsOfUsersDialog="updateKindsOfUsersDialog"
-        title="به عنوان یک نوع از کاربرهای زیر می‌توانید ثبت‌نام کنید:"
-      >
-        <div slot="dialogText" class="ma-n4">
-          <v-list>
-            <v-list-item class="py-1" link to="/register-benefactor">
-              <v-list-item-avatar size="100">
-                <v-img src="@/assets/images/user_1.png"></v-img>
-              </v-list-item-avatar>
-
-              <v-list-item-content>
-                <v-list-item-title>
-                  <h6>نیکوکار</h6>
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-
-            <v-list-item class="py-1" link to="/register-charity">
-              <v-list-item-avatar size="100">
-                <v-img src="@/assets/images/user_2.png"></v-img>
-              </v-list-item-avatar>
-
-              <v-list-item-content>
-                <v-list-item-title>
-                  <h6>خیریه</h6>
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
+        <div>
+          <router-link to="/register-charity">
+            <small>ثبت‌نام خیریه</small>
+          </router-link>
         </div>
-      </Dialog> -->
-
+      </div>
 
       <Dialog
         :dialogOpen="dialogOpen"
@@ -185,8 +156,6 @@ export default {
   data() {
     return {
       dialogOpen: false,
-      // kindsOfUsersDialog: false,
-
 
       formData: {
         phoneNumber: "",
@@ -205,14 +174,6 @@ export default {
       this.dialogOpen = newVal;
     },
 
-    // openKindsOfUsersDialog(){
-    //   this.kindsOfUsersDialog = !this.kindsOfUsersDialog
-    // },
-
-    // updateKindsOfUsersDialog(newVal){
-    //   this.kindsOfUsersDialog= newVal
-    // },
-
     logoutHandler() {
       this.$store.commit("logout");
     },
@@ -220,15 +181,18 @@ export default {
     async getVerifycode() {
       const data = this.formData.phoneNumber;
       this.$store.dispatch("getVerifycode", { data });
-      this.isSendVerifycode= true
+      this.isSendVerifycode = true;
     },
 
     async checkVerifycode() {
-      this.$store.commit("updateVerificatedPhoneNumber", this.formData.phoneNumber);
+      this.$store.commit(
+        "updateVerificatedPhoneNumber",
+        this.formData.phoneNumber
+      );
 
       const data = this.formData;
       this.$store.dispatch("checkVerifycode", { data });
-      router.push("/register-benefactor")
+      router.push("/register-benefactor");
       // this.openKindsOfUsersDialog()
     },
   },

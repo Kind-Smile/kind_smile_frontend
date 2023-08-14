@@ -2,9 +2,17 @@
   <div>
     <AppBar></AppBar>
     <v-main class="mt-8 mb-5 mx-5">
-      <v-row>
+      <div v-if="this.$store.state.isLoading"><h4>صبر کنید...</h4></div>
+
+      <v-row v-else>
         <v-col lg="12" md="12" sm="12" cols="12">
-          <Card :cardColor="getCardColor" title text :image="false">
+          <Card
+            :cardColor="getCardColor"
+            title
+            text
+            :image="false"
+            v-if="this.charityList.length > 0"
+          >
             <div
               slot="cardTitle"
               :style="{ color: $vuetify.theme.currentTheme.primary }"
@@ -22,7 +30,9 @@
                       :style="{ color: $vuetify.theme.currentTheme.primary }"
                       class="bold semiSmall"
                     >
-                      <a @click="showDialog">{{ charity.charityName }}</a>
+                      <a @click="opencharityInfoDialog(charity.id)">{{
+                        charity.charityName
+                      }}</a>
                     </div>
 
                     <div slot="cardText">
@@ -67,8 +77,24 @@
               </template>
             </v-row>
           </Card>
+
+          <div v-else>
+            <p>در حال حاضر هیچ خیریه‌ای دارای سفره مهربانی موجود نمی‌باشد.</p>
+            <router-link to="/">بازگشت به صفحه اصلی</router-link>
+          </div>
         </v-col>
       </v-row>
+
+      <Dialog
+        :dialogOpen="charityInfoDialog"
+        @update:dialogOpen="updateCharityInfoDialog"
+        title="اطلاعات خیریه"
+        @close="closeCharityInfo"
+      >
+        <div slot="dialogText" class="mb-n4">
+          <p>این خیریه....</p>
+        </div>
+      </Dialog>
     </v-main>
   </div>
 </template>
@@ -77,13 +103,31 @@
 import AppBar from "@/components/basics/AppBar.vue";
 import Card from "@/components/basics/Card.vue";
 import Button from "@/components/basics/Button.vue";
+import Dialog from "@/components/basics/Dialog.vue";
 
 export default {
-  name: "Food",
+  name: "FoodCharities",
 
   data() {
     return {
-      isShowDialog: false,
+      charityInfoDialog: false,
+      charityList: [],
+      // charityInfo: {
+      //   name: "",
+      //   boss: "",
+      //   phoneNumber: "",
+      //   correlation: "",
+      //   selectedState: "",
+      //   selectedRegion: "",
+      //   other: "",
+      //   officer: "",
+      //   officerPhone: "",
+      //   cardNumber: "",
+      //   code: "",
+      //   institute: "",
+      //   description: "",
+      //   address: this.$store.state.charity.address,
+      // },
     };
   },
 
@@ -91,23 +135,51 @@ export default {
     AppBar,
     Card,
     Button,
+    Dialog,
   },
 
   methods: {
-    showDialog() {
-      this.isShowDialog = !this.isShowDialog;
-      console.log(this.isShowDialog);
+    async opencharityInfoDialog(charityId) {
+      console.log(charityId);
+      this.charityInfoDialog = !this.charityInfoDialog;
+
+      // try {
+      //   await this.$store.dispatch("charityInfo", { charityId });
+      //   this.charityInfo = this.$store.state.responseData;
+
+      //   //چک کنم اینجا چی برمیگردونه تا بتونم نمایشش بدم توی چریتی اینفو و توی دیالوگ
+
+      //   this.charityInfoDialog = !this.charityInfoDialog;
+      // } catch (error) {
+      //   console.error("Error during login:", error);
+      //   // Handle error, show error message, etc.
+      // }
     },
+
+    updateCharityInfoDialog(newVal) {
+      this.charityInfoDialog = newVal;
+    },
+    
+    closeCharityInfo(){
+      this.$store.commit('clearResponseData');
+    }
   },
 
   computed: {
-    charityList() {
-      return this.$store.state.charityList;
-    },
-
     getCardColor() {
       return this.$hexToRgba(this.$vuetify.theme.currentTheme.secondary, 0.15);
     },
   },
+
+  created() {
+    // this.$store.dispatch('foodCharities');
+    // this.charityList = this.$store.state.responseData
+
+    this.charityList = this.$store.state.charityList;
+  },
+
+  destroyed(){
+    this.$store.commit('setIsLoading', true);
+  }
 };
 </script>

@@ -17,41 +17,43 @@ export default {
     state.verificatedPhoneNumber = newPhoneNumber;
   },
 
-  login(state, token) {
-    // handle authentication
-    // console.log("here");
-    // console.log(localStorage);
-    // console.log(token)
-    if (token) {
+  login(state, data) {
+    if (data.access) {
       state.isAuthenticated = true;
-      state.token = token;
-      localStorage.setItem("token", token);
+      state.token = data.access;
+      state.role = data.role;
+
+      localStorage.setItem("token", data.access);
+      localStorage.setItem("role" , data.role)
     } else {
       state.isAuthenticated = false;
       state.token = "";
+      state.role = "";
       localStorage.removeItem("token");
+      localStorage.removeItem("role");
     }
   },
 
   logout(state) {
-    // handle authentication
-    // console.log("logout");
-    // console.log("here");
-    // console.log(localStorage);
     state.isAuthenticated = false;
     state.token = "";
+    state.role = "";
     localStorage.removeItem("token");
+    localStorage.removeItem("role");
   },
 
   checkAuthState(state) {
     const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
 
     if (token) {
       state.isAuthenticated = true;
       state.token = token;
+      state.role = role
     } else {
       state.isAuthenticated = false;
       state.token = "";
+      state.role = ""
     }
   },
 
@@ -61,5 +63,17 @@ export default {
 
   registerCharity(state, data) {
     state.charityUsers.push(data);
+  },
+
+  setResponseData(state, data) {
+    state.responseData = data;
+  },
+
+  clearResponseData(state) {
+    state.responseData = null;
+  },
+
+  setIsLoading(state, newVal) {
+    state.isLoading = newVal;
   },
 };

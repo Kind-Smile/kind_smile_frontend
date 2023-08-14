@@ -72,6 +72,7 @@ export default {
     closeDialog() {
       this.dialog = false;
       this.$emit("update:dialogOpen", false); // Emit event to update parent's prop
+      this.$emit('close');
     },
     saveAndCloseDialog() {
       // Save any data if needed

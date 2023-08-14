@@ -21,7 +21,7 @@
             suffix="| 98+"
             class="mb-3"
           />
-          
+
           <Input
             outlined
             dense
@@ -117,8 +117,14 @@ export default {
     async onSubmit() {
       console.log(this.formData);
       const data = this.formData;
-      this.$store.dispatch("login", { data });
-      router.push("/");
+
+      try {
+        await this.$store.dispatch("login", { data });
+        router.push("/");
+      } catch (error) {
+        console.error("Error during login:", error);
+        // Handle error, show error message, etc.
+      }
     },
   },
 };
