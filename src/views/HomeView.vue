@@ -45,18 +45,5 @@ export default {
       return this.$hexToRgba(this.$vuetify.theme.currentTheme.secondary, 0.15);
     },
   },
-
-  watch: {
-    userRole(){
-      if(!this.$store.state.role){
-        this.userRole=true
-      }
-    }
-  },
-
-  created() {
-    console.log(!this.$store.state.role);
-    this.userRole = this.$store.state.role
-  },
 };
 </script>

@@ -83,6 +83,10 @@ export default {
     getImagePath(imagePath) {
       return require(`@/assets/images/${imagePath}`);
     },
+
+    onClick() {
+      this.$emit("click");
+    },
   },
 
   computed: {

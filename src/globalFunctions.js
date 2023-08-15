@@ -15,3 +15,7 @@ export function updateBenefactorProperty(property, newVal) {
 export function updateCharityProperty(property, newVal) {
   this.$store.commit("updateCharity", { property, newVal });
 }
+
+export function updateAgentProperty(property, newVal) {
+  this.$store.commit("updateAgent", { property, newVal });
+}

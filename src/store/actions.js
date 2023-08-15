@@ -87,6 +87,54 @@ export default {
       });
   },
 
+  async registerAgent({ state, commit }, { data }) {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+    await axios
+      .post(
+        `http://127.0.0.1:8000/auth/AgentRegister/`,
+        {
+          name: data.name,
+          phoneNumber: parseInt(data.phoneNumber, 10),
+          polygon: data.polygon,
+          password: data.password,
+        },
+        config
+      )
+      .then((response) => {
+        let data = response.data;
+        // commit("registerAgent", data.access);
+        console.log(
+          `registerAgent successfully!`
+        );
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  },
+
+  async regionsByState({ commit }, { data }){
+    const config = {
+      params: { state: data },
+    };
+    console.log(`in actions: data is: ${data}`)
+
+    await axios
+      .get("http://127.0.0.1:8000/auth/citiesByState/", config)
+      .then((response) => {
+        let responseMessage = response.data.cities;
+        console.log(`action response: ${responseMessage}`)
+        commit("setResponseData", responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error fetching regionsByState:", error);
+      });
+  },
+
   async getVerifycode({ commit }, { data }) {
     await axios
       .post(`http://127.0.0.1:8000/auth/sendSms/`, {
@@ -116,7 +164,27 @@ export default {
       });
   },
 
-  async charityInfo({ commit }, { data }) {
+  async charityAgentList({ state, commit }) {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .get("http://127.0.0.1:8000/auth/agentList/", config)
+      .then((response) => {
+        let responseMessage = response.data;
+        state.isLoading = false;
+        commit("setResponseData", responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error fetching charityAgentList:", error);
+      });
+  },
+
+  async charityInfo({ state, commit }, { data }) {
     const config = {
       params: { id: data },
       headers: {
@@ -136,7 +204,7 @@ export default {
       });
   },
 
-  async foodCharities({ commit }) {
+  async foodCharities({ state, commit }) {
     const config = {
       headers: {
         Authorization: `Bearer ${state.token}`,
@@ -156,7 +224,7 @@ export default {
       });
   },
 
-  async notificationCharities({ commit }) {
+  async notificationCharities({ state, commit }) {
     const config = {
       headers: {
         Authorization: `Bearer ${state.token}`,

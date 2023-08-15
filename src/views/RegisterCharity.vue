@@ -84,7 +84,7 @@
                 item-value="id"
                 hide-details
                 placeholder="استان خود را انتخاب کنید"
-                @change="onStateSelect"
+                @change="stateSelectedName"
                 class="ma-2"
               >
               </v-autocomplete>
@@ -102,7 +102,8 @@
                 placeholder="شهر خود را انتخاب کنید"
                 class="ma-2"
               >
-                <!-- :items="regions" -->
+              <!-- @click="regionsByState" -->
+              <!-- :items="regions" -->
               </v-autocomplete>
             </v-col>
 
@@ -274,42 +275,6 @@
               </v-col>
             </v-col>
 
-            <!-- <v-col
-              cols="12"
-              sm="12"
-              md="4"
-              lg="4"
-              v-if="!this.$store.state.charity.isSetPolygon"
-              class="ma-2 mr-0"
-            >
-              <router-link
-                to="/polygon"
-                :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
-              >
-                <div
-                  @click="clickPolygon"
-                  :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
-                >
-                  انتخاب محدوده سرویس خیریه از روی نقشه
-                </div>
-              </router-link>
-            </v-col> -->
-
-            <!-- <v-col cols="12" sm="12" md="12" lg="12" v-else>
-              <router-link
-                to="/polygon"
-                :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
-                style="font-size: 0.8rem"
-                class="mb-2"
-                ><div
-                  @click="clickPolygon"
-                  :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
-                >
-                  برای نمایش یا تغییر محدوده سرویس خیریه اینجا کلیک کنید.
-                </div></router-link
-              >
-            </v-col> -->
-
             <v-col cols="12" sm="12" md="12" lg="12">
               <Input
                 outlined
@@ -399,6 +364,7 @@ export default {
         password: "",
       },
 
+      selectedState: "",
       regions: [],
       latitude: "",
       longitude: "",
@@ -434,7 +400,7 @@ export default {
   },
 
   methods: {
-    onStateSelect() {
+    stateSelectedName() {
       const selectedStateObject = this.$store.state.states.find(
         (state) => state.id == this.formData.selectedState
       );
@@ -442,21 +408,21 @@ export default {
       if (selectedStateObject) {
         this.latitude = selectedStateObject.latitude;
         this.longitude = selectedStateObject.longitude;
+        this.selectedState = selectedStateObject.name
       }
     },
 
-    // async fetchRegionsData() {
-    //   try {
-    //     const response = await axios.get(
-    //       "iran-locations-api.vercel.app/api/v1/cities?state=اصفهان"
-    //     );
-    //     this.regions = response.data;
+    async regionsByState(){
+      const data = this.selectedState;
 
-    //     localStorage.setItem("regionsData", JSON.stringify(response.data));
-    //   } catch (error) {
-    //     console.error("Error fetching regions data:", error);
-    //   }
-    // },
+      try {
+        await this.$store.dispatch("regionsByState", { data });
+        this.regions = this.$store.state.responseData
+        this.$store.commit("clearResponseData");
+      } catch (error) {
+        console.error("Error during regionsByState:", error);
+      }
+    },
 
     clickAddress() {
       localStorage.setItem("charityFormData", JSON.stringify(this.formData));
@@ -476,7 +442,7 @@ export default {
       const data = this.formData;
 
       try {
-        this.$store.dispatch("registerCharity", { data });
+        await this.$store.dispatch("registerCharity", { data });
 
         localStorage.removeItem("charityFormData");
         // this.$refs.charityForm.reset();

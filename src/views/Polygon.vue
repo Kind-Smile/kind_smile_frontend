@@ -147,9 +147,9 @@ export default {
     },
 
     savePolygon() {
-      this.$updateCharityProperty("isSetPolygon", true);
-      this.$updateCharityProperty("polygonPoints", this.points);
-      console.log(this.$store.state.charity.polygonPoints);
+      this.$updateAgentProperty("isSetPolygon", true);
+      this.$updateAgentProperty("polygonPoints", this.points);
+      // console.log(this.$store.state.agent.polygonPoints);
       router.back();
     },
   },
@@ -161,8 +161,8 @@ export default {
   },
 
   mounted() {
-    if (this.$store.state.charity.isSetPolygon) {
-      this.points = this.$store.state.charity.polygonPoints;
+    if (this.$store.state.agent.isSetPolygon) {
+      this.points = this.$store.state.agent.polygonPoints;
       this.updatePolygonGeoJson();
     }
   },

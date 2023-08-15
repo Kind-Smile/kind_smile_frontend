@@ -13,6 +13,13 @@ export default {
     }
   },
 
+  updateAgent(state, payload) {
+    const { property, newVal } = payload;
+    if (state.agent.hasOwnProperty(property)) {
+      state.agent[property] = newVal;
+    }
+  },
+
   updateVerificatedPhoneNumber(state, newPhoneNumber) {
     state.verificatedPhoneNumber = newPhoneNumber;
   },
@@ -64,6 +71,10 @@ export default {
   registerCharity(state, data) {
     state.charityUsers.push(data);
   },
+
+  // registerAgent(state, data) {
+  //   state.agentUsers.push(data);
+  // },
 
   setResponseData(state, data) {
     state.responseData = data;

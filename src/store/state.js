@@ -5,6 +5,7 @@ export default {
 
   benefactorUsers: [],
   charityUsers: [],
+  agentUsers: [],
 
   verificatedPhoneNumber: "",
 
@@ -23,6 +24,11 @@ export default {
     polygonPoints: {},
     latitude: 0.0,
     longitude: 0.0,
+  },
+  agent: {
+    isClickPolygon: false,
+    isSetPolygon: false,
+    polygonPoints: [],
   },
 
   isLoading: false,

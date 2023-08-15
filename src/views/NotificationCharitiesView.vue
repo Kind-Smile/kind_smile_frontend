@@ -152,6 +152,7 @@ export default {
   created() {
     // this.$store.dispatch('notificationCharities');
     // this.charityList = this.$store.state.responseData
+    // this.$store.commit("clearResponseData");
 
     this.charityList = this.$store.state.charityList;
   },

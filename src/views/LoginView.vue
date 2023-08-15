@@ -35,15 +35,6 @@
           />
 
           <v-row class="ma-1">
-            <!-- <v-col cols="12" sm="12" md="12" lg="6">
-              <v-checkbox
-                v-model.trim="formData.rememberMe"
-                label="مرا به خاطر بسپار"
-                color="info"
-                hide-details
-              ></v-checkbox>
-            </v-col> -->
-
             <v-col cols="12" sm="12" md="12" lg="6" class="mt-5 mb-0">
               <p>
                 <!-- class="text-lg-left" -->
