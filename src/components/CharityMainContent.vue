@@ -277,12 +277,11 @@ export default {
     async charityAgentList() {
       try {
         await this.$store.dispatch("charityAgentList");
-        if (!this.$store.state.responseData.length == 0) {
-          this.openAddAgentDialog();
-        } else {
-          router.push("food-charities");
-        }
-        this.$store.commit("clearResponseData");
+        // if (this.$store.state.charityAgentList.length == 0) {
+        //   this.openAddAgentDialog();
+        // } else {
+        router.push("charity-food");
+        // }
       } catch (error) {
         console.error("Error during charityAgentList in component:", error);
       }

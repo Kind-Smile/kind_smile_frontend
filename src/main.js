@@ -20,7 +20,20 @@ Vue.config.productionTip = false;
 
 Vue.use(Mapir, {
   key: process.env.VUE_APP_MAPIR_API_KEY,
-  // Add any other options or configurations if needed
+});
+
+import VuePersianDatetimePicker from 'vue-persian-datetime-picker';
+Vue.use(VuePersianDatetimePicker, {
+  name: 'custom-date-picker',
+  props: {
+    // format: 'YYYY-MM-DD',
+    // displayFormat: 'jYYYY-jMM-jDD',
+    // altFormat: 'YYYY-MM-DD',
+    editable: false,
+    inputClass: 'form-control my-custom-class-name',
+    color: '#66CC99',
+    autoSubmit: false,
+  }
 });
 
 new Vue({

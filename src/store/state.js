@@ -35,6 +35,8 @@ export default {
   // ToDo: it should be true by default
   responseData: null,
 
+  charityAgentList:[],
+
   states: [
     {
       name: "آذربايجان شرقی",

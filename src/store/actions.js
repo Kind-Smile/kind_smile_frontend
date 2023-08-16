@@ -107,7 +107,7 @@ export default {
       )
       .then((response) => {
         let data = response.data;
-        // commit("registerAgent", data.access);
+        commit("registerAgent", data);
         console.log(
           `registerAgent successfully!`
         );
@@ -177,12 +177,58 @@ export default {
       .then((response) => {
         let responseMessage = response.data;
         state.isLoading = false;
-        commit("setResponseData", responseMessage);
+        commit("setCharityAgentList", responseMessage);
       })
       .catch((error) => {
         console.error("Error fetching charityAgentList:", error);
       });
   },
+
+  async addFood({ state, commit }, { data }) {
+    // console.log("I am in: action->addFood");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .post(`http://127.0.0.1:8000/food/create/`, {
+        request: parseInt(data.request, 10),
+        eventDate: data.eventDate.replace("/","-").replace("/","-"),
+        eventTime: data.eventTime,
+        agent: data.agent,
+        recreate: data.recreate ,
+      }, config)
+      .then((response) => {
+        let data = response.data;
+        console.log(`addFood successfully! this is response: ${data}`);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  },
+
+  // async getFoodsCharity({ state, commit }, { data }) {
+  //   const config = {
+  //     params: { id: data },
+  //     headers: {
+  //       Authorization: `Bearer ${state.token}`,
+  //       Accept: "application/json",
+  //     },
+  //   };
+
+  //   await axios
+  //     .get("http://127.0.0.1:8000/charityInfo/", config)
+  //     .then((response) => {
+  //       let responseMessage = response.data;
+  //       commit("setResponseData", responseMessage);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching charityInfo:", error);
+  //     });
+  // },
 
   async charityInfo({ state, commit }, { data }) {
     const config = {

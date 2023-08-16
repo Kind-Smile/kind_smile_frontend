@@ -72,9 +72,13 @@ export default {
     state.charityUsers.push(data);
   },
 
-  // registerAgent(state, data) {
-  //   state.agentUsers.push(data);
-  // },
+  registerAgent(state, data) {
+    state.charityAgentList.push(data);
+  },
+
+  setCharityAgentList(state, data) {
+    state.charityAgentList = data;
+  },
 
   setResponseData(state, data) {
     state.responseData = data;
