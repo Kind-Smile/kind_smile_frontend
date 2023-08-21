@@ -91,43 +91,40 @@ export default {
     const config = {
       headers: {
         Authorization: `Bearer ${state.token}`,
-        Accept: "application/json",
+        "Content-Type": "multipart/form-data",
       },
     };
+
+    const agentData = new FormData();
+    agentData.append("name", data.name);
+    agentData.append("phoneNumber", parseInt(data.phoneNumber, 10));
+    agentData.append("polygon", JSON.stringify(data.polygon));
+    agentData.append("password", data.password);
+
     await axios
-      .post(
-        `http://127.0.0.1:8000/auth/AgentRegister/`,
-        {
-          name: data.name,
-          phoneNumber: parseInt(data.phoneNumber, 10),
-          polygon: data.polygon,
-          password: data.password,
-        },
-        config
-      )
+      .post(`http://127.0.0.1:8000/auth/AgentRegister/`, agentData, config)
       .then((response) => {
         let data = response.data;
-        commit("registerAgent", data);
-        console.log(
-          `registerAgent successfully!`
-        );
+        // commit("registerAgent", data.access);
+        console.log(`registerAgent successfully!`);
       })
       .catch((error) => {
+        console.log("in action error");
         console.error("Error:", error);
       });
   },
 
-  async regionsByState({ commit }, { data }){
+  async regionsByState({ commit }, { data }) {
     const config = {
       params: { state: data },
     };
-    console.log(`in actions: data is: ${data}`)
+    console.log(`in actions: data is: ${data}`);
 
     await axios
       .get("http://127.0.0.1:8000/auth/citiesByState/", config)
       .then((response) => {
         let responseMessage = response.data.cities;
-        console.log(`action response: ${responseMessage}`)
+        console.log(`action response: ${responseMessage}`);
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
@@ -184,6 +181,28 @@ export default {
       });
   },
 
+  async benefactorList({ state, commit }, {data}) {
+    console.log(data)
+    const config = {
+      data: { id: data },
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .get("http://127.0.0.1:8000/food/foodDonors/", config)
+      .then((response) => {
+        let responseMessage = response.data;
+        state.isLoading = false;
+        commit("setCharityAgentList", responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error fetching benefactorList:", error);
+      });
+  },
+
   async addFood({ state, commit }, { data }) {
     // console.log("I am in: action->addFood");
     const config = {
@@ -194,13 +213,17 @@ export default {
     };
 
     await axios
-      .post(`http://127.0.0.1:8000/food/create/`, {
-        request: parseInt(data.request, 10),
-        eventDate: data.eventDate.replace("/","-").replace("/","-"),
-        eventTime: data.eventTime,
-        agent: data.agent,
-        recreate: data.recreate ,
-      }, config)
+      .post(
+        `http://127.0.0.1:8000/food/create/`,
+        {
+          request: parseInt(data.request, 10),
+          eventDate: data.eventDate.replace("/", "-").replace("/", "-"),
+          eventTime: data.eventTime,
+          agent: data.agent,
+          recreate: data.recreate,
+        },
+        config
+      )
       .then((response) => {
         let data = response.data;
         console.log(`addFood successfully! this is response: ${data}`);
@@ -210,25 +233,45 @@ export default {
       });
   },
 
-  // async getFoodsCharity({ state, commit }, { data }) {
-  //   const config = {
-  //     params: { id: data },
-  //     headers: {
-  //       Authorization: `Bearer ${state.token}`,
-  //       Accept: "application/json",
-  //     },
-  //   };
+  async removeFood({ state, commit }, { id }) {
+    // console.log("I am in: action->removeFood");
+    const config = {
+      data: { id },
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+    await axios
+      .delete(`http://127.0.0.1:8000/food/delete/`, config)
+      .then((response) => {
+        let responseMessage = response.data;
+        console.log(responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error removeFood:", error);
+      });
+  },
 
-  //   await axios
-  //     .get("http://127.0.0.1:8000/charityInfo/", config)
-  //     .then((response) => {
-  //       let responseMessage = response.data;
-  //       commit("setResponseData", responseMessage);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching charityInfo:", error);
-  //     });
-  // },
+  async getFoodsCharity({ state, commit }) {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .get("http://127.0.0.1:8000/food/own/", config)
+      .then((response) => {
+        let responseMessage = response.data;
+        // console.log(responseMessage)
+        commit("setResponseData", responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error fetching getFoodsCharity:", error);
+      });
+  },
 
   async charityInfo({ state, commit }, { data }) {
     const config = {

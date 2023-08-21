@@ -5,11 +5,23 @@
 </template>
 
 <script>
+import jalaliMoment from 'jalali-moment';
+
 export default {
   name: "App",
 
+  methods:{
+    getJalaliToday() {
+      const gregorianToday = new Date();
+      const jalaliToday = jalaliMoment(gregorianToday).format('jYYYY/jM/jD');
+      localStorage.setItem("todayDate", jalaliToday);
+    },
+  },
+
   created() {
     this.$store.commit("checkAuthState");
+
+    this.getJalaliToday()
   },
 };
 </script>

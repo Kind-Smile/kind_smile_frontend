@@ -177,9 +177,5 @@ export default {
 
     this.charityList = this.$store.state.charityList;
   },
-
-  destroyed(){
-    this.$store.commit('setIsLoading', true);
-  }
 };
 </script>
