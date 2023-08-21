@@ -22,8 +22,14 @@
             </div>
 
             <v-row slot="cardText">
-              <template v-for="foodCharity in foodsCharity">
-                <v-col lg="4" md="6" sm="6" cols="12" :key="foodCharity.id">
+              <template v-for="(foodCharity, index) in foodsCharity">
+                <v-col
+                  lg="4"
+                  md="6"
+                  sm="6"
+                  cols="12"
+                  :key="foodCharity.id + index"
+                >
                   <Card
                     text
                     actions
@@ -103,7 +109,9 @@
                             }"
                           >
                             <small>
-                              <a> ویرایش سفره </a>
+                              <a @click="openEditFoodDialog(foodCharity.id)">
+                                ویرایش سفره
+                              </a>
                             </small>
                           </p>
                         </v-col>
@@ -166,12 +174,99 @@
       </v-container>
 
       <Dialog
+        :dialogOpen="editFoodDialog"
+        @update:dialogOpen="updateEditFoodDialog"
+        title="ویرایش مشخصات سفره مهربانی"
+      >
+        <v-form
+          @submit.prevent="onEdit"
+          slot="dialogText"
+          class="mb-n4"
+          ref="editFood"
+        >
+          <Input
+            outlined
+            dense
+            name="request"
+            type="number"
+            v-model.trim="editedFormData.request"
+            labelTag
+            labelText="تعداد غذای مورد نیاز"
+            placeholder="تعداد غذای مورد نیاز"
+            hide_details
+            :disabled="ishaveBenefactor"
+            class="mb-5"
+          />
+
+          <div class="mb-5">
+            <custom-date-picker
+              v-model="editedFormData.eventDate"
+              auto-submit
+              placeholder="تاریخ را انتخاب نمایید"
+              :min="getDate"
+              :disabled="ishaveBenefactor"
+            />
+          </div>
+
+          <div class="mb-5">
+            <custom-date-picker
+              v-model="editedFormData.eventTime"
+              type="time"
+              simple
+              placeholder="زمان را انتخاب نمایید"
+              :disabled="ishaveBenefactor"
+            />
+          </div>
+
+          <v-autocomplete
+            outlined
+            v-model="editedFormData.agent"
+            :items="this.$store.state.charityAgentList"
+            item-text="name"
+            item-value="id"
+            hide-details
+            placeholder="سفیر مهربانی خود را انتخاب کنید"
+            :disabled="ishaveBenefactor"
+            class="ma-2"
+          >
+          </v-autocomplete>
+
+          <v-checkbox
+            v-model.trim="editedFormData.recreate"
+            label="هر هفته سفره با زمان فوق را تمدید کن."
+            :color="$vuetify.theme.currentTheme.thirdColor"
+            hide-details
+            class="mb-5"
+          ></v-checkbox>
+
+          <div class="my-5" v-if="ishaveBenefactor">
+            <small
+              :style="{ color: $vuetify.theme.currentTheme.primary }"
+              class="bold"
+              >به دلیل ثبت مشارکت برای این سفره، تنها امکان ویرایش تمدید هفتگی
+              وجود دارد و سایر موارد قابل ویرایش نیست.</small
+            >
+          </div>
+
+          <Button
+            input_value="ثبت‌نام"
+            type="submit"
+            dark
+            block
+            large
+            class="mb-3 mt-5"
+          >
+          </Button>
+        </v-form>
+      </Dialog>
+
+      <Dialog
         :dialogOpen="benefactorListDialog"
         @update:dialogOpen="updateBenefactorListDialog"
         :title="benefactorListMessage"
       >
         <div slot="dialogText">
-          <Card></Card>
+          <!-- <Card></Card> -->
         </div>
       </Dialog>
 
@@ -286,10 +381,22 @@ export default {
 
       benefactorListMessage: "هنوز مشارکتی برای این سفره ثبت نشده است.",
 
+      ishaveBenefactor: false,
+
       addFoodDialog: false,
       benefactorListDialog: false,
+      editFoodDialog: false,
 
       formData: {
+        request: "",
+        eventDate: "",
+        eventTime: "",
+        agent: "",
+        recreate: false,
+      },
+
+      editedFormData: {
+        id: 0,
         request: "",
         eventDate: "",
         eventTime: "",
@@ -310,6 +417,7 @@ export default {
       }
     },
 
+    //handle addFoodDialog
     openaddFoodDialog() {
       this.addFoodDialog = !this.addFoodDialog;
     },
@@ -320,11 +428,36 @@ export default {
       this.addFoodDialog = false;
     },
 
+    //handle editFoodDialog
+    openEditFoodDialog(id) {
+      this.editFoodDialog = !this.editFoodDialog;
+      const food = this.foodsCharity.find((item) => item.id == id);
+      food.request = food.request.toString();
+      this.editedFormData.id = id;
+      this.editedFormData = food;
+
+      if (!food.food.length == 0) {
+        this.ishaveBenefactor = true;
+      } else {
+        this.ishaveBenefactor = false;
+      }
+
+      console.log(id);
+    },
+    updateEditFoodDialog(newVal) {
+      this.editFoodDialog = newVal;
+    },
+    closeEditFoodDialog() {
+      this.editFoodDialog = false;
+    },
+
+    //handle benefactorListDialog
     openBenefactorListDialog(id) {
       this.benefactorListDialog = !this.benefactorListDialog;
       this.getBenefactorList(id);
-      if (this.benefactorList == null){
-        this.benefactorListMessage= "افراد زیر در این سفره مهربانی مشارکت داشته‌اند:"
+      if (this.benefactorList == null) {
+        this.benefactorListMessage =
+          "افراد زیر در این سفره مهربانی مشارکت داشته‌اند:";
       }
     },
     updateBenefactorListDialog(newVal) {
@@ -335,12 +468,11 @@ export default {
     },
 
     async getBenefactorList(id) {
-      const data = id
+      const data = id;
       try {
-        await this.$store.dispatch("benefactorList", {data});
+        await this.$store.dispatch("benefactorList", { data });
         this.benefactorList = this.$store.state.responseData;
-        console.log(this.benefactorList);
-        // this.$store.commit("clearResponseData");
+        this.$store.commit("clearResponseData");
       } catch (error) {
         console.error("Error during getBenefactorList in component:", error);
       }
@@ -366,6 +498,25 @@ export default {
         this.getFoodsCharity();
       } catch (error) {
         console.error("Error during removeFood in component:", error);
+      }
+    },
+
+    async onEdit() {
+      console.log(this.editedFormData);
+      const data = this.editedFormData;
+
+      try {
+        await this.$store.dispatch("editFood", { data });
+        this.getFoodsCharity();
+        this.closeEditFoodDialog();
+        // this.editedFormData.id = 0;
+        // this.editedFormData.request = "";
+        // this.editedFormData.eventDate = "";
+        // this.editedFormData.eventTime = "";
+        // this.editedFormData.agent = "";
+        // this.editedFormData.recreate = false;
+      } catch (error) {
+        console.error("Error during onEdit food in component:", error);
       }
     },
 

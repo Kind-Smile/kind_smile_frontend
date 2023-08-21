@@ -87,7 +87,7 @@ export default {
       });
   },
 
-  async registerAgent({ state, commit }, { data }) {
+  async registerAgent({ state }, { data }) {
     const config = {
       headers: {
         Authorization: `Bearer ${state.token}`,
@@ -203,7 +203,7 @@ export default {
       });
   },
 
-  async addFood({ state, commit }, { data }) {
+  async addFood({ state }, { data }) {
     // console.log("I am in: action->addFood");
     const config = {
       headers: {
@@ -233,7 +233,7 @@ export default {
       });
   },
 
-  async removeFood({ state, commit }, { id }) {
+  async removeFood({ state }, { id }) {
     // console.log("I am in: action->removeFood");
     const config = {
       data: { id },
@@ -250,6 +250,37 @@ export default {
       })
       .catch((error) => {
         console.error("Error removeFood:", error);
+      });
+  },
+
+  async editFood({ state }, { data }) {
+    // console.log("I am in: action->editFood");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .put(
+        `http://127.0.0.1:8000/food/editFood/`,
+        {
+          id: data.id,
+          request: parseInt(data.request, 10),
+          eventDate: data.eventDate.replace("/", "-").replace("/", "-"),
+          eventTime: data.eventTime,
+          agent: data.agent.id,
+          recreate: data.recreate,
+        },
+        config
+      )
+      .then((response) => {
+        let data = response.data;
+        console.log(`addFood successfully! this is response: ${data}`);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
       });
   },
 
