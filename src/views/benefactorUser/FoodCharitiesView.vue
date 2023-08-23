@@ -24,52 +24,49 @@
             <v-row slot="cardText">
               <template v-for="charity in charityList">
                 <v-col lg="4" md="6" sm="6" cols="12" :key="charity.id">
-                  <Card title text actions imageNewLine cardImage="razavi.jpg">
+                  <Card title text actions imageNewLine :cardImage="charity.logo">
                     <div
                       slot="cardTitle"
                       :style="{ color: $vuetify.theme.currentTheme.primary }"
                       class="bold semiSmall"
                     >
-                      <a @click="opencharityInfoDialog(charity.id)">{{
-                        charity.charityName
+                      <a @click="opencharityInfoDialog(charity.id)">خیریه {{
+                        charity.name
                       }}</a>
                     </div>
 
                     <div slot="cardText">
                       <div class="mb-1">
-                        <p style="display: inline" class="ml-1">
-                          زمان جمع‌آوری:
-                        </p>
+                        <p style="display: inline" class="ml-1">مدیریت:</p>
                         <p style="display: inline">
-                          <b>{{ charity.collectionTime }}</b>
+                          <b>{{ charity.boss }}</b>
                         </p>
                       </div>
 
                       <div class="mb-1">
-                        <p style="display: inline" class="ml-1">
-                          تعداد غذای مورد نیاز:
-                        </p>
+                        <p style="display: inline" class="ml-1">وابسته به:</p>
                         <p style="display: inline">
-                          <b>{{ charity.foodRequired }} پرس</b>
+                          <b>{{ charity.correlation }}</b>
                         </p>
                       </div>
 
                       <div>
-                        <p style="display: inline" class="ml-1">
-                          تعداد غذای مورد نیاز باقیمانده:
-                        </p>
+                        <p style="display: inline" class="ml-1">آدرس خیریه:</p>
                         <p style="display: inline">
-                          <b>{{ charity.foodRequiredLeft }} پرس</b>
+                          <b>{{ charity.other }}</b>
                         </p>
                       </div>
                     </div>
 
-                    <v-row slot="cardActions" class="justify-end px-4 py-3">
+                    <v-row
+                      slot="cardActions"
+                      class="justify-end px-4 pt-5 pb-3"
+                    >
                       <Button
                         :block="!$vuetify.breakpoint.mdAndUp"
                         dark
                         :color="$vuetify.theme.currentTheme.primary"
-                        input_value="ثبت مشارکت"
+                        input_value="مشاهده سفره‌های مهربانی"
                       ></Button>
                     </v-row>
                   </Card>
@@ -159,10 +156,21 @@ export default {
     updateCharityInfoDialog(newVal) {
       this.charityInfoDialog = newVal;
     },
-    
-    closeCharityInfo(){
-      this.$store.commit('clearResponseData');
-    }
+
+    closeCharityInfo() {
+      this.$store.commit("clearResponseData");
+    },
+
+    async getFoodCharities() {
+      try {
+        await this.$store.dispatch('foodCharities');
+        this.charityList = this.$store.state.responseData;
+        console.log(this.$store.state.responseData)
+        this.$store.commit("clearResponseData");
+      } catch (error) {
+        console.error("Error during getFoodCharities in component:", error);
+      }
+    },
   },
 
   computed: {
@@ -172,10 +180,7 @@ export default {
   },
 
   created() {
-    // this.$store.dispatch('foodCharities');
-    // this.charityList = this.$store.state.responseData
-
-    this.charityList = this.$store.state.charityList;
+    this.getFoodCharities()
   },
 };
 </script>

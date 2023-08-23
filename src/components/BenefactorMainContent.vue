@@ -8,6 +8,7 @@
               :cardColor="getCardColor"
               title
               text
+              localImage
               cardImage="food.png"
               :hover="hover"
               :elevationValue="1"
@@ -35,6 +36,7 @@
               :cardColor="getCardColor"
               title
               text
+              localImage
               cardImage="clothes.png"
               :hover="hover"
               :elevationValue="1"
@@ -63,6 +65,7 @@
               :cardColor="getCardColor"
               title
               text
+              localImage
               cardImage="money.png"
               :hover="hover"
               :elevationValue="1"
@@ -91,6 +94,7 @@
               :cardColor="getCardColor"
               title
               text
+              localImage
               cardImage="notifications.png"
               :hover="hover"
               :elevationValue="1"

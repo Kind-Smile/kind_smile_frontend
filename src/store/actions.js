@@ -181,7 +181,7 @@ export default {
       });
   },
 
-  async benefactorList({ state, commit }, {data}) {
+  async foodBenefactorList({ state, commit }, {data}) {
     console.log(data)
     const config = {
       data: { id: data },
@@ -296,7 +296,6 @@ export default {
       .get("http://127.0.0.1:8000/food/own/", config)
       .then((response) => {
         let responseMessage = response.data;
-        // console.log(responseMessage)
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
@@ -333,7 +332,7 @@ export default {
     };
 
     await axios
-      .get("http://127.0.0.1:8000/charityInfo/", config)
+      .get("http://127.0.0.1:8000/food/charityFood/", config)
       .then((response) => {
         let responseMessage = response.data;
         state.isLoading = false;

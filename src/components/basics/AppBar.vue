@@ -175,6 +175,7 @@ export default {
     },
 
     logoutHandler() {
+      router.push("/")
       this.$store.commit("logout");
     },
 

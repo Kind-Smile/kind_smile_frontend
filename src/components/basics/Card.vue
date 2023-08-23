@@ -72,6 +72,7 @@ export default {
       default: true,
     },
     imageNewLine: Boolean,
+    localImage: Boolean,
 
     title: Boolean,
     subtitle: Boolean,
@@ -81,7 +82,11 @@ export default {
 
   methods: {
     getImagePath(imagePath) {
-      return require(`@/assets/images/${imagePath}`);
+      if(this.localImage){
+        return require(`@/assets/images/${imagePath}`);
+      }else{
+        return imagePath
+      }
     },
 
     onClick() {

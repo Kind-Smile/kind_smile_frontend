@@ -32,6 +32,7 @@
       :rounded="rounded"
       :autofocus="autofocus"
       :suffix="suffix"
+      :prefix="prefix"
       :hide-details="hide_details"
       @blur="$emit('input', $event.target.value)"
       @keypress="$emit('input', $event.target.value)"
@@ -90,6 +91,7 @@ export default {
     rounded: Boolean,
     autofocus: Boolean,
     suffix: String,
+    prefix: String,
     hide_details: Boolean,
   },
 

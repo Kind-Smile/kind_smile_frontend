@@ -22,13 +22,13 @@
             </div>
 
             <v-row slot="cardText">
-              <template v-for="(foodCharity, index) in foodsCharity">
+              <template v-for="foodCharity in foodsCharity">
                 <v-col
                   lg="4"
                   md="6"
                   sm="6"
                   cols="12"
-                  :key="foodCharity.id + index"
+                  :key="foodCharity.id"
                 >
                   <Card
                     text
@@ -46,12 +46,12 @@
                         </p>
                       </div>
 
-                      <div class="mb-1" v-if="foodCharity.food.length > 0">
+                      <div class="mb-1" v-if="foodCharity.collection > 0">
                         <p style="display: inline" class="ml-1">
                           تعداد مشارکت ثبت‌شده:
                         </p>
                         <p style="display: inline">
-                          <b>{{ foodCharity.food.length }} پرس</b>
+                          <b>{{ foodCharity.collection }} پرس</b>
                         </p>
                       </div>
 
@@ -133,7 +133,7 @@
 
                       <Button
                         v-if="
-                          !foodCharity.isExpired && foodCharity.food.length == 0
+                          !foodCharity.isExpired && foodCharity.collection == 0
                         "
                         :block="!$vuetify.breakpoint.mdAndUp"
                         dark
@@ -436,7 +436,7 @@ export default {
       this.editedFormData.id = id;
       this.editedFormData = food;
 
-      if (!food.food.length == 0) {
+      if (!food.collection == 0) {
         this.ishaveBenefactor = true;
       } else {
         this.ishaveBenefactor = false;
@@ -470,7 +470,7 @@ export default {
     async getBenefactorList(id) {
       const data = id;
       try {
-        await this.$store.dispatch("benefactorList", { data });
+        await this.$store.dispatch("foodBenefactorList", { data });
         this.benefactorList = this.$store.state.responseData;
         this.$store.commit("clearResponseData");
       } catch (error) {
@@ -490,6 +490,7 @@ export default {
 
     addFood() {
       this.openaddFoodDialog();
+      this.getAgentList();
     },
 
     async removeFood(id) {
@@ -509,12 +510,6 @@ export default {
         await this.$store.dispatch("editFood", { data });
         this.getFoodsCharity();
         this.closeEditFoodDialog();
-        // this.editedFormData.id = 0;
-        // this.editedFormData.request = "";
-        // this.editedFormData.eventDate = "";
-        // this.editedFormData.eventTime = "";
-        // this.editedFormData.agent = "";
-        // this.editedFormData.recreate = false;
       } catch (error) {
         console.error("Error during onEdit food in component:", error);
       }

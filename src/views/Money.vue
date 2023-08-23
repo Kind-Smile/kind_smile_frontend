@@ -25,9 +25,9 @@ export default {
       };
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/auth/userProfile/", config
+          "http://127.0.0.1:8000/food/charityFood/", config
         ); 
-        this.charityLogoUrl = response.data.logo;
+        this.charityLogoUrl = response.data[0].logo;
         console.log(response.data)
       } catch (error) {
         console.log("in catch")

@@ -21,6 +21,7 @@
                 labelTag
                 labelText="نام خیریه"
                 placeholder="نام خیریه"
+                prefix=" خیریه"
                 hide_details
                 class="mb-2 mx-2"
               />
@@ -78,7 +79,7 @@
               <label> استان </label>
               <v-autocomplete
                 outlined
-                v-model="formData.selectedState"
+                v-model="selectedState"
                 :items="this.$store.state.states"
                 item-text="name"
                 item-value="id"
@@ -94,12 +95,13 @@
               <label> شهر </label>
               <v-autocomplete
                 outlined
-                v-model="formData.selectedRegion"
+                v-model="selectedRegion"
                 :items="this.$store.state.states"
                 item-text="name"
                 item-value="id"
                 hide-details
                 placeholder="شهر خود را انتخاب کنید"
+                @change="stateSelectedName"
                 class="ma-2"
               >
               <!-- @click="regionsByState" -->
@@ -365,6 +367,7 @@ export default {
       },
 
       selectedState: "",
+      selectedRegion: "",
       regions: [],
       latitude: "",
       longitude: "",
@@ -408,7 +411,8 @@ export default {
       if (selectedStateObject) {
         this.latitude = selectedStateObject.latitude;
         this.longitude = selectedStateObject.longitude;
-        this.selectedState = selectedStateObject.name
+        this.formData.selectedState = selectedStateObject.name
+        this.formData.selectedRegion = selectedStateObject.name
       }
     },
 
