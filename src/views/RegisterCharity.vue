@@ -79,7 +79,7 @@
               <label> استان </label>
               <v-autocomplete
                 outlined
-                v-model="selectedState"
+                v-model="formData.selectedState"
                 :items="this.$store.state.states"
                 item-text="name"
                 item-value="id"
@@ -88,24 +88,6 @@
                 @change="stateSelectedName"
                 class="ma-2"
               >
-              </v-autocomplete>
-            </v-col>
-
-            <v-col cols="12" sm="12" md="12" lg="4">
-              <label> شهر </label>
-              <v-autocomplete
-                outlined
-                v-model="selectedRegion"
-                :items="this.$store.state.states"
-                item-text="name"
-                item-value="id"
-                hide-details
-                placeholder="شهر خود را انتخاب کنید"
-                @change="stateSelectedName"
-                class="ma-2"
-              >
-              <!-- @click="regionsByState" -->
-              <!-- :items="regions" -->
               </v-autocomplete>
             </v-col>
 
@@ -201,28 +183,32 @@
               ></v-file-input
             ></v-col>
 
-            <v-col cols="12" sm="12" md="12" lg="4">
-              <label> هیئت امنا </label>
-              <v-textarea
-                outlined
-                clearable
-                hide-details
-                clear-icon="mdi-close-circle"
-                v-model="formData.institute"
-                class="my-2"
-              ></v-textarea>
-            </v-col>
+            <v-col lg="12" md="12" sm="12" cols="12">
+            <v-row>
+              <v-col cols="12" sm="12" md="12" lg="4">
+                <label> هیئت امنا </label>
+                <v-textarea
+                  outlined
+                  clearable
+                  hide-details
+                  clear-icon="mdi-close"
+                  v-model="formData.institute"
+                  class="my-2"
+                ></v-textarea>
+              </v-col>
 
-            <v-col cols="12" sm="12" md="12" lg="4">
-              <label> توضیحات </label>
-              <v-textarea
-                outlined
-                clearable
-                hide-details
-                clear-icon="mdi-close-circle"
-                v-model="formData.description"
-                class="my-2"
-              ></v-textarea>
+              <v-col cols="12" sm="12" md="12" lg="4">
+                <label> توضیحات </label>
+                <v-textarea
+                  outlined
+                  clearable
+                  hide-details
+                  clear-icon="mdi-close"
+                  v-model="formData.description"
+                  class="my-2"
+                ></v-textarea>
+              </v-col>
+            </v-row>
             </v-col>
 
             <v-col
@@ -236,7 +222,7 @@
               <router-link
                 :to="{
                   path: '/map',
-                  query: { lat: this.latitude, lng: this.longitude },
+                  query: { coordinates: this.coordinates },
                 }"
               >
                 <div
@@ -248,7 +234,7 @@
               </router-link>
             </v-col>
 
-            <v-col cols="12" sm="12" md="4" lg="4" v-else class="pa-0">
+            <v-col cols="12" sm="12" md="12" lg="12" v-else class="pa-0">
               <v-col cols="12" sm="12" md="12" lg="12">
                 <Input
                   outlined
@@ -266,7 +252,14 @@
               </v-col>
 
               <v-col cols="12" sm="12" md="12" lg="12" class="pt-0">
-                <router-link to="/map" style="font-size: 0.8rem" class="mb-2">
+                <router-link
+                  :to="{
+                    path: '/map',
+                    query: { coordinates: this.coordinates },
+                  }"
+                  style="font-size: 0.8rem"
+                  class="mb-2"
+                >
                   <div
                     @click="clickAddress"
                     :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
@@ -351,7 +344,6 @@ export default {
         phoneNumber: "",
         correlation: "",
         selectedState: "",
-        selectedRegion: "",
         other: "",
         officer: "",
         officerPhone: "",
@@ -367,10 +359,8 @@ export default {
       },
 
       selectedState: "",
-      selectedRegion: "",
-      regions: [],
-      latitude: "",
-      longitude: "",
+
+      coordinates: [51.420296, 35.732379],
 
       rules: {
         required: [
@@ -404,37 +394,25 @@ export default {
 
   methods: {
     stateSelectedName() {
+      
       const selectedStateObject = this.$store.state.states.find(
         (state) => state.id == this.formData.selectedState
       );
 
       if (selectedStateObject) {
-        this.latitude = selectedStateObject.latitude;
-        this.longitude = selectedStateObject.longitude;
-        this.formData.selectedState = selectedStateObject.name
-        this.formData.selectedRegion = selectedStateObject.name
-      }
-    },
-
-    async regionsByState(){
-      const data = this.selectedState;
-
-      try {
-        await this.$store.dispatch("regionsByState", { data });
-        this.regions = this.$store.state.responseData
-        this.$store.commit("clearResponseData");
-      } catch (error) {
-        console.error("Error during regionsByState:", error);
+        this.selectedState = selectedStateObject.name;
+        if (!this.$store.state.charity.isSetAddress) {
+          this.coordinates[1] = selectedStateObject.latitude;
+          this.coordinates[0] = selectedStateObject.longitude;
+        }
       }
     },
 
     clickAddress() {
-      localStorage.setItem("charityFormData", JSON.stringify(this.formData));
       this.$updateCharityProperty("isClickAddress", true);
     },
 
     handleLogoChange(event) {
-      // console.log(event.target);
       const file = event;
       if (file) {
         this.formData.logo = file;
@@ -442,14 +420,14 @@ export default {
     },
 
     async onSubmit() {
-      // console.log(this.formData);
+      this.formData.selectedState = this.selectedState
+      console.log(this.formData)
       const data = this.formData;
 
       try {
         await this.$store.dispatch("registerCharity", { data });
 
         localStorage.removeItem("charityFormData");
-        // this.$refs.charityForm.reset();
         this.$updateCharityProperty("isSetAddress", false);
         this.$updateCharityProperty("address", "");
         this.$updateCharityProperty("latitude", 0.0);
@@ -475,14 +453,25 @@ export default {
       this.formData.address = this.$store.state.charity.address;
       this.formData.latitude = this.$store.state.charity.latitude;
       this.formData.longitude = this.$store.state.charity.longitude;
+      if(this.formData.name == ""){
+        this.formData.selectedState = ""
+      }
+      this.stateSelectedName();
     }
 
-    // const cachedData = localStorage.getItem("regionsData");
-    // if (cachedData) {
-    //   this.regions = JSON.parse(cachedData);
-    // } else {
-    //   this.fetchRegionsData();
-    // }
+    if (this.$store.state.charity.isSetAddress) {
+      this.coordinates[0] = this.$store.state.charity.longitude;
+      this.coordinates[1] = this.$store.state.charity.latitude;
+    }
+  },
+
+  watch: {
+    formData: {
+      handler() {
+        localStorage.setItem("charityFormData", JSON.stringify(this.formData));
+      },
+      deep: true
+    }
   },
 };
 </script>

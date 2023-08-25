@@ -175,7 +175,10 @@ export default {
     },
 
     logoutHandler() {
-      router.push("/")
+      if (this.$route.path !== "/") {
+        router.push("/");
+      }
+
       this.$store.commit("logout");
     },
 
@@ -194,7 +197,6 @@ export default {
       const data = this.formData;
       this.$store.dispatch("checkVerifycode", { data });
       router.push("/register-benefactor");
-      // this.openKindsOfUsersDialog()
     },
   },
 

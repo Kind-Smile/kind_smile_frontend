@@ -24,15 +24,21 @@
             <v-row slot="cardText">
               <template v-for="charity in charityList">
                 <v-col lg="4" md="6" sm="6" cols="12" :key="charity.id">
-                  <Card title text actions imageNewLine :cardImage="charity.logo">
+                  <Card
+                    title
+                    text
+                    actions
+                    imageNewLine
+                    :cardImage="charity.logo"
+                  >
                     <div
                       slot="cardTitle"
                       :style="{ color: $vuetify.theme.currentTheme.primary }"
                       class="bold semiSmall"
                     >
-                      <a @click="opencharityInfoDialog(charity.id)">خیریه {{
-                        charity.name
-                      }}</a>
+                      <a @click="opencharityInfoDialog(charity.id)"
+                        >خیریه {{ charity.name }}</a
+                      >
                     </div>
 
                     <div slot="cardText">
@@ -109,22 +115,7 @@ export default {
     return {
       charityInfoDialog: false,
       charityList: [],
-      // charityInfo: {
-      //   name: "",
-      //   boss: "",
-      //   phoneNumber: "",
-      //   correlation: "",
-      //   selectedState: "",
-      //   selectedRegion: "",
-      //   other: "",
-      //   officer: "",
-      //   officerPhone: "",
-      //   cardNumber: "",
-      //   code: "",
-      //   institute: "",
-      //   description: "",
-      //   address: this.$store.state.charity.address,
-      // },
+      charityInfo: [],
     };
   },
 
@@ -139,6 +130,7 @@ export default {
     async opencharityInfoDialog(charityId) {
       console.log(charityId);
       this.charityInfoDialog = !this.charityInfoDialog;
+      console.log(this.charityList);
 
       // try {
       //   await this.$store.dispatch("charityInfo", { charityId });
@@ -163,9 +155,9 @@ export default {
 
     async getFoodCharities() {
       try {
-        await this.$store.dispatch('foodCharities');
+        await this.$store.dispatch("foodCharities");
         this.charityList = this.$store.state.responseData;
-        console.log(this.$store.state.responseData)
+        console.log(this.$store.state.responseData);
         this.$store.commit("clearResponseData");
       } catch (error) {
         console.error("Error during getFoodCharities in component:", error);
@@ -180,7 +172,7 @@ export default {
   },
 
   created() {
-    this.getFoodCharities()
+    this.getFoodCharities();
   },
 };
 </script>

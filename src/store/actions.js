@@ -118,7 +118,7 @@ export default {
     const config = {
       params: { state: data },
     };
-    console.log(`in actions: data is: ${data}`);
+    console.log(`in regionsByState actions: data is: ${data}`);
 
     await axios
       .get("http://127.0.0.1:8000/auth/citiesByState/", config)

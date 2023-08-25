@@ -51,7 +51,12 @@
               v-if="!this.$store.state.benefactor.isSetAddress"
               class="my-3"
             >
-              <router-link to="/map">
+              <router-link
+                :to="{
+                  path: '/map',
+                  query: { coordinates: this.coordinates },
+                }"
+              >
                 <div
                   @click="clickAddress"
                   :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
@@ -80,7 +85,10 @@
 
               <v-col cols="12" sm="12" md="12" lg="12">
                 <router-link
-                  to="/map"
+                  :to="{
+                    path: '/map',
+                    query: { coordinates: this.coordinates },
+                  }"
                   style="font-size: 0.8rem"
                   class="mb-2"
                   @click="clickAddress"
@@ -170,6 +178,9 @@ export default {
         longitude: this.$store.state.benefactor.longitude,
         password: "",
       },
+
+      coordinates: [51.420296, 35.732379],
+
       rules: {
         required: (value) => {
           return !!value || "Required.";
@@ -229,6 +240,11 @@ export default {
       this.formData.address = this.$store.state.benefactor.address;
       this.formData.latitude = this.$store.state.benefactor.latitude;
       this.formData.longitude = this.$store.state.benefactor.longitude;
+    }
+
+    if (this.$store.state.benefactor.isSetAddress) {
+      this.coordinates[0] = this.$store.state.benefactor.longitude;
+      this.coordinates[1] = this.$store.state.benefactor.latitude;
     }
   },
 };
