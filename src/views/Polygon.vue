@@ -149,7 +149,7 @@ export default {
     savePolygon() {
       this.$updateAgentProperty("isSetPolygon", true);
       this.$updateAgentProperty("polygonPoints", this.points);
-      // console.log(this.$store.state.agent.polygonPoints);
+      console.log(this.$store.state.agent.polygonPoints);
       router.back();
     },
   },

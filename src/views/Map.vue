@@ -68,13 +68,14 @@ export default {
       mapirToken: process.env.VUE_APP_MAPIR_API_KEY,
     };
   },
+  
   methods: {
     async mapOnClick(e) {
       this.markerCoordinates = [
         e.actualEvent.lngLat.lng,
         e.actualEvent.lngLat.lat,
       ];
-      this.coordinates=this.markerCoordinates
+      this.coordinates = this.markerCoordinates;
 
       try {
         const response = await axios.get(
@@ -98,8 +99,8 @@ export default {
         e.actualEvent.target._lngLat.lng,
         e.actualEvent.target._lngLat.lat,
       ];
-      this.coordinates=this.markerCoordinates
-      
+      this.coordinates = this.markerCoordinates;
+
       try {
         const response = await axios.get(
           `https://map.ir/reverse?lat=${this.markerCoordinates[1]}&lon=${this.markerCoordinates[0]}`,
@@ -133,9 +134,6 @@ export default {
       if (this.$store.state.benefactor.isClickAddress) {
         this.$updateBenefactorProperty("isSetAddress", true);
         this.$updateBenefactorProperty("address", newValue);
-        // console.log(`in map component, lacal coordinates ${this.coordinates}`)
-        // console.log(`in map component, stroe.state.latitude ${this.$store.state.benefactor.latitude}`)
-        // console.log(`in map component, stroe.state.longitude ${this.$store.state.benefactor.longitude}`)
         this.$updateBenefactorProperty("latitude", this.coordinates[1]);
         this.$updateBenefactorProperty("longitude", this.coordinates[0]);
       } else if (this.$store.state.charity.isClickAddress) {
@@ -149,8 +147,11 @@ export default {
 
   created() {
     this.coordinates = this.$route.query.coordinates;
-    if(this.$store.state.charity.isSetAddress || this.$store.state.benefactor.isSetAddress){
-      this.markerCoordinates = this.coordinates
+    if (
+      this.$store.state.charity.isSetAddress ||
+      this.$store.state.benefactor.isSetAddress
+    ) {
+      this.markerCoordinates = this.coordinates;
     }
   },
 

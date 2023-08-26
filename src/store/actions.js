@@ -7,17 +7,10 @@ export default {
       .post(`http://127.0.0.1:8000/auth/token/`, {
         phoneNumber: parseInt(data.phoneNumber, 10),
         password: data.password,
-        // rememberMe: data.rememberMe,
       })
       .then((response) => {
         let data = response.data;
-        // commit("login", data.access);
-        commit("login", { access: data.access, role: data.role });
-        // console.log(`in actions role is: ${data.role}`);
-        // console.log(
-        //   `loged in successfully! and this is your access token: ${data.access}`
-        //   // User and Charity and
-        // );
+        commit("login", { access: data.access, role: data.role, completeData: data });
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -111,6 +104,26 @@ export default {
       .catch((error) => {
         console.log("in action error");
         console.error("Error:", error);
+      });
+  },
+
+  async userProfile({ state, commit }) {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .get("http://127.0.0.1:8000/auth/userProfile/", config)
+      .then((response) => {
+        let responseMessage = response.data;
+        state.isLoading = false;
+        commit("setResponseData", responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error fetching userProfile:", error);
       });
   },
 

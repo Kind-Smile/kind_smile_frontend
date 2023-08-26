@@ -3,6 +3,9 @@ export default {
   token: "",
   role: "",
 
+  benefactorLng: 0.0,
+  benefactorLat: 0.0,
+
   benefactorUsers: [],
   charityUsers: [],
   agentUsers: [],

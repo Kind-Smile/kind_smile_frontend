@@ -1,3 +1,5 @@
+import store from ".";
+
 export default {
   updateCharity(state, payload) {
     const { property, newVal } = payload;
@@ -31,7 +33,15 @@ export default {
       state.role = data.role;
 
       localStorage.setItem("token", data.access);
-      localStorage.setItem("role" , data.role)
+      localStorage.setItem("role", data.role);
+
+      if (data.role == "User") {
+        state.benefactorLat = data.completeData.latitude;
+        state.benefactorLng = data.completeData.longitude;
+
+        localStorage.setItem("benefactorLat", data.completeData.latitude);
+        localStorage.setItem("benefactorLng", data.completeData.longitude);
+      }
     } else {
       state.isAuthenticated = false;
       state.token = "";
@@ -47,6 +57,8 @@ export default {
     state.role = "";
     localStorage.removeItem("token");
     localStorage.removeItem("role");
+    localStorage.removeItem("benefactorLat");
+    localStorage.removeItem("benefactorLng");
   },
 
   checkAuthState(state) {
@@ -56,11 +68,16 @@ export default {
     if (token) {
       state.isAuthenticated = true;
       state.token = token;
-      state.role = role
+      state.role = role;
+
+      if (role == "User") {
+        state.benefactorLat = localStorage.getItem("benefactorLat");
+        state.benefactorLng = localStorage.getItem("benefactorLng");
+      }
     } else {
       state.isAuthenticated = false;
       state.token = "";
-      state.role = ""
+      state.role = "";
     }
   },
 

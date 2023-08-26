@@ -394,7 +394,6 @@ export default {
 
   methods: {
     stateSelectedName() {
-      
       const selectedStateObject = this.$store.state.states.find(
         (state) => state.id == this.formData.selectedState
       );
