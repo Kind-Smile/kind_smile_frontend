@@ -54,6 +54,10 @@ const routes = [
     path: "/map",
     name: "map",
     component: Map,
+    props: route => ({
+      disable: route.query.disable === 'true' || false,
+      coordinates: route.query.coordinates || null
+    })
   },
 
   {

@@ -452,7 +452,7 @@ export default {
       this.formData.address = this.$store.state.charity.address;
       this.formData.latitude = this.$store.state.charity.latitude;
       this.formData.longitude = this.$store.state.charity.longitude;
-      if(this.formData.name == ""){
+      if(this.formData.address == ""){
         this.formData.selectedState = ""
       }
       this.stateSelectedName();

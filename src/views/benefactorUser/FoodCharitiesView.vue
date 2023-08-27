@@ -164,11 +164,11 @@
             </p>
           </div>
 
-          <div class="mb-1">
+          <div class="mt-3 mb-1">
             <router-link
               :to="{
                 path: '/map',
-                query: { coordinates: [charityInfo.longitude, charityInfo.latitude] },
+                query: { coordinates: [charityInfo.longitude, charityInfo.latitude] , disable: true},
               }"
             >
               <div
@@ -190,7 +190,6 @@ import Card from "@/components/basics/Card.vue";
 import Button from "@/components/basics/Button.vue";
 import Dialog from "@/components/basics/Dialog.vue";
 import * as turf from "@turf/turf";
-import { eventBus } from '@/eventBus.js';
 
 export default {
   name: "FoodCharities",
@@ -282,8 +281,6 @@ export default {
 
   created() {
     this.getFoodCharities();
-
-    this.$updateCharityProperty("isSetAddress", true);
   },
 };
 </script>

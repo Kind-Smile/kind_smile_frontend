@@ -5,12 +5,12 @@
         v-if="markerCoordinates"
         :coordinates="markerCoordinates"
         color="#0"
-        :draggable="true"
+        :draggable="!disable"
         @dragend="onMarkerDragEnd"
       ></mapMarker>
     </mapir>
 
-    <v-row no-gutters>
+    <v-row no-gutters v-if="!disable">
       <v-col lg="12" md="12" sm="12" cols="12" class="map-panel px-7">
         <v-row class="justify-space-between align-center">
           <v-col
@@ -66,55 +66,60 @@ export default {
       markerCoordinates: null,
       address: "",
       mapirToken: process.env.VUE_APP_MAPIR_API_KEY,
+      disable: false,
     };
   },
-  
+
   methods: {
     async mapOnClick(e) {
-      this.markerCoordinates = [
-        e.actualEvent.lngLat.lng,
-        e.actualEvent.lngLat.lat,
-      ];
-      this.coordinates = this.markerCoordinates;
+      if (!this.disable) {
+        this.markerCoordinates = [
+          e.actualEvent.lngLat.lng,
+          e.actualEvent.lngLat.lat,
+        ];
+        this.coordinates = this.markerCoordinates;
 
-      try {
-        const response = await axios.get(
-          `https://map.ir/reverse?lat=${this.markerCoordinates[1]}&lon=${this.markerCoordinates[0]}`,
-          {
-            headers: {
-              "x-api-key": this.mapirToken,
-            },
-          }
-        );
+        try {
+          const response = await axios.get(
+            `https://map.ir/reverse?lat=${this.markerCoordinates[1]}&lon=${this.markerCoordinates[0]}`,
+            {
+              headers: {
+                "x-api-key": this.mapirToken,
+              },
+            }
+          );
 
-        this.address = response.data.address;
-        alert(`${this.markerCoordinates}`);
-      } catch (error) {
-        console.error("Error fetching reverse geocoding data:", error);
+          this.address = response.data.address;
+          alert(`${this.markerCoordinates}`);
+        } catch (error) {
+          console.error("Error fetching reverse geocoding data:", error);
+        }
       }
     },
 
     async onMarkerDragEnd(e) {
-      this.markerCoordinates = [
-        e.actualEvent.target._lngLat.lng,
-        e.actualEvent.target._lngLat.lat,
-      ];
-      this.coordinates = this.markerCoordinates;
+      if (!this.disable) {
+        this.markerCoordinates = [
+          e.actualEvent.target._lngLat.lng,
+          e.actualEvent.target._lngLat.lat,
+        ];
+        this.coordinates = this.markerCoordinates;
 
-      try {
-        const response = await axios.get(
-          `https://map.ir/reverse?lat=${this.markerCoordinates[1]}&lon=${this.markerCoordinates[0]}`,
-          {
-            headers: {
-              "x-api-key": this.mapirToken,
-            },
-          }
-        );
+        try {
+          const response = await axios.get(
+            `https://map.ir/reverse?lat=${this.markerCoordinates[1]}&lon=${this.markerCoordinates[0]}`,
+            {
+              headers: {
+                "x-api-key": this.mapirToken,
+              },
+            }
+          );
 
-        this.address = response.data.address;
-        alert(`${this.address}`);
-      } catch (error) {
-        console.error("Error fetching reverse geocoding data:", error);
+          this.address = response.data.address;
+          alert(`${this.address}`);
+        } catch (error) {
+          console.error("Error fetching reverse geocoding data:", error);
+        }
       }
     },
 
@@ -147,9 +152,11 @@ export default {
 
   created() {
     this.coordinates = this.$route.query.coordinates;
+    this.disable = this.$route.query.disable;
     if (
       this.$store.state.charity.isSetAddress ||
-      this.$store.state.benefactor.isSetAddress
+      this.$store.state.benefactor.isSetAddress ||
+      this.$route.query.disable
     ) {
       this.markerCoordinates = this.coordinates;
     }
@@ -177,5 +184,9 @@ export default {
   top: 15px;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.clickable {
+  cursor: pointer;
 }
 </style>
