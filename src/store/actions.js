@@ -376,6 +376,30 @@ export default {
       });
   },
 
+  async donateFood({state, commit }, { data }) {
+    // console.log("I am in: action->donateFood");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .post(`http://127.0.0.1:8000/food/createDonor/`, {
+        food_collect: parseInt(data.foodCollect, 10),
+        food: parseInt(data.id, 10),
+      }, config)
+      .then((response) => {
+        let data = response.data;
+        console.log(data)
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        throw error;
+      });
+  },
+
   async notificationCharities({ state, commit }) {
     const config = {
       headers: {

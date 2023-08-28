@@ -81,25 +81,14 @@
                         </small>
                       </div>
 
-                      <div v-if="!food.food_collect == null">
+                      <div v-if="food.food_collect != null">
+                        <v-divider class="my-3"></v-divider>
                         <div class="mb-1">
                           <p style="display: inline" class="ml-1">
                             میزان مشارکت شما:
                           </p>
                           <p style="display: inline">
                             <b>{{ food.food_collect }} پرس</b>
-                          </p>
-                        </div>
-
-                        <div class="mt-3 mb-1">
-                          <p
-                            style="display: inline"
-                            :style="{
-                              color: $vuetify.theme.currentTheme.thirdColor,
-                            }"
-                            class="ml-1"
-                          >
-                            از مشارکت شما نیکوکار گرامی متشکریم.
                           </p>
                         </div>
 
@@ -120,6 +109,18 @@
                             <b>0{{ food.food.agent.phoneNumber }}</b>
                           </p>
                         </div>
+
+                        <div class="mt-3 mb-1">
+                          <p
+                            style="display: inline"
+                            :style="{
+                              color: $vuetify.theme.currentTheme.thirdColor,
+                            }"
+                            class="ml-1"
+                          >
+                            از مشارکت شما نیکوکار گرامی متشکریم. <br/>در صورت نیاز با سفیر مهربانی تماس حاصل فرمایید.
+                          </p>
+                        </div>
                       </div>
                     </div>
 
@@ -133,8 +134,8 @@
                         dark
                         :color="$vuetify.theme.currentTheme.primary"
                         input_value="ثبت مشارکت"
+                        @click="openDonateFoodDialog(food.food.id)"
                       ></Button>
-                      <!-- @click="seeFoodsCharity(food.food.id)" -->
                     </v-row>
                   </Card>
                 </v-col>
@@ -143,6 +144,54 @@
           </Card>
         </v-col>
       </v-row>
+
+      <Dialog
+        :dialogOpen="donateFoodDialog"
+        @update:dialogOpen="updateDonateFoodDialog"
+        title="برای ثبت مشارکت در این سفره، اطلاعات زیر را تکمیل نمایید:"
+      >
+        <v-form
+          @submit.prevent="onSubmit"
+          slot="dialogText"
+          class="mb-n4"
+          ref="addFood"
+        >
+          <v-autocomplete
+            outlined
+            v-model="formData.selectedFood"
+            :items="this.$store.state.foodsList"
+            hide-details
+            placeholder="نوع غذای خود را انتخاب کنید"
+            class="mb-5"
+          >
+            <!-- item-value="id" -->
+            <!-- item-text="name" -->
+          </v-autocomplete>
+
+          <Input
+            outlined
+            dense
+            name="foodCollect"
+            type="number"
+            v-model.trim="formData.foodCollect"
+            labelTag
+            labelText="تعداد غذای اهدایی"
+            placeholder="تعداد غذای اهدایی"
+            hide_details
+            class="mb-5"
+          />
+
+          <Button
+            input_value="ثبت‌"
+            type="submit"
+            dark
+            block
+            large
+            class="mb-3 mt-5"
+          >
+          </Button>
+        </v-form>
+      </Dialog>
     </v-main>
   </div>
 </template>
@@ -150,6 +199,7 @@
 <script>
 import AppBar from "@/components/basics/AppBar.vue";
 import Card from "@/components/basics/Card.vue";
+import Input from "@/components/basics/Input.vue";
 import Button from "@/components/basics/Button.vue";
 import Dialog from "@/components/basics/Dialog.vue";
 import * as turf from "@turf/turf";
@@ -163,14 +213,65 @@ export default {
       id: 0,
       charityName: "",
       foodsList: [],
+
+      formData: {
+        id: "",
+        selectedFood: "",
+        foodCollect: "",
+      },
+
+      donateFoodDialog: false,
     };
   },
 
   components: {
     AppBar,
     Card,
+    Input,
     Button,
     Dialog,
+  },
+
+  methods: {
+    //handle donateFoodDialog
+    openDonateFoodDialog(id) {
+      this.donateFoodDialog = !this.donateFoodDialog;
+      this.formData.id = id;
+    },
+    updateDonateFoodDialog(newVal) {
+      this.donateFoodDialog = newVal;
+    },
+    closeDonateFoodDialog() {
+      this.donateFoodDialog = false;
+    },
+
+    async getFoodsCharity() {
+      const id = this.id;
+      try {
+        await this.$store.dispatch("getBenefactorFoodsCharity", { id });
+        this.foodsList = this.$store.state.responseData;
+        console.log(this.foodsList);
+        this.$store.commit("clearResponseData");
+      } catch (error) {
+        console.error(
+          "Error during getBenefactorFoodsCharity in component:",
+          error
+        );
+      }
+    },
+
+    async onSubmit() {
+      const data = this.formData;
+      console.log(this.formData);
+
+      try {
+        await this.$store.dispatch("donateFood", { data });
+        this.getFoodsCharity();
+        this.closeDonateFoodDialog();
+      } catch (error) {
+        console.error("Error during onSubmit in component:", error);
+      }
+    },
   },
 
   computed: {
@@ -211,22 +312,6 @@ export default {
 
         return this.$hexToRgba(this.$vuetify.theme.currentTheme.text, 0.15);
       };
-    },
-  },
-
-  methods: {
-    async getFoodsCharity() {
-      const id = this.id;
-      try {
-        await this.$store.dispatch("getBenefactorFoodsCharity", { id });
-        this.foodsList = this.$store.state.responseData;
-        this.$store.commit("clearResponseData");
-      } catch (error) {
-        console.error(
-          "Error during getBenefactorFoodsCharity in component:",
-          error
-        );
-      }
     },
   },
 
