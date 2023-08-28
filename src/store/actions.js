@@ -356,6 +356,26 @@ export default {
       });
   },
 
+  async getBenefactorFoodsCharity({ state, commit }, {id}) {
+    const config = {
+      params: { id: id },
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .get("http://127.0.0.1:8000/food/show/", config)
+      .then((response) => {
+        let responseMessage = response.data;
+        commit("setResponseData", responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error fetching getBenefactorFoodsCharity:", error);
+      });
+  },
+
   async notificationCharities({ state, commit }) {
     const config = {
       headers: {

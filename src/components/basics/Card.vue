@@ -38,11 +38,11 @@
           <slot name="cardSubtitle"></slot>
         </v-card-subtitle>
 
-        <v-card-text v-if="text" class="px-4 pt-0 pb-3">
+        <v-card-text v-if="text" class="px-4 pt-0 pb-0">
           <slot name="cardText"></slot>
         </v-card-text>
 
-        <v-card-actions v-if="actions" class="px-4 pt-0 pb-3">
+        <v-card-actions v-if="actions" class="px-4 py-3">
           <slot name="cardActions"></slot>
         </v-card-actions>
       </v-col>

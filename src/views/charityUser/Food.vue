@@ -249,7 +249,7 @@
           </div>
 
           <Button
-            input_value="ثبت‌نام"
+            input_value="ثبت‌"
             type="submit"
             dark
             block
@@ -342,7 +342,7 @@
           </div>
 
           <Button
-            input_value="ثبت‌نام"
+            input_value="ثبت‌"
             type="submit"
             dark
             block

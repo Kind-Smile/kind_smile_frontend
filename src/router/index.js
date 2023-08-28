@@ -2,8 +2,11 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 
 import HomeView from "@/views/HomeView.vue";
+
+//benefactor account
 import FoodCharities from "@/views/benefactorUser/FoodCharitiesView.vue";
 import NotificationCharities from "@/views/benefactorUser/NotificationCharitiesView.vue";
+import FoodsCharity from "@/views/benefactorUser/FoodsCharity.vue"
 import Money from "@/views/Money.vue"
 
 //charity account
@@ -36,6 +39,12 @@ const routes = [
     path: "/notification-charities",
     name: "notification",
     component: NotificationCharities,
+  },
+
+  {
+    path: "/foods-charity/:id",
+    name: "foodsCharity",
+    component: FoodsCharity,
   },
 
   {

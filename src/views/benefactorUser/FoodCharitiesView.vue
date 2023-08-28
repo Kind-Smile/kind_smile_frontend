@@ -2,7 +2,9 @@
   <div>
     <AppBar></AppBar>
     <v-main class="mt-8 mb-5 mx-5">
-      <div v-if="this.$store.state.isLoading"><h4>صبر کنید...</h4></div>
+      <div v-if="this.$store.state.isLoading">
+        <h4>صبر کنید...</h4>
+      </div>
 
       <v-row v-else>
         <v-col lg="12" md="12" sm="12" cols="12">
@@ -64,7 +66,7 @@
                         </p>
                       </div>
 
-                      <div class="mt-3" v-if="isInside">
+                      <div class="mt-3" v-if="!charity.isInside">
                         <p style="display: inline">
                           <v-icon
                             size="15"
@@ -93,6 +95,7 @@
                         dark
                         :color="$vuetify.theme.currentTheme.primary"
                         input_value="مشاهده سفره‌های مهربانی"
+                        @click="seeFoodsCharity(charity.id)"
                       ></Button>
                     </v-row>
                   </Card>
@@ -168,12 +171,13 @@
             <router-link
               :to="{
                 path: '/map',
-                query: { coordinates: [charityInfo.longitude, charityInfo.latitude] , disable: true},
+                query: {
+                  coordinates: [charityInfo.longitude, charityInfo.latitude],
+                  disable: true,
+                },
               }"
             >
-              <div
-                :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
-              >
+              <div :style="{ color: $vuetify.theme.currentTheme.thirdColor }">
                 مشاهده آدرس خیریه روی نقشه
               </div>
             </router-link>
@@ -190,6 +194,7 @@ import Card from "@/components/basics/Card.vue";
 import Button from "@/components/basics/Button.vue";
 import Dialog from "@/components/basics/Dialog.vue";
 import * as turf from "@turf/turf";
+import router from "@/router";
 
 export default {
   name: "FoodCharities",
@@ -236,6 +241,10 @@ export default {
         console.error("Error during getFoodCharities in component:", error);
       }
     },
+
+    seeFoodsCharity(id){
+      router.push(`/foods-charity/${id}`);
+    }
   },
 
   computed: {
@@ -265,6 +274,8 @@ export default {
             [lng, lat],
             turf.polygon([coordinatesArray])
           );
+
+          charity.isInside = isInside;
 
           if (isInside) {
             return this.$hexToRgba(
