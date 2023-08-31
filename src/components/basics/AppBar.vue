@@ -20,11 +20,11 @@
       </template>
 
       <div class="pt-3 mr-2 ml-3">
-        <a href="/">
+        <router-link to="/">
           <v-icon :color="$vuetify.theme.currentTheme.text" size="22"
             >mdi-home-outline</v-icon
           >
-        </a>
+        </router-link>
       </div>
 
       <div v-if="this.$store.state.isAuthenticated" class="pt-3">
@@ -51,9 +51,9 @@
         </div>
 
         <div>
-          <a class="ml-3" href="/login">
+          <router-link class="ml-3" to="/login">
             <small>ورود</small>
-          </a>
+          </router-link>
         </div>
 
         <div>

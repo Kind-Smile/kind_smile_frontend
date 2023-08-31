@@ -452,12 +452,16 @@ export default {
     },
 
     //handle benefactorListDialog
-    openBenefactorListDialog(id) {
+    async openBenefactorListDialog(id) {
       this.benefactorListDialog = !this.benefactorListDialog;
-      this.getBenefactorList(id);
-      if (this.benefactorList == null) {
+      await this.getBenefactorList(id);
+      console.log(this.benefactorList.length != 0);
+      if (this.benefactorList.length != 0) {
         this.benefactorListMessage =
           "افراد زیر در این سفره مهربانی مشارکت داشته‌اند:";
+      }else{
+        this.benefactorListMessage =
+        "هنوز مشارکتی برای این سفره ثبت نشده است.";
       }
     },
     updateBenefactorListDialog(newVal) {
@@ -472,6 +476,7 @@ export default {
       try {
         await this.$store.dispatch("foodBenefactorList", { data });
         this.benefactorList = this.$store.state.responseData;
+        console.log(this.benefactorList)
         this.$store.commit("clearResponseData");
       } catch (error) {
         console.error("Error during getBenefactorList in component:", error);

@@ -164,8 +164,6 @@
             placeholder="نوع غذای خود را انتخاب کنید"
             class="mb-5"
           >
-            <!-- item-value="id" -->
-            <!-- item-text="name" -->
           </v-autocomplete>
 
           <Input
@@ -233,7 +231,6 @@ export default {
   },
 
   methods: {
-    //handle donateFoodDialog
     openDonateFoodDialog(id) {
       this.donateFoodDialog = !this.donateFoodDialog;
       this.formData.id = id;
@@ -250,7 +247,6 @@ export default {
       try {
         await this.$store.dispatch("getBenefactorFoodsCharity", { id });
         this.foodsList = this.$store.state.responseData;
-        console.log(this.foodsList);
         this.$store.commit("clearResponseData");
       } catch (error) {
         console.error(
@@ -281,7 +277,7 @@ export default {
 
     getFoodCardColors() {
       return (food) => {
-        const agent = food.agent;
+        const agent = food.agent; 
 
         const coordinatesArray = [];
 
@@ -303,14 +299,20 @@ export default {
 
         food.isInside = isInside;
 
+        if (!isInside) {
+          return this.$hexToRgba(this.$vuetify.theme.currentTheme.text, 0.15);
+        }
+
+        if (food.isDone){
+          return this.$hexToRgba(this.$vuetify.theme.currentTheme.thirdColor, 0.15);
+        }
+
         if (isInside) {
           return this.$hexToRgba(
             this.$vuetify.theme.currentTheme.primary,
             0.15
           );
         }
-
-        return this.$hexToRgba(this.$vuetify.theme.currentTheme.text, 0.15);
       };
     },
   },

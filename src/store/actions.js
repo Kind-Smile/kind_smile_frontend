@@ -197,7 +197,7 @@ export default {
   async foodBenefactorList({ state, commit }, {data}) {
     console.log(data)
     const config = {
-      data: { id: data },
+      params: { id: data },
       headers: {
         Authorization: `Bearer ${state.token}`,
         Accept: "application/json",
@@ -209,7 +209,7 @@ export default {
       .then((response) => {
         let responseMessage = response.data;
         state.isLoading = false;
-        commit("setCharityAgentList", responseMessage);
+        commit("setResponseData", responseMessage);
       })
       .catch((error) => {
         console.error("Error fetching benefactorList:", error);
@@ -417,6 +417,25 @@ export default {
       })
       .catch((error) => {
         console.error("Error fetching notificationCharity:", error);
+      });
+  },
+
+  async getAgentFoodsCharity({ state, commit }) {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .get("http://127.0.0.1:8000/food/agentFood/", config)
+      .then((response) => {
+        let responseMessage = response.data;
+        commit("setResponseData", responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error fetching getAgentFoodsCharity:", error);
       });
   },
 };

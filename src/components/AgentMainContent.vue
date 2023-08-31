@@ -2,7 +2,7 @@
   <v-main class="mt-8 mb-5 mx-5">
     <v-row>
       <v-col lg="3" md="4" sm="4" cols="12">
-        <router-link :to="`/food`">
+        <router-link :to="`/foods-agent`">
           <v-hover v-slot="{ hover }">
             <Card
               :cardColor="getCardColor"

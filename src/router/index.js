@@ -7,10 +7,13 @@ import HomeView from "@/views/HomeView.vue";
 import FoodCharities from "@/views/benefactorUser/FoodCharitiesView.vue";
 import NotificationCharities from "@/views/benefactorUser/NotificationCharitiesView.vue";
 import FoodsCharity from "@/views/benefactorUser/FoodsCharity.vue"
-import Money from "@/views/Money.vue"
 
 //charity account
+import AgentFoods from "@/views/AgentUser/Food.vue"
 import CharityFood from "@/views/charityUser/Food.vue"
+
+//agent account
+import FoodDonors from "@/views/AgentUser/FoodDonors.vue"
 
 import Map from "@/views/Map.vue";
 import Polygon from "@/views/Polygon.vue";
@@ -48,9 +51,15 @@ const routes = [
   },
 
   {
-    path: "/money",
-    name: "money",
-    component: Money,
+    path: "/foods-agent",
+    name: "AgentFoods",
+    component: AgentFoods,
+  },
+
+  {
+    path: "/food-donors/:id",
+    name: "FoodDonors",
+    component: FoodDonors,
   },
 
   {
