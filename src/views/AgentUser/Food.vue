@@ -7,7 +7,11 @@
       </div>
 
       <v-row v-else>
-        <v-col lg="12" md="12" sm="12" cols="12">
+        <div v-if="this.foodsList.length == 0" class="pa-5">
+          <h6>سفره‌ای برای شما ثبت نشده است.</h6>
+        </div>
+
+        <v-col lg="12" md="12" sm="12" cols="12" v-else>
           <Card :cardColor="getCardColor" title text :image="false">
             <div
               slot="cardTitle"
@@ -19,12 +23,8 @@
 
             <v-row slot="cardText">
               <template v-for="food in foodsList">
-                <v-col lg="4" md="6" sm="6" cols="12" :key="food.id">
-                  <Card
-                    text
-                    actions
-                    :image="false"
-                  >
+                <v-col lg="4" md="4" sm="6" cols="12" :key="food.id">
+                  <Card text :actions="food.collection > 0" :image="false">
                     <div slot="cardText">
                       <div class="mb-1">
                         <p style="display: inline" class="ml-1">
@@ -37,7 +37,7 @@
 
                       <div class="mb-1" v-if="food.collection > 0">
                         <p style="display: inline" class="ml-1">
-                          تعداد غذای جمع‌آوری شده تاکنون:
+                          تعداد غذای ثبت‌شده تاکنون:
                         </p>
                         <p style="display: inline">
                           <b>{{ food.collection }} پرس</b>
@@ -58,6 +58,21 @@
                           </b>
                         </p>
                       </div>
+
+                      <!-- <div class="mb-1" v-if="food.collection > 0">
+                        <p style="display: inline" class="ml-1">
+                          تعداد غذای جمع‌آوری شده تاکنون:
+                        </p>
+                        <p style="display: inline">
+                          <b>{{ food.collection }} پرس</b>
+                        </p>
+                      </div> -->
+
+                      <div class="mt-3 mb-1" v-if="food.collection == 0">
+                        <small class="ml-1 bold" :style="{ color: $vuetify.theme.currentTheme.primary }">
+                          هنوز مشارکتی ثبت نشده است.
+                        </small>
+                      </div>
                     </div>
 
                     <v-row
@@ -65,6 +80,7 @@
                       class="justify-end px-4 pt-5 pb-3"
                     >
                       <Button
+                        v-if="food.collection > 0"
                         :block="!$vuetify.breakpoint.mdAndUp"
                         dark
                         :color="$vuetify.theme.currentTheme.primary"
@@ -109,16 +125,16 @@ export default {
       try {
         await this.$store.dispatch("getAgentFoodsCharity");
         this.foodsList = this.$store.state.responseData;
-        console.log(this.foodsList)
+        console.log(this.foodsList);
         this.$store.commit("clearResponseData");
       } catch (error) {
         console.error("Error during getAgentFoodsCharity in component:", error);
       }
     },
 
-    showDonor(id){
-        router.push(`/food-donors/${id}`)
-    }
+    showDonor(id) {
+      router.push(`/food-donors/${id}`);
+    },
   },
 
   computed: {

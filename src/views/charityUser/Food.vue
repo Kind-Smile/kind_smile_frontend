@@ -471,10 +471,10 @@ export default {
       this.benefactorListDialog = false;
     },
 
-    async getBenefactorList(id) {
-      const data = id;
+    async getBenefactorList(foodId) {
+      const id = foodId;
       try {
-        await this.$store.dispatch("foodBenefactorList", { data });
+        await this.$store.dispatch("foodDonorsList", { id });
         this.benefactorList = this.$store.state.responseData;
         console.log(this.benefactorList)
         this.$store.commit("clearResponseData");

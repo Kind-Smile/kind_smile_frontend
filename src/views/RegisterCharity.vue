@@ -168,7 +168,7 @@
               />
             </v-col>
 
-            <v-col cols="12" sm="12" md="4" lg="4">
+            <v-col cols="12" sm="12" md="12" lg="4">
               <label class="mr-3"> لوگوی خیریه </label>
               <v-file-input
                 v-model="formData.logo"
@@ -214,7 +214,7 @@
             <v-col
               cols="12"
               sm="12"
-              md="4"
+              md="12"
               lg="4"
               v-if="!this.$store.state.charity.isSetAddress"
               class="ma-2 mr-0"

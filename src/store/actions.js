@@ -194,10 +194,9 @@ export default {
       });
   },
 
-  async foodBenefactorList({ state, commit }, {data}) {
-    console.log(data)
+  async foodDonorsList({ state, commit }, {id}) {
     const config = {
-      params: { id: data },
+      params: { id: id },
       headers: {
         Authorization: `Bearer ${state.token}`,
         Accept: "application/json",
@@ -212,7 +211,7 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        console.error("Error fetching benefactorList:", error);
+        console.error("Error fetching foodDonorsList:", error);
       });
   },
 
