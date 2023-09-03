@@ -8,7 +8,7 @@
 
       <v-row v-else>
         <div v-if="this.foodsList.length == 0" class="pa-5">
-          <h6>سفره‌ای برای شما ثبت نشده است.</h6>
+          <h6>سفره‌ای برای شما موجود نیست.</h6>
         </div>
 
         <v-col lg="12" md="12" sm="12" cols="12" v-else>

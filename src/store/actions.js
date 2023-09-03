@@ -10,7 +10,11 @@ export default {
       })
       .then((response) => {
         let data = response.data;
-        commit("login", { access: data.access, role: data.role, completeData: data });
+        commit("login", {
+          access: data.access,
+          role: data.role,
+          completeData: data,
+        });
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -194,7 +198,7 @@ export default {
       });
   },
 
-  async foodDonorsList({ state, commit }, {id}) {
+  async foodDonorsList({ state, commit }, { id }) {
     const config = {
       params: { id: id },
       headers: {
@@ -355,7 +359,7 @@ export default {
       });
   },
 
-  async getBenefactorFoodsCharity({ state, commit }, {id}) {
+  async getBenefactorFoodsCharity({ state, commit }, { id }) {
     const config = {
       params: { id: id },
       headers: {
@@ -375,7 +379,7 @@ export default {
       });
   },
 
-  async donateFood({state, commit }, { data }) {
+  async donateFood({ state, commit }, { data }) {
     // console.log("I am in: action->donateFood");
     const config = {
       headers: {
@@ -385,13 +389,18 @@ export default {
     };
 
     await axios
-      .post(`http://127.0.0.1:8000/food/createDonor/`, {
-        food_collect: parseInt(data.foodCollect, 10),
-        food: parseInt(data.id, 10),
-      }, config)
+      .post(
+        `http://127.0.0.1:8000/food/createDonor/`,
+        {
+          food_type: data.selectedFood,
+          food_collect: parseInt(data.foodCollect, 10),
+          food: parseInt(data.id, 10),
+        },
+        config
+      )
       .then((response) => {
         let data = response.data;
-        console.log(data)
+        console.log(data);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -419,6 +428,7 @@ export default {
       });
   },
 
+  //Agent
   async getAgentFoodsCharity({ state, commit }) {
     const config = {
       headers: {
@@ -435,6 +445,34 @@ export default {
       })
       .catch((error) => {
         console.error("Error fetching getAgentFoodsCharity:", error);
+      });
+  },
+
+  async agentReceiveFood({ state, commit }, { id }) {
+    // console.log("I am in: action->agentReceiveFood");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .post(
+        `http://127.0.0.1:8000/food/isCollected/`,
+        {
+          user_id: id[0],
+          food_id: id[1],
+        },
+        config
+      )
+      .then((response) => {
+        let responseMessage = response.data;
+        console.log(responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        throw error;
       });
   },
 };

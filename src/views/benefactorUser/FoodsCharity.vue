@@ -118,7 +118,8 @@
                             }"
                             class="ml-1"
                           >
-                            از مشارکت شما نیکوکار گرامی متشکریم. <br/>در صورت نیاز با سفیر مهربانی تماس حاصل فرمایید.
+                            از مشارکت شما نیکوکار گرامی متشکریم. <br />در صورت
+                            نیاز با سفیر مهربانی تماس حاصل فرمایید.
                           </p>
                         </div>
                       </div>
@@ -264,6 +265,9 @@ export default {
         await this.$store.dispatch("donateFood", { data });
         this.getFoodsCharity();
         this.closeDonateFoodDialog();
+        this.formData.id = "";
+        this.formData.selectedFood = "";
+        this.formData.foodCollect = "";
       } catch (error) {
         console.error("Error during onSubmit in component:", error);
       }
@@ -277,7 +281,7 @@ export default {
 
     getFoodCardColors() {
       return (food) => {
-        const agent = food.agent; 
+        const agent = food.agent;
 
         const coordinatesArray = [];
 
@@ -303,8 +307,11 @@ export default {
           return this.$hexToRgba(this.$vuetify.theme.currentTheme.text, 0.15);
         }
 
-        if (food.isDone){
-          return this.$hexToRgba(this.$vuetify.theme.currentTheme.thirdColor, 0.15);
+        if (food.isDone) {
+          return this.$hexToRgba(
+            this.$vuetify.theme.currentTheme.thirdColor,
+            0.15
+          );
         }
 
         if (isInside) {

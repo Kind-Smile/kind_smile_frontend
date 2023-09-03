@@ -23,13 +23,7 @@
 
             <v-row slot="cardText">
               <template v-for="foodCharity in foodsCharity">
-                <v-col
-                  lg="4"
-                  md="6"
-                  sm="6"
-                  cols="12"
-                  :key="foodCharity.id"
-                >
+                <v-col lg="4" md="6" sm="6" cols="12" :key="foodCharity.id">
                   <Card
                     text
                     actions
@@ -265,9 +259,72 @@
         @update:dialogOpen="updateBenefactorListDialog"
         :title="benefactorListMessage"
       >
-        <div slot="dialogText">
-          <!-- <Card></Card> -->
-        </div>
+        <template v-for="donor in benefactorList" slot="dialogText">
+          <v-col lg="12" md="12" sm="12" cols="12" :key="donor.id">
+            <Card title text :image="false">
+              <div
+                slot="cardTitle"
+                :style="{ color: $vuetify.theme.currentTheme.primary }"
+                class="semiSmall bold mt-n5"
+              >
+                {{ donor.user.name }}
+              </div>
+
+              <div slot="cardText">
+                <div class="mb-1">
+                  <p style="display: inline" class="ml-1">
+                    شماره تماس نیکوکار مهربان:
+                  </p>
+                  <p style="display: inline">
+                    <b>0{{ donor.user.phoneNumber }}</b>
+                  </p>
+                </div>
+
+                <div class="mb-1">
+                  <p style="display: inline" class="ml-1">
+                    تعداد غذای ثبت‌شده:
+                  </p>
+                  <p style="display: inline">
+                    <b>{{ donor.food_collect }} پرس</b>
+                  </p>
+                </div>
+
+                <div class="mb-1">
+                  <p style="display: inline" class="ml-1">نوع غذای ثبت‌شده:</p>
+                  <p style="display: inline">
+                    <b>{{ donor.food_type }}</b>
+                  </p>
+                </div>
+
+                <div class="mb-1">
+                  <p style="display: inline" class="ml-1">آدرس:</p>
+                  <p style="display: inline">
+                    <b>{{ donor.user.address.slice(7) }}</b>
+                  </p>
+                </div>
+
+                <!-- <router-link
+                  class="mb-1"
+                  :to="{
+                    path: '/map',
+                    query: {
+                      coordinates: [donor.user.longitude, donor.user.latitude],
+                      disable: true,
+                    },
+                  }"
+                >
+                  <div
+                    :style="{
+                      color: $vuetify.theme.currentTheme.thirdColor,
+                    }"
+                  >
+                    مشاهده آدرس از روی نقشه
+                  </div>
+                </router-link> -->
+              </div>
+            </Card>
+          </v-col>
+        </template>
       </Dialog>
 
       <Dialog
@@ -433,16 +490,13 @@ export default {
       this.editFoodDialog = !this.editFoodDialog;
       const food = this.foodsCharity.find((item) => item.id == id);
       food.request = food.request.toString();
-      this.editedFormData.id = id;
-      this.editedFormData = food;
+      this.editedFormData = { ...food, id };
 
       if (!food.collection == 0) {
         this.ishaveBenefactor = true;
       } else {
         this.ishaveBenefactor = false;
       }
-
-      console.log(id);
     },
     updateEditFoodDialog(newVal) {
       this.editFoodDialog = newVal;
@@ -455,13 +509,11 @@ export default {
     async openBenefactorListDialog(id) {
       this.benefactorListDialog = !this.benefactorListDialog;
       await this.getBenefactorList(id);
-      console.log(this.benefactorList.length != 0);
       if (this.benefactorList.length != 0) {
         this.benefactorListMessage =
           "افراد زیر در این سفره مهربانی مشارکت داشته‌اند:";
-      }else{
-        this.benefactorListMessage =
-        "هنوز مشارکتی برای این سفره ثبت نشده است.";
+      } else {
+        this.benefactorListMessage = "هنوز مشارکتی برای این سفره ثبت نشده است.";
       }
     },
     updateBenefactorListDialog(newVal) {
@@ -475,8 +527,8 @@ export default {
       const id = foodId;
       try {
         await this.$store.dispatch("foodDonorsList", { id });
-        this.benefactorList = this.$store.state.responseData;
-        console.log(this.benefactorList)
+        this.benefactorList = this.$store.state.responseData[0].donors
+        console.log(this.benefactorList);
         this.$store.commit("clearResponseData");
       } catch (error) {
         console.error("Error during getBenefactorList in component:", error);

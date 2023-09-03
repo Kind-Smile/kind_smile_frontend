@@ -6,8 +6,13 @@
         <h4>صبر کنید...</h4>
       </div>
 
-      <v-row v-else>
-        <v-col lg="12" md="12" sm="12" cols="12">
+      <v-row v-else class="pa-5">
+        <div v-if="isFinished">
+          <h6>دریافت غذا از تمام نیکوکاران مهربان به پایان رسید. با تشکر از زحمات شما</h6>
+          <router-link to="/foods-agent">بازگشت به صفحه قبل</router-link>
+        </div>
+
+        <v-col lg="12" md="12" sm="12" cols="12" v-else>
           <Card :cardColor="getCardColor" title text :image="false">
             <div
               slot="cardTitle"
@@ -48,14 +53,14 @@
                         </p>
                       </div>
 
-                      <!-- <div class="mb-1">
+                      <div class="mb-1">
                         <p style="display: inline" class="ml-1">
                           نوع غذای ثبت‌شده:
                         </p>
                         <p style="display: inline">
-                          <b>{{ donor.}}</b>
+                          <b>{{ donor.food_type }}</b>
                         </p>
-                      </div> -->
+                      </div>
 
                       <div class="mb-1">
                         <p style="display: inline" class="ml-1">آدرس:</p>
@@ -90,12 +95,14 @@
                     <v-row
                       slot="cardActions"
                       class="justify-end px-4 pt-5 pb-3"
+                      v-if="!donor.isCollected"
                     >
                       <Button
                         :block="!$vuetify.breakpoint.mdAndUp"
                         dark
                         :color="$vuetify.theme.currentTheme.primary"
                         input_value="دریافت شد"
+                        @click="received(donor.user.id)"
                       ></Button>
                     </v-row>
                   </Card>
@@ -122,6 +129,7 @@ export default {
     return {
       id: 0,
       donorsList: [],
+      isFinished: false,
       coordinates: [51.420296, 35.732379],
     };
   },
@@ -137,11 +145,24 @@ export default {
       try {
         const id = this.id;
         await this.$store.dispatch("foodDonorsList", { id });
-        this.donorsList = this.$store.state.responseData;
+        this.donorsList = this.$store.state.responseData[0].donors;
+        this.isFinished= this.$store.state.responseData[0].finished
         console.log(this.donorsList);
         this.$store.commit("clearResponseData");
       } catch (error) {
         console.error("Error during getAgentFoodsDonors in component:", error);
+      }
+    },
+
+    async received(userId) {
+      try {
+        const id = [];
+        id[0] = userId;
+        id[1] = parseInt(this.id, 10);
+        await this.$store.dispatch("agentReceiveFood", { id });
+        await this.getAgentFoodsDonors();
+      } catch (error) {
+        console.error("Error during received in component:", error);
       }
     },
   },
