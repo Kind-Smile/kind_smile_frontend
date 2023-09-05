@@ -4,24 +4,12 @@
     <v-text-field
       class="mt-2 custom-input"
       :name="name"
-      :value="value"
       :type="type"
-      :label="label"
       :placeholder="placeholder"
-      :append-icon="append_icon"
-      :prepend-icon="prepend_icon"
-      :prepend-inner-icon="prepend_inner_icon"
       :outlined="outlined"
-      :background-color="background_color"
-      :color="color"
-      :dark="dark"
-      :light="light"
       :dense="dense"
       :disabled="disabled"
       :readonly="readonly"
-      :filled="filled"
-      :solo="solo"
-      :success="success"
       :error="error"
       :success-messages="success_messages"
       :error-messages="error_messages"
@@ -29,17 +17,10 @@
       :hint="hint"
       :rules="rules"
       :loading="loading"
-      :rounded="rounded"
-      :autofocus="autofocus"
       :suffix="suffix"
-      :prefix="prefix"
       :hide-details="hide_details"
-      @blur="$emit('input', $event.target.value)"
-      @keypress="$emit('input', $event.target.value)"
-      @click="onClick"
-      @keyup.enter="onKeyupEnter"
-      @keydown="onKeydown"
-      @keyup="onKeyup"
+      @blur="onBlur"
+      @input="onInput"
     ></v-text-field>
   </div>
 </template>
@@ -96,15 +77,11 @@ export default {
   },
 
   methods: {
-    onClick() {},
-    onKeyupEnter() {
-      this.$emit("keyup");
+    onBlur(event) {
+      this.$emit("blur", event.target.value);
     },
-    onKeydown() {
-      this.$emit("keydown");
-    },
-    onKeyup() {
-      this.$emit("keyup");
+    onInput(value) {
+      this.$emit("input", value);
     },
   },
 };

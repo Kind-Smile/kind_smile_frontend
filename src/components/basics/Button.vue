@@ -28,7 +28,6 @@
     :x-small="x_small"
     :loading="loading"
     @click="onClick"
-    :class="{ notActiveClass: notActive }"
     class="px-3"
   >
     <slot name="buttonSlotBefor"></slot>
@@ -78,7 +77,6 @@ export default {
     x_large: Boolean,
     x_small: Boolean,
     loading: Boolean,
-    notActive: Boolean,
   },
 
   methods: {

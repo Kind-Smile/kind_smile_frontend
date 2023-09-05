@@ -17,8 +17,8 @@ export default {
         });
       })
       .catch((error) => {
-        console.error("Error:", error);
-        throw error;
+        console.error("Error:", error.response.data.detail);
+        throw error.response.data.detail;
       });
   },
 
@@ -355,7 +355,7 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        console.error("Error fetching foodCharity:", error);
+        console.error("Error fetching foodCharities:", error);
       });
   },
 
@@ -429,6 +429,35 @@ export default {
   },
 
   //Agent
+  async agentChangePass({ state, commit }, { data }) {
+    // console.log("I am in: action->agentChangePass");
+    console.log(data)
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .put(
+        `http://127.0.0.1:8000/auth/changePassword/`,
+        {
+          old_password: data.oldPassword,
+          new_password: data.newPassword,
+        },
+        config
+      )
+      .then((response) => {
+        let responseMessage = response.data;
+        console.log(responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error:", error.response.data);
+        throw error;
+      });
+  },
+
   async getAgentFoodsCharity({ state, commit }) {
     const config = {
       headers: {

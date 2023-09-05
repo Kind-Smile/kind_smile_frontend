@@ -14,7 +14,7 @@
               :style="{ color: $vuetify.theme.currentTheme.primary }"
               class="bold"
             >
-              {{ id }}
+             خیریه {{ charityName }}
             </div>
 
             <v-row slot="cardText">
@@ -24,7 +24,7 @@
                     text
                     :actions="food.food_collect == null && food.food.isInside"
                     :image="false"
-                    :cardColor="getFoodCardColors(food.food)"
+                    :cardColor="getFoodCardColors(food.food)" 
                   >
                     <div slot="cardText">
                       <div class="mb-1">
@@ -248,6 +248,9 @@ export default {
       try {
         await this.$store.dispatch("getBenefactorFoodsCharity", { id });
         this.foodsList = this.$store.state.responseData;
+        if(this.foodsList.length>0){
+          this.charityName=this.foodsList[0].food.charity.name
+        }
         this.$store.commit("clearResponseData");
       } catch (error) {
         console.error(

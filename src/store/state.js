@@ -6,6 +6,8 @@ export default {
   benefactorLng: 0.0,
   benefactorLat: 0.0,
 
+  agentHasChangePass: false,
+
   benefactorUsers: [],
   charityUsers: [],
   agentUsers: [],
@@ -266,17 +268,4 @@ export default {
     "همبرگر",
     "سایر",
   ],
-  // "",
-  // "",
-  // "",
-  // "",
-  // "",
-  // "",
-  // "",
-  // "",
-  // "",
-  // "",
-  // "",
-  // "",
-  // "",
 };

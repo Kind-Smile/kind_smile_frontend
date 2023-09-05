@@ -24,7 +24,12 @@
             <v-row slot="cardText">
               <template v-for="food in foodsList">
                 <v-col lg="4" md="4" sm="6" cols="12" :key="food.id">
-                  <Card text :actions="food.collection > 0" :image="false">
+                  <Card
+                    text
+                    :actions="food.collection > 0"
+                    :image="false"
+                    :cardColor="getFoodCardColors(food.isDone)"
+                  >
                     <div slot="cardText">
                       <div class="mb-1">
                         <p style="display: inline" class="ml-1">
@@ -69,7 +74,12 @@
                       </div> -->
 
                       <div class="mt-3 mb-1" v-if="food.collection == 0">
-                        <small class="ml-1 bold" :style="{ color: $vuetify.theme.currentTheme.primary }">
+                        <small
+                          class="ml-1 bold"
+                          :style="{
+                            color: $vuetify.theme.currentTheme.primary,
+                          }"
+                        >
                           هنوز مشارکتی ثبت نشده است.
                         </small>
                       </div>
@@ -140,6 +150,22 @@ export default {
   computed: {
     getCardColor() {
       return this.$hexToRgba(this.$vuetify.theme.currentTheme.secondary, 0.15);
+    },
+
+    getFoodCardColors() {
+      return (isDone) => {
+        if (isDone) {
+          return this.$hexToRgba(
+            this.$vuetify.theme.currentTheme.thirdColor,
+            0.15
+          );
+        } else {
+          return this.$hexToRgba(
+            this.$vuetify.theme.currentTheme.primary,
+            0.15
+          );
+        }
+      };
     },
   },
 

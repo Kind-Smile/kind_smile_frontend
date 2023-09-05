@@ -3,6 +3,20 @@
     <AppBar></AppBar>
     <card-with-image>
       <div slot="rightPart">
+        <v-alert
+          v-if="alert"
+          dense
+          :color="
+            this.$hexToRgba(this.$vuetify.theme.currentTheme.primary, 0.3)
+          "
+          type="error"
+          icon="mdi-alert-circle-outline"
+          border="left"
+          class="mb-1"
+        >
+          نام کاربری یا رمز عبور اشتباه است.
+        </v-alert>
+
         <v-toolbar class="elevation-0 ma-0">
           <v-toolbar-title class="mx-auto semi-larg">خوش آمدید</v-toolbar-title>
         </v-toolbar>
@@ -52,11 +66,13 @@
           </v-row>
 
           <Button
+            :disabled="
+              this.formData.phoneNumber === '' || this.formData.password === ''
+            "
             input_value="ورود"
-            type="submit"
-            dark
             block
             large
+            @click="onSubmit"
             class="mb-3"
           >
           </Button>
@@ -89,30 +105,36 @@ import router from "@/router";
 
 export default {
   name: "Login",
+
   components: {
     CardWithImage,
     Button,
     Input,
     AppBar,
   },
+
   data() {
     return {
       formData: {
         phoneNumber: "",
         password: "",
-        // rememberMe: false,
       },
+
+      alert: false,
     };
   },
+
   methods: {
     async onSubmit() {
       console.log(this.formData);
       const data = this.formData;
 
       try {
+        this.alert = false;
         await this.$store.dispatch("login", { data });
         router.push("/");
       } catch (error) {
+        this.alert = true;
         console.error("Error during login:", error);
         // Handle error, show error message, etc.
       }

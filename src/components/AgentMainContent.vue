@@ -47,23 +47,112 @@
         </router-link>
       </v-col>
     </v-row>
+
+    <Dialog
+      v-if="!hasChangePass"
+      :dialogOpen="changePassDialog"
+      @update:dialogOpen="updateChangePassDialog"
+      title="برای حفظ امنیت، در اولین ورود خود به سامانه باید رمز عبور خود را تغییر دهید."
+    >
+      <v-form @submit.prevent="onSubmit" slot="dialogText" class="mb-n4">
+        <Input
+          outlined
+          dense
+          name="password"
+          type="password"
+          v-model.trim="formData.oldPassword"
+          labelTag
+          labelText="رمز عبور قبلی"
+          placeholder="رمز عبور قبلی"
+          class="mb-n2"
+        />
+
+        <Input
+          outlined
+          dense
+          name="password"
+          type="password"
+          v-model.trim="formData.newPassword"
+          labelTag
+          labelText="رمز عبور جدید"
+          placeholder="رمز عبور جدید"
+          hint="حداقل 8 کاراکتر"
+          class="mb-n2"
+        />
+
+        <Button
+          input_value="تغییر رمز"
+          type="submit"
+          dark
+          block
+          large
+          class="mb-3 mt-5"
+        >
+        </Button>
+      </v-form>
+    </Dialog>
   </v-main>
 </template>
 
 <script>
 import Card from "@/components/basics/Card.vue";
+import Button from "@/components/basics/Button.vue";
+import Input from "@/components/basics/Input.vue";
+import Dialog from "@/components/basics/Dialog.vue";
 
 export default {
   name: "AgentMainContent",
 
+  data() {
+    return {
+      hasChangePass: false,
+      changePassDialog: true,
+      formData: {
+        oldPassword: "",
+        newPassword: "",
+      },
+    };
+  },
+
   components: {
     Card,
+    Button,
+    Input,
+    Dialog,
+  },
+
+  methods: {
+    updateChangePassDialog(newVal) {
+      this.changePassDialog = newVal;
+    },
+    closeChangePassDialog() {
+      this.changePassDialog = false;
+    },
+
+    async onSubmit() {
+      const data = this.formData;
+      console.log(data);
+
+      try {
+        await this.$store.dispatch("agentChangePass", { data });
+        this.$store.commit("updateAgentHasChangePass", true);
+        this.closeChangePassDialog();
+      } catch (error) {
+        console.error("Error during agentChangePass in component:", error);
+        // Handle error, show error message, etc.
+      }
+    },
   },
 
   computed: {
     getCardColor() {
       return this.$hexToRgba(this.$vuetify.theme.currentTheme.secondary, 0.15);
     },
+  },
+
+  created() {
+    this.hasChangePass = this.$store.state.agentHasChangePass;
+    console.log(this.hasChangePass);
   },
 };
 </script>

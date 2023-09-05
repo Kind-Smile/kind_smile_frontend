@@ -26,6 +26,11 @@ export default {
     state.verificatedPhoneNumber = newPhoneNumber;
   },
 
+  updateAgentHasChangePass(state, newstate) {
+    state.agentHasChangePass = newstate;
+    localStorage.setItem("agentHasChangePass", newstate);
+  },
+
   login(state, data) {
     if (data.access) {
       state.isAuthenticated = true;
@@ -41,6 +46,11 @@ export default {
 
         localStorage.setItem("benefactorLat", data.completeData.latitude);
         localStorage.setItem("benefactorLng", data.completeData.longitude);
+      }
+
+      else if(data.role == "Agent") {
+        state.agentHasChangePass = data.completeData.hasChangePass
+        localStorage.setItem("agentHasChangePass", data.completeData.hasChangePass);
       }
     } else {
       state.isAuthenticated = false;
@@ -73,6 +83,11 @@ export default {
       if (role == "User") {
         state.benefactorLat = localStorage.getItem("benefactorLat");
         state.benefactorLng = localStorage.getItem("benefactorLng");
+      }
+
+      else if(role== "Agent"){
+        state.agentHasChangePass = localStorage.getItem("agentHasChangePass");
+        console.log()
       }
     } else {
       state.isAuthenticated = false;
