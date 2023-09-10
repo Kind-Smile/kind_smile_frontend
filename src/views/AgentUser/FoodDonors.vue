@@ -25,7 +25,7 @@
             <v-row slot="cardText">
               <template v-for="donor in donorsList">
                 <v-col lg="4" md="4" sm="6" cols="12" :key="donor.id">
-                  <Card title text actions :image="false">
+                  <Card title text :actions="!donor.isCollected" :image="false">
                     <div
                       slot="cardTitle"
                       :style="{ color: $vuetify.theme.currentTheme.primary }"
@@ -70,7 +70,6 @@
                       </div>
 
                       <router-link
-                        class="mb-1"
                         :to="{
                           path: '/map',
                           query: {
@@ -86,10 +85,17 @@
                           :style="{
                             color: $vuetify.theme.currentTheme.thirdColor,
                           }"
+                          class="mb-1"
                         >
                           مشاهده آدرس از روی نقشه
                         </div>
                       </router-link>
+
+                      <div class="mb-1" v-if="donor.isCollected">
+                        <p :style="{
+                            color: $vuetify.theme.currentTheme.primary,
+                          }" class="bold mb-0">دریافت شده</p>
+                      </div>
                     </div>
 
                     <v-row

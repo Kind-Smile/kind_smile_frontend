@@ -64,14 +64,14 @@
                         </p>
                       </div>
 
-                      <!-- <div class="mb-1" v-if="food.collection > 0">
+                      <div class="mb-1" v-if="food.numCollected > 0">
                         <p style="display: inline" class="ml-1">
                           تعداد غذای جمع‌آوری شده تاکنون:
                         </p>
                         <p style="display: inline">
-                          <b>{{ food.collection }} پرس</b>
+                          <b>{{ food.numCollected }} پرس</b>
                         </p>
-                      </div> -->
+                      </div>
 
                       <div class="mt-3 mb-1" v-if="food.collection == 0">
                         <small

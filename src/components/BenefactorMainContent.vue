@@ -59,7 +59,7 @@
       </v-col>
 
       <v-col lg="4" md="6" sm="6" cols="12">
-        <router-link :to="`/money`">
+        <router-link :to="`/money-charities`">
           <v-hover v-slot="{ hover }">
             <Card
               :cardColor="getCardColor"

@@ -217,7 +217,7 @@ export default {
         this.$updateBenefactorProperty("longitude", 0.0);
         this.$store.commit("updateVerificatedPhoneNumber", "");
 
-        router.push("/");
+        router.push("/login");
       } catch (error) {
         console.error("Error during benefactor register:", error);
         // Handle error, show error message, etc.

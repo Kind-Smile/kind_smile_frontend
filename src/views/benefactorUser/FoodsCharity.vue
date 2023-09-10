@@ -94,6 +94,15 @@
 
                         <div class="mb-1">
                           <p style="display: inline" class="ml-1">
+                            نوع غذا:
+                          </p>
+                          <p style="display: inline">
+                            <b>{{ food.food_type }}</b>
+                          </p>
+                        </div>
+
+                        <div class="mb-1">
+                          <p style="display: inline" class="ml-1">
                             نام سفیر مهربانی:
                           </p>
                           <p style="display: inline">
@@ -246,7 +255,7 @@ export default {
     async getFoodsCharity() {
       const id = this.id;
       try {
-        await this.$store.dispatch("getBenefactorFoodsCharity", { id });
+        await this.$store.dispatch("getFoodsCharityForBenefactor", { id });
         this.foodsList = this.$store.state.responseData;
         if(this.foodsList.length>0){
           this.charityName=this.foodsList[0].food.charity.name
@@ -254,7 +263,7 @@ export default {
         this.$store.commit("clearResponseData");
       } catch (error) {
         console.error(
-          "Error during getBenefactorFoodsCharity in component:",
+          "Error during getFoodsCharityForBenefactor in component:",
           error
         );
       }

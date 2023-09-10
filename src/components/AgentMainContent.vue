@@ -54,42 +54,58 @@
       @update:dialogOpen="updateChangePassDialog"
       title="برای حفظ امنیت، در اولین ورود خود به سامانه باید رمز عبور خود را تغییر دهید."
     >
-      <v-form @submit.prevent="onSubmit" slot="dialogText" class="mb-n4">
-        <Input
-          outlined
+      <div slot="dialogText">
+        <v-alert
+          v-if="alert"
           dense
-          name="password"
-          type="password"
-          v-model.trim="formData.oldPassword"
-          labelTag
-          labelText="رمز عبور قبلی"
-          placeholder="رمز عبور قبلی"
-          class="mb-n2"
-        />
-
-        <Input
-          outlined
-          dense
-          name="password"
-          type="password"
-          v-model.trim="formData.newPassword"
-          labelTag
-          labelText="رمز عبور جدید"
-          placeholder="رمز عبور جدید"
-          hint="حداقل 8 کاراکتر"
-          class="mb-n2"
-        />
-
-        <Button
-          input_value="تغییر رمز"
-          type="submit"
-          dark
-          block
-          large
-          class="mb-3 mt-5"
+          :color="
+            this.$hexToRgba(this.$vuetify.theme.currentTheme.primary, 0.3)
+          "
+          type="error"
+          icon="mdi-alert-circle-outline"
+          border="left"
+          class="mb-1"
         >
-        </Button>
-      </v-form>
+          {{ alertMessage }}
+        </v-alert>
+
+        <v-form @submit.prevent="onSubmit" class="mb-n4">
+          <Input
+            outlined
+            dense
+            name="password"
+            type="password"
+            v-model.trim="formData.oldPassword"
+            labelTag
+            labelText="رمز عبور قبلی"
+            placeholder="رمز عبور قبلی"
+            class="mb-n2"
+          />
+
+          <Input
+            outlined
+            dense
+            name="password"
+            type="password"
+            v-model.trim="formData.newPassword"
+            labelTag
+            labelText="رمز عبور جدید"
+            placeholder="رمز عبور جدید"
+            hint="حداقل 8 کاراکتر"
+            class="mb-n2"
+          />
+
+          <Button
+            input_value="تغییر رمز"
+            type="submit"
+            dark
+            block
+            large
+            class="mb-3 mt-5"
+          >
+          </Button>
+        </v-form>
+      </div>
     </Dialog>
   </v-main>
 </template>
@@ -111,6 +127,8 @@ export default {
         oldPassword: "",
         newPassword: "",
       },
+      alert: false,
+      alertMessage: "",
     };
   },
 
@@ -134,12 +152,14 @@ export default {
       console.log(data);
 
       try {
+        this.alert = false;
         await this.$store.dispatch("agentChangePass", { data });
         this.$store.commit("updateAgentHasChangePass", true);
         this.closeChangePassDialog();
       } catch (error) {
         console.error("Error during agentChangePass in component:", error);
-        // Handle error, show error message, etc.
+        this.alert = true;
+        this.alertMessage = error;
       }
     },
   },

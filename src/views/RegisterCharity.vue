@@ -432,7 +432,7 @@ export default {
         this.$updateCharityProperty("latitude", 0.0);
         this.$updateCharityProperty("longitude", 0.0);
 
-        router.push("/");
+        router.push("/login");
       } catch (error) {
         console.error("Error during charity register:", error);
       }

@@ -145,7 +145,7 @@
           </Card>
 
           <div v-else>
-            <p>در حال حاضر هیچ سفره‌ای برای شما ثبت نشده است.</p>
+            <p>در حال حاضر هیچ سفره‌ای توسط شما ثبت نشده است.</p>
             <a @click="addFood">اضافه کردن سفره جدید</a>
           </div>
         </v-col>
@@ -302,25 +302,6 @@
                     <b>{{ donor.user.address.slice(7) }}</b>
                   </p>
                 </div>
-
-                <!-- <router-link
-                  class="mb-1"
-                  :to="{
-                    path: '/map',
-                    query: {
-                      coordinates: [donor.user.longitude, donor.user.latitude],
-                      disable: true,
-                    },
-                  }"
-                >
-                  <div
-                    :style="{
-                      color: $vuetify.theme.currentTheme.thirdColor,
-                    }"
-                  >
-                    مشاهده آدرس از روی نقشه
-                  </div>
-                </router-link> -->
               </div>
             </Card>
           </v-col>

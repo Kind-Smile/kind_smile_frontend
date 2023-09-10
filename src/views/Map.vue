@@ -29,7 +29,7 @@
               dense
               name="address"
               type="text"
-              v-model.trim="this.address"
+              v-model.trim="address"
               label="آدرس"
               hide_details
               readonly
@@ -90,7 +90,7 @@ export default {
           );
 
           this.address = response.data.address;
-          alert(`${this.markerCoordinates}`);
+          console.log(this.address)
         } catch (error) {
           console.error("Error fetching reverse geocoding data:", error);
         }
@@ -116,7 +116,7 @@ export default {
           );
 
           this.address = response.data.address;
-          alert(`${this.address}`);
+          console.log(this.address)
         } catch (error) {
           console.error("Error fetching reverse geocoding data:", error);
         }
@@ -137,20 +137,31 @@ export default {
   watch: {
     address(newValue) {
       if (this.$store.state.benefactor.isClickAddress) {
+        console.log(`in watcher local address ${this.address}`)
+
         this.$updateBenefactorProperty("isSetAddress", true);
         this.$updateBenefactorProperty("address", newValue);
         this.$updateBenefactorProperty("latitude", this.coordinates[1]);
         this.$updateBenefactorProperty("longitude", this.coordinates[0]);
+
+        console.log(`in watcher vuex address ${this.$store.state.benefactor.address}`)
       } else if (this.$store.state.charity.isClickAddress) {
+        console.log(`in watcher local address ${this.address}`)
+
         this.$updateCharityProperty("isSetAddress", true);
         this.$updateCharityProperty("address", newValue);
         this.$updateCharityProperty("latitude", this.coordinates[1]);
         this.$updateCharityProperty("longitude", this.coordinates[0]);
+
+        console.log(`in watcher vuex address ${this.$store.state.charity.address}`)
       }
     },
   },
 
   created() {
+    console.log(`charity.isClickAddress ${this.$store.state.charity.isClickAddress}`)
+    console.log(`benefactor.isClickAddress ${this.$store.state.benefactor.isClickAddress}`)
+
     this.coordinates = this.$route.query.coordinates;
     this.disable = this.$route.query.disable;
     if (

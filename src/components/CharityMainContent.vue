@@ -50,7 +50,7 @@
       </v-col>
 
       <v-col lg="3" md="4" sm="4" cols="12">
-        <router-link :to="`#`">
+        <router-link :to="`/charity-money`">
           <v-hover v-slot="{ hover }">
             <Card
               :cardColor="getCardColor"
@@ -120,7 +120,7 @@
     <Dialog
       :dialogOpen="registerAgentDialog"
       @update:dialogOpen="updateRegisterAgentDialog"
-      title="شما برای خیریه خود سفیر مهربانی ثبت نکرده‌اید. در صورت تمایل می‌توانید سفیر خود را اضافه نمایید:"
+      title="برای ثبت نماینده جدید، اطلاعات زیر را تکمیل نمایید:"
     >
       <v-form @submit.prevent="onSubmit" slot="dialogText" class="mb-n4">
         <Input

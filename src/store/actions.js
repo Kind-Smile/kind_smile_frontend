@@ -359,7 +359,7 @@ export default {
       });
   },
 
-  async getBenefactorFoodsCharity({ state, commit }, { id }) {
+  async getFoodsCharityForBenefactor({ state, commit }, { id }) {
     const config = {
       params: { id: id },
       headers: {
@@ -375,7 +375,7 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        console.error("Error fetching getBenefactorFoodsCharity:", error);
+        console.error("Error fetching getFoodsCharityForBenefactor:", error);
       });
   },
 
@@ -408,6 +408,97 @@ export default {
       });
   },
 
+  //money
+  async addMoney({ state }, { data }) {
+    // console.log("I am in: action->addMoney");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .post(
+        `http://127.0.0.1:8000/money/create/`,
+        {
+          name: data.name,
+          money_need: parseInt(data.moneyNeed, 10),
+          expireDate: data.expireDate.replace("/", "-").replace("/", "-"),
+          description: data.description
+        },
+        config
+      )
+      .then((response) => {
+        let data = response.data;
+        console.log(`addMoney successfully! this is response: ${data}`);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  },
+
+  async getMoneyCharity({ state, commit }) {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .get("http://127.0.0.1:8000/money/own/", config)
+      .then((response) => {
+        let responseMessage = response.data;
+        commit("setResponseData", responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error fetching getMoneyCharity:", error);
+      });
+  },
+
+  async moneyDonorsList({ state, commit }, { id }) {
+    const config = {
+      params: { id: id },
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .get("http://127.0.0.1:8000/money/moneyDonors/", config)
+      .then((response) => {
+        let responseMessage = response.data;
+        state.isLoading = false;
+        commit("setResponseData", responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error fetching moneyDonorsList:", error);
+      });
+  },
+
+  async removeMoney({ state }, { id }) {
+    // console.log("I am in: action->removeMoney");
+    const config = {
+      data: { id },
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+    await axios
+      .delete(`http://127.0.0.1:8000/money/delete/`, config)
+      .then((response) => {
+        let responseMessage = response.data;
+        console.log(responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error removeMoney:", error);
+      });
+  },
+
+  //notif
   async notificationCharities({ state, commit }) {
     const config = {
       headers: {
@@ -428,10 +519,11 @@ export default {
       });
   },
 
+  /////////////////////////////////////////////////////////////////////////////////////////////
   //Agent
   async agentChangePass({ state, commit }, { data }) {
     // console.log("I am in: action->agentChangePass");
-    console.log(data)
+    console.log(data);
     const config = {
       headers: {
         Authorization: `Bearer ${state.token}`,
@@ -454,7 +546,7 @@ export default {
       })
       .catch((error) => {
         console.error("Error:", error.response.data);
-        throw error;
+        throw error.response.data[0].Error[0][0];
       });
   },
 
@@ -492,6 +584,78 @@ export default {
         {
           user_id: id[0],
           food_id: id[1],
+        },
+        config
+      )
+      .then((response) => {
+        let responseMessage = response.data;
+        console.log(responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        throw error;
+      });
+  },
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////
+  //benefactor
+
+  //money
+  async moneyCharities({ state, commit }) {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .get("http://127.0.0.1:8000/money/charityMoney/", config)
+      .then((response) => {
+        let responseMessage = response.data;
+        state.isLoading = false;
+        commit("setResponseData", responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error fetching moneyCharities:", error);
+      });
+  },
+
+  async getMoniesCharity({ state, commit }, { id }) {
+    const config = {
+      params: { id: id },
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .get("http://127.0.0.1:8000/money/show/", config)
+      .then((response) => {
+        let responseMessage = response.data;
+        commit("setResponseData", responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error fetching getMoniesCharity:", error);
+      });
+  },
+
+  async donateMoney({ state, commit }, { data }) {
+    // console.log("I am in: action->donateMoney");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .post(
+        `http://127.0.0.1:8000/money/createDonor/`,
+        {
+          money_collect: parseInt(data.moneyCollect, 10),
+          money: parseInt(data.id, 10),
         },
         config
       )
