@@ -7,8 +7,8 @@
       </div>
 
       <v-row v-else>
-        <div v-if="this.foodsList.length == 0" class="pa-5">
-          <h6>سفره‌ای برای شما موجود نیست.</h6>
+        <div v-if="this.clothesList.length == 0" class="pa-5">
+          <h6>پوشاک مهربانی‌ای برای شما موجود نیست.</h6>
         </div>
 
         <v-col lg="12" md="12" sm="12" cols="12" v-else>
@@ -18,34 +18,25 @@
               :style="{ color: $vuetify.theme.currentTheme.primary }"
               class="bold"
             >
-              سفره مهربانی
+              پوشاک مهربانی
             </div>
 
             <v-row slot="cardText">
-              <template v-for="food in foodsList">
-                <v-col lg="4" md="4" sm="6" cols="12" :key="food.id">
+              <template v-for="clothe in clothesList">
+                <v-col lg="4" md="4" sm="6" cols="12" :key="clothe.id">
                   <Card
                     text
-                    :actions="food.collection > 0"
+                    :actions="clothe.collection > 0"
                     :image="false"
-                    :cardColor="getFoodCardColors(food.isDone)"
+                    :cardColor="getClotheCardColors(clothe.isDone)"
                   >
                     <div slot="cardText">
-                      <div class="mb-1">
+                      <div class="mb-1" v-if="clothe.collection > 0">
                         <p style="display: inline" class="ml-1">
-                          کل غذای مورد نیاز:
+                          تعداد مشارکت ثبت‌شده تاکنون:
                         </p>
                         <p style="display: inline">
-                          <b>{{ food.request }} پرس</b>
-                        </p>
-                      </div>
-
-                      <div class="mb-1" v-if="food.collection > 0">
-                        <p style="display: inline" class="ml-1">
-                          تعداد غذای ثبت‌شده تاکنون:
-                        </p>
-                        <p style="display: inline">
-                          <b>{{ food.collection }} پرس</b>
+                          <b>{{ clothe.collection }} نفر</b>
                         </p>
                       </div>
 
@@ -56,24 +47,24 @@
                         <p style="display: inline">
                           <b
                             >{{
-                              food.eventDate.replace("-", "/").replace("-", "/")
+                              clothe.eventDate.replace("-", "/").replace("-", "/")
                             }}
                             ساعت
-                            {{ food.eventTime.slice(0, -3) }}
+                            {{ clothe.eventTime.slice(0, -3) }}
                           </b>
                         </p>
                       </div>
 
-                      <div class="mb-1" v-if="food.numCollected > 0">
+                      <div class="mb-1" v-if="clothe.numCollected > 0">
                         <p style="display: inline" class="ml-1">
-                          تعداد غذای جمع‌آوری شده تاکنون:
+                          تعداد پوشاک جمع‌آوری شده تاکنون:
                         </p>
                         <p style="display: inline">
-                          <b>{{ food.numCollected }} پرس</b>
+                          <b>{{ clothe.numCollected }} نفر</b>
                         </p>
                       </div>
 
-                      <div class="mt-3 mb-1" v-if="food.collection == 0">
+                      <div class="mt-3 mb-1" v-if="clothe.collection == 0">
                         <small
                           class="ml-1 bold"
                           :style="{
@@ -90,12 +81,12 @@
                       class="justify-end px-4 pt-5 pb-3"
                     >
                       <Button
-                        v-if="food.collection > 0"
+                        v-if="clothe.collection > 0"
                         :block="!$vuetify.breakpoint.mdAndUp"
                         dark
                         :color="$vuetify.theme.currentTheme.primary"
                         input_value="مشاهده مشارکت‌های ثبت‌شده"
-                        @click="showDonor(food.id)"
+                        @click="showDonor(clothe.id)"
                       ></Button>
                     </v-row>
                   </Card>
@@ -116,11 +107,11 @@ import Button from "@/components/basics/Button.vue";
 import router from "@/router";
 
 export default {
-  name: "Food",
+  name: "Clothe",
 
   data() {
     return {
-      foodsList: [],
+      clothesList: [],
     };
   },
 
@@ -131,19 +122,21 @@ export default {
   },
 
   methods: {
-    async getFoodsCharity() {
+    async getClothesCharity() {
       try {
-        await this.$store.dispatch("getAgentFoodsCharity");
-        this.foodsList = this.$store.state.responseData;
-        console.log(this.foodsList);
+        await this.$store.dispatch("getAgentClothesCharity");
+        this.clothesList = this.$store.state.responseData;
         this.$store.commit("clearResponseData");
       } catch (error) {
-        console.error("Error during getAgentFoodsCharity in component:", error);
+        console.error(
+          "Error during getAgentClothesCharity in component:",
+          error
+        );
       }
     },
 
     showDonor(id) {
-      router.push(`/food-donors/${id}`);
+      router.push(`/clothe-donors/${id}`);
     },
   },
 
@@ -152,7 +145,7 @@ export default {
       return this.$hexToRgba(this.$vuetify.theme.currentTheme.secondary, 0.15);
     },
 
-    getFoodCardColors() {
+    getClotheCardColors() {
       return (isDone) => {
         if (isDone) {
           return this.$hexToRgba(
@@ -170,7 +163,7 @@ export default {
   },
 
   created() {
-    this.getFoodsCharity();
+    this.getClothesCharity();
   },
 };
 </script>

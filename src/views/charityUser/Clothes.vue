@@ -11,44 +11,26 @@
             title
             text
             :image="false"
-            v-if="this.foodsCharity.length > 0"
+            v-if="this.clothesCharity.length > 0"
           >
             <div
               slot="cardTitle"
               :style="{ color: $vuetify.theme.currentTheme.primary }"
               class="bold"
             >
-              سفره مهربانی
+              پوشاک مهربانی
             </div>
 
             <v-row slot="cardText">
-              <template v-for="foodCharity in foodsCharity">
-                <v-col lg="4" md="6" sm="6" cols="12" :key="foodCharity.id">
+              <template v-for="clotheCharity in clothesCharity">
+                <v-col lg="4" md="6" sm="6" cols="12" :key="clotheCharity.id">
                   <Card
                     text
                     actions
                     :image="false"
-                    :cardColor="foodCardColor(foodCharity)"
+                    :cardColor="clotheCardColor(clotheCharity)"
                   >
                     <div slot="cardText">
-                      <div class="mb-1">
-                        <p style="display: inline" class="ml-1">
-                          کل غذای مورد نیاز:
-                        </p>
-                        <p style="display: inline">
-                          <b>{{ foodCharity.request }} پرس</b>
-                        </p>
-                      </div>
-
-                      <div class="mb-1" v-if="foodCharity.collection > 0">
-                        <p style="display: inline" class="ml-1">
-                          تعداد مشارکت ثبت‌شده:
-                        </p>
-                        <p style="display: inline">
-                          <b>{{ foodCharity.collection }} پرس</b>
-                        </p>
-                      </div>
-
                       <div class="mb-1">
                         <p style="display: inline" class="ml-1">
                           زمان جمع‌آوری:
@@ -56,12 +38,12 @@
                         <p style="display: inline">
                           <b
                             >{{
-                              foodCharity.eventDate
+                              clotheCharity.eventDate
                                 .replace("-", "/")
                                 .replace("-", "/")
                             }}
                             ساعت
-                            {{ foodCharity.eventTime.slice(0, -3) }}</b
+                            {{ clotheCharity.eventTime.slice(0, -3) }}</b
                           >
                         </p>
                       </div>
@@ -71,39 +53,40 @@
                           سفیر مهربانی:
                         </p>
                         <p style="display: inline">
-                          <b>{{ foodCharity.agent.name }}</b>
+                          <b>{{ clotheCharity.agent.name }}</b>
                         </p>
                       </div>
 
                       <v-row
                         class="mt-2 my-auto"
                         no-gutters
-                        v-if="!foodCharity.isExpired"
+                        v-if="!clotheCharity.isExpired"
                       >
                         <v-col
                           lg="8"
                           md="8"
                           sm="12"
                           cols="12"
-                          v-if="foodCharity.recreate"
+                          v-if="clotheCharity.recreate"
                         >
                           <small
                             :style="{
                               color: $vuetify.theme.currentTheme.thirdColor,
                             }"
-                            >این سفره به‌صورت هفتگی تمدید خواهد شد.</small
+                            >این پوشاک مهربانی برای ۳۰ روز آینده تمدید خواهد
+                            شد.</small
                           >
                         </v-col>
 
                         <v-col lg="4" md="4" sm="12" cols="12">
                           <p
                             :class="{
-                              'text-lg-left': foodCharity.recreate,
-                              'text-md-left': foodCharity.recreate,
+                              'text-lg-left': clotheCharity.recreate,
+                              'text-md-left': clotheCharity.recreate,
                             }"
                           >
                             <small>
-                              <a @click="openEditFoodDialog(foodCharity.id)">
+                              <a @click="openEditClotheDialog(clotheCharity.id)">
                                 ویرایش
                               </a>
                             </small>
@@ -122,12 +105,12 @@
                         dark
                         small
                         input_value="مشاهده مشارکت ثبت شده"
-                        @click="openBenefactorListDialog(foodCharity.id)"
+                        @click="openBenefactorListDialog(clotheCharity.id)"
                       ></Button>
 
                       <Button
                         v-if="
-                          !foodCharity.isExpired && foodCharity.collection == 0
+                          !clotheCharity.isExpired && clotheCharity.collection == 0
                         "
                         :block="!$vuetify.breakpoint.mdAndUp"
                         dark
@@ -135,7 +118,7 @@
                         :color="$vuetify.theme.currentTheme.primary"
                         input_value="حذف"
                         :class="{ 'mt-3': !$vuetify.breakpoint.mdAndUp }"
-                        @click="removeFood(foodCharity.id)"
+                        @click="removeClothe(clotheCharity.id)"
                       ></Button>
                     </v-row>
                   </Card>
@@ -145,8 +128,8 @@
           </Card>
 
           <div v-else>
-            <p>در حال حاضر هیچ سفره‌ای توسط شما ثبت نشده است.</p>
-            <a @click="addFood">اضافه کردن سفره جدید</a>
+            <p>در حال حاضر هیچ پوشاک مهربانی توسط شما ثبت نشده است.</p>
+            <a @click="addClothes">اضافه کردن پوشاک مهربانی جدید</a>
           </div>
         </v-col>
       </v-row>
@@ -157,7 +140,7 @@
             <Button
               fab
               :color="$vuetify.theme.currentTheme.primary"
-              @click="addFood"
+              @click="addClothes"
             >
               <v-icon slot="buttonSlotBefor" color="white" large
                 >mdi-plus</v-icon
@@ -168,30 +151,11 @@
       </v-container>
 
       <Dialog
-        :dialogOpen="editFoodDialog"
-        @update:dialogOpen="updateEditFoodDialog"
-        title="ویرایش مشخصات سفره مهربانی"
+        :dialogOpen="editClotheDialog"
+        @update:dialogOpen="updateEditClotheDialog"
+        title="ویرایش مشخصات پوشاک مهربانی"
       >
-        <v-form
-          @submit.prevent="onEdit"
-          slot="dialogText"
-          class="mb-n4"
-          ref="editFood"
-        >
-          <Input
-            outlined
-            dense
-            name="request"
-            type="number"
-            v-model.trim="editedFormData.request"
-            labelTag
-            labelText="تعداد غذای مورد نیاز"
-            placeholder="تعداد غذای مورد نیاز"
-            hide_details
-            :disabled="ishaveBenefactor"
-            class="mb-5"
-          />
-
+        <v-form @submit.prevent="onEdit" slot="dialogText" class="mb-n4">
           <div class="mb-5">
             <custom-date-picker
               v-model="editedFormData.eventDate"
@@ -220,14 +184,14 @@
             item-value="id"
             hide-details
             placeholder="سفیر مهربانی خود را انتخاب کنید"
-            :disabled="ishaveBenefactor"
             class="ma-2"
+            :disabled="ishaveBenefactor"
           >
           </v-autocomplete>
 
           <v-checkbox
             v-model.trim="editedFormData.recreate"
-            label="هر هفته سفره با زمان فوق را تمدید کن."
+            label="پوشاک را برای ۳۰ روز آینده تمدید کن."
             :color="$vuetify.theme.currentTheme.thirdColor"
             hide-details
             class="mb-5"
@@ -237,7 +201,7 @@
             <small
               :style="{ color: $vuetify.theme.currentTheme.primary }"
               class="bold"
-              >به دلیل ثبت مشارکت برای این سفره، تنها امکان ویرایش تمدید هفتگی
+              >به دلیل ثبت مشارکت برای این پوشاک، تنها امکان ویرایش تمدید آن
               وجود دارد و سایر موارد قابل ویرایش نیست.</small
             >
           </div>
@@ -281,22 +245,6 @@
                 </div>
 
                 <div class="mb-1">
-                  <p style="display: inline" class="ml-1">
-                    تعداد غذای ثبت‌شده:
-                  </p>
-                  <p style="display: inline">
-                    <b>{{ donor.food_collect }} پرس</b>
-                  </p>
-                </div>
-
-                <div class="mb-1">
-                  <p style="display: inline" class="ml-1">نوع غذای ثبت‌شده:</p>
-                  <p style="display: inline">
-                    <b>{{ donor.food_type }}</b>
-                  </p>
-                </div>
-
-                <div class="mb-1">
                   <p style="display: inline" class="ml-1">آدرس:</p>
                   <p style="display: inline">
                     <b>{{ donor.user.address.slice(7) }}</b>
@@ -309,29 +257,11 @@
       </Dialog>
 
       <Dialog
-        :dialogOpen="addFoodDialog"
-        @update:dialogOpen="updateaddFoodDialog"
-        title="برای ثبت سفره جدید اطلاعات زیر را تکمیل نمایید:"
+        :dialogOpen="addClothesDialog"
+        @update:dialogOpen="updateaddClothesDialog"
+        title="برای ثبت پوشاک مهربانی جدید اطلاعات زیر را تکمیل نمایید:"
       >
-        <v-form
-          @submit.prevent="onSubmit"
-          slot="dialogText"
-          class="mb-n4"
-          ref="addFood"
-        >
-          <Input
-            outlined
-            dense
-            name="request"
-            type="number"
-            v-model.trim="formData.request"
-            labelTag
-            labelText="تعداد غذای مورد نیاز"
-            placeholder="تعداد غذای مورد نیاز"
-            hide_details
-            class="mb-5"
-          />
-
+        <v-form @submit.prevent="onSubmit" slot="dialogText" class="mb-n4">
           <div class="mb-5">
             <custom-date-picker
               v-model="formData.eventDate"
@@ -364,7 +294,7 @@
 
           <v-checkbox
             v-model.trim="formData.recreate"
-            label="هر هفته سفره با زمان فوق را تمدید کن."
+            label="پوشاک را برای ۳۰ روز آینده تمدید کن."
             :color="$vuetify.theme.currentTheme.thirdColor"
             hide-details
             class="mb-5"
@@ -375,7 +305,7 @@
               :style="{ color: $vuetify.theme.currentTheme.primary }"
               class="bold"
               >توجه داشته باشید تنها قبل از ثبت مشارکت نیکوکاران مهربان قادر به
-              حذف یا ویرایش این سفره خواهید بود.</small
+              حذف یا ویرایش این پوشاک خواهید بود.</small
             >
           </div>
 
@@ -402,7 +332,7 @@ import Card from "@/components/basics/Card.vue";
 import Dialog from "@/components/basics/Dialog.vue";
 
 export default {
-  name: "Food",
+  name: "Clothes",
 
   components: {
     AppBar,
@@ -414,76 +344,73 @@ export default {
 
   data() {
     return {
-      foodsCharity: [],
+      clothesCharity: [],
       benefactorList: [],
 
       benefactorListMessage: "هنوز مشارکتی برای این سفره ثبت نشده است.",
 
       ishaveBenefactor: false,
 
-      addFoodDialog: false,
+      addClothesDialog: false,
       benefactorListDialog: false,
-      editFoodDialog: false,
+      editClotheDialog: false,
 
       formData: {
-        request: "",
         eventDate: "",
         eventTime: "",
         agent: "",
-        recreate: false,
+        recreate: "",
       },
 
       editedFormData: {
         id: 0,
-        request: "",
         eventDate: "",
         eventTime: "",
         agent: "",
-        recreate: false,
+        recreate: "",
       },
     };
   },
 
   methods: {
-    async getFoodsCharity() {
+    async getClothesCharity() {
       try {
-        await this.$store.dispatch("getFoodsCharity");
-        this.foodsCharity = this.$store.state.responseData;
+        await this.$store.dispatch("getClothesCharity");
+        this.clothesCharity = this.$store.state.responseData;
         this.$store.commit("clearResponseData");
       } catch (error) {
-        console.error("Error during getFoodsCharity in component:", error);
+        console.error("Error during getClothesCharity in component:", error);
       }
     },
 
-    //handle addFoodDialog
-    openaddFoodDialog() {
-      this.addFoodDialog = !this.addFoodDialog;
+    //handle addClothesDialog
+    openaddClothesDialog() {
+      this.addClothesDialog = !this.addClothesDialog;
     },
-    updateaddFoodDialog(newVal) {
-      this.addFoodDialog = newVal;
+    updateaddClothesDialog(newVal) {
+      this.addClothesDialog = newVal;
     },
-    closeaddFoodDialog() {
-      this.addFoodDialog = false;
+    closeaddClothesDialog() {
+      this.addClothesDialog = false;
     },
 
-    //handle editFoodDialog
-    openEditFoodDialog(id) {
-      this.editFoodDialog = !this.editFoodDialog;
-      const food = this.foodsCharity.find((item) => item.id == id);
-      food.request = food.request.toString();
-      this.editedFormData = { ...food, id };
+    //handle editClotheDialog
+    openEditClotheDialog(id) {
+      this.editClotheDialog = !this.editClotheDialog;
+      const clothe = this.clothesCharity.find((item) => item.id == id);
+      this.editedFormData = { ...clothe, id  };
 
-      if (!food.collection == 0) {
-        this.ishaveBenefactor = true;
-      } else {
+      if (clothe.collection == 0) {
         this.ishaveBenefactor = false;
+      } else {
+        this.ishaveBenefactor = true;
       }
     },
-    updateEditFoodDialog(newVal) {
-      this.editFoodDialog = newVal;
+    updateEditClotheDialog(newVal) {
+      this.editClotheDialog = newVal;
     },
-    closeEditFoodDialog() {
-      this.editFoodDialog = false;
+    closeEditClotheDialog() {
+      this.editClotheDialog = false;
     },
 
     //handle benefactorListDialog
@@ -504,11 +431,11 @@ export default {
       this.benefactorListDialog = false;
     },
 
-    async getBenefactorList(foodId) {
-      const id = foodId;
+    async getBenefactorList(clotheId) {
+      const id = clotheId;
       try {
-        await this.$store.dispatch("foodDonorsList", { id });
-        this.benefactorList = this.$store.state.responseData[0].donors
+        await this.$store.dispatch("clotheDonorsList", { id });
+        this.benefactorList = this.$store.state.responseData[0].donors;
         console.log(this.benefactorList);
         this.$store.commit("clearResponseData");
       } catch (error) {
@@ -526,17 +453,17 @@ export default {
       }
     },
 
-    addFood() {
-      this.openaddFoodDialog();
+    addClothes() {
+      this.openaddClothesDialog();
       this.getAgentList();
     },
 
-    async removeFood(id) {
+    async removeClothe(id) {
       try {
-        await this.$store.dispatch("removeFood", { id });
-        this.getFoodsCharity();
+        await this.$store.dispatch("removeClothe", { id });
+        this.getClothesCharity();
       } catch (error) {
-        console.error("Error during removeFood in component:", error);
+        console.error("Error during removeClothe in component:", error);
       }
     },
 
@@ -545,11 +472,11 @@ export default {
       const data = this.editedFormData;
 
       try {
-        await this.$store.dispatch("editFood", { data });
-        this.getFoodsCharity();
-        this.closeEditFoodDialog();
+        await this.$store.dispatch("editClothe", { data });
+        this.getClothesCharity();
+        this.closeEditClotheDialog();
       } catch (error) {
-        console.error("Error during onEdit food in component:", error);
+        console.error("Error during onEdit clothe in component:", error);
       }
     },
 
@@ -558,16 +485,15 @@ export default {
       const data = this.formData;
 
       try {
-        await this.$store.dispatch("addFood", { data });
-        this.getFoodsCharity();
-        this.closeaddFoodDialog();
-        this.formData.request = "";
+        await this.$store.dispatch("addClothes", { data });
+        this.getClothesCharity();
+        this.closeaddClothesDialog();
         this.formData.eventDate = "";
         this.formData.eventTime = "";
         this.formData.agent = "";
         this.formData.recreate = false;
       } catch (error) {
-        console.error("Error during add food in component:", error);
+        console.error("Error during add clothes in component:", error);
       }
     },
   },
@@ -581,11 +507,11 @@ export default {
       return localStorage.getItem("todayDate");
     },
 
-    foodCardColor() {
-      return (foodCharity) => {
-        if (foodCharity.isExpired) {
+    clotheCardColor() {
+      return (clotheCharity) => {
+        if (clotheCharity.isExpired) {
           return this.$hexToRgba(this.$vuetify.theme.currentTheme.text, 0.15);
-        } else if (foodCharity.isDone) {
+        } else if (clotheCharity.isDone) {
           return this.$hexToRgba(
             this.$vuetify.theme.currentTheme.thirdColor,
             0.15
@@ -603,7 +529,7 @@ export default {
   created() {
     this.getAgentList();
 
-    this.getFoodsCharity();
+    this.getClothesCharity();
   },
 };
 </script>

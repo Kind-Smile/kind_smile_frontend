@@ -32,7 +32,6 @@
             labelText="تلفن همراه"
             placeholder="تلفن همراه"
             hide_details
-            suffix="| 98+"
             class="mb-3"
           />
 

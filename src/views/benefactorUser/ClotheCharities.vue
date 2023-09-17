@@ -20,7 +20,7 @@
               :style="{ color: $vuetify.theme.currentTheme.primary }"
               class="bold"
             >
-              سفره مهربانی
+              پوشاک مهربانی
             </div>
 
             <v-row slot="cardText">
@@ -95,8 +95,8 @@
                         :block="!$vuetify.breakpoint.mdAndUp"
                         dark
                         :color="$vuetify.theme.currentTheme.primary"
-                        input_value="مشاهده سفره‌های مهربانی"
-                        @click="seeFoodsCharity(charity.id)"
+                        input_value="مشاهده پوشاک مهربانی"
+                        @click="seeClothesCharity(charity.id)"
                       ></Button>
                     </v-row>
                   </Card>
@@ -106,7 +106,7 @@
           </Card>
 
           <div v-else>
-            <p>در حال حاضر هیچ خیریه‌ای دارای سفره مهربانی موجود نمی‌باشد.</p>
+            <p>در حال حاضر هیچ خیریه‌ای دارای پوشاک مهربانی موجود نمی‌باشد.</p>
             <router-link to="/">بازگشت به صفحه اصلی</router-link>
           </div>
         </v-col>
@@ -205,7 +205,7 @@ import * as turf from "@turf/turf";
 import router from "@/router";
 
 export default {
-  name: "FoodCharities",
+  name: "ClotheCharities",
 
   data() {
     return {
@@ -240,20 +240,20 @@ export default {
       this.charityInfoDialog = newVal;
     },
 
-    async getFoodCharities() {
+    async getClotheCharities() {
       try {
-        await this.$store.dispatch("foodCharities");
+        await this.$store.dispatch("clotheCharities");
         this.charityList = this.$store.state.responseData;
-        console.log(this.$store.state.responseData)
+        console.log(this.charityList);
         this.$store.commit("clearResponseData");
       } catch (error) {
-        console.error("Error during getFoodCharities in component:", error);
+        console.error("Error during getClotheCharities in component:", error);
       }
     },
 
-    seeFoodsCharity(id){
-      router.push(`/foods-charity/${id}`);
-    }
+    seeClothesCharity(id) {
+      router.push(`/clothes-charity/${id}`);
+    },
   },
 
   computed: {
@@ -266,6 +266,7 @@ export default {
         const agents = charity.agents;
 
         for (const agent of agents) {
+          // console.log(agent.polygon)
           const coordinatesArray = [];
 
           for (const point of agent.polygon) {
@@ -275,6 +276,8 @@ export default {
           if (coordinatesArray.length > 0) {
             coordinatesArray.push(coordinatesArray[0]);
           }
+
+          console.log(coordinatesArray);
 
           const lat = this.$store.state.benefactorLat;
           const lng = this.$store.state.benefactorLng;
@@ -303,7 +306,7 @@ export default {
   },
 
   created() {
-    this.getFoodCharities();
+    this.getClotheCharities();
   },
 };
 </script>

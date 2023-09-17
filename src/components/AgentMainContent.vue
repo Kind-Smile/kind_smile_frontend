@@ -25,7 +25,7 @@
       </v-col>
 
       <v-col lg="3" md="4" sm="4" cols="12">
-        <router-link :to="`#`">
+        <router-link :to="`/clothes-agent`">
           <v-hover v-slot="{ hover }">
             <Card
               :cardColor="getCardColor"
@@ -52,7 +52,7 @@
       v-if="!hasChangePass"
       :dialogOpen="changePassDialog"
       @update:dialogOpen="updateChangePassDialog"
-      title="برای حفظ امنیت، در اولین ورود خود به سامانه باید رمز عبور خود را تغییر دهید."
+      title="برای حفظ امنیت، در اولین ورود به سامانه باید رمز عبور خود را تغییر دهید."
     >
       <div slot="dialogText">
         <v-alert
@@ -172,7 +172,6 @@ export default {
 
   created() {
     this.hasChangePass = this.$store.state.agentHasChangePass;
-    console.log(this.hasChangePass);
   },
 };
 </script>

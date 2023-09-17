@@ -293,7 +293,7 @@ export default {
       )
       .then((response) => {
         let data = response.data;
-        console.log(`addFood successfully! this is response: ${data}`);
+        console.log(`editFood successfully! this is response: ${data}`);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -351,6 +351,7 @@ export default {
       .get("http://127.0.0.1:8000/food/charityFood/", config)
       .then((response) => {
         let responseMessage = response.data;
+        console.log(responseMessage)
         state.isLoading = false;
         commit("setResponseData", responseMessage);
       })
@@ -399,12 +400,133 @@ export default {
         config
       )
       .then((response) => {
-        let data = response.data;
-        console.log(data);
+        let responseMessage = response.data;
+        console.log(responseMessage);
       })
       .catch((error) => {
-        console.error("Error:", error);
+        console.error("Error fetching donateFood:", error);
         throw error;
+      });
+  },
+
+  //clothes
+  async addClothes({ state }, { data }) {
+    // console.log("I am in: action->addClothes");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .post(
+        `http://127.0.0.1:8000/clothes/create/`,
+        {
+          eventDate: data.eventDate.replace("/", "-").replace("/", "-"),
+          eventTime: data.eventTime,
+          agent: data.agent,
+          recreate: data.recreate,
+        },
+        config
+      )
+      .then((response) => {
+        let responseMessage = response.data;
+        console.log(`addClothes successfully! this is response: ${responseMessage}`);
+      })
+      .catch((error) => {
+        console.error("Error fetching addClothes:", error);
+      });
+  },
+
+  async getClothesCharity({ state, commit }) {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .get("http://127.0.0.1:8000/clothes/own/", config)
+      .then((response) => {
+        let responseMessage = response.data;
+        commit("setResponseData", responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error fetching getClothesCharity:", error);
+      });
+  },
+
+  async removeClothe({ state }, { id }) {
+    // console.log("I am in: action->removeFood");
+    const config = {
+      data: { id },
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+    await axios
+      .delete(`http://127.0.0.1:8000/clothes/delete/`, config)
+      .then((response) => {
+        let responseMessage = response.data;
+        console.log(responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error removeClothe:", error);
+      });
+  },
+
+  async editClothe({ state }, { data }) {
+    console.log(data.id)
+    // console.log("I am in: action->editClothe");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .put(
+        `http://127.0.0.1:8000/clothes/editClothes/`,
+        {
+          id: data.id,
+          eventDate: data.eventDate.replace("/", "-").replace("/", "-"),
+          eventTime: data.eventTime,
+          agent: data.agent.id,
+          recreate: data.recreate,
+        },
+        config
+      )
+      .then((response) => {
+        let data = response.data;
+        console.log(`editClothe successfully! this is response: ${data}`);
+      })
+      .catch((error) => {
+        console.error("Error fetching editClothe:", error);
+      });
+  },
+
+  async clotheDonorsList({ state, commit }, { id }) {
+    const config = {
+      params: { id: id },
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .get("http://127.0.0.1:8000/clothes/clothesDonors/", config)
+      .then((response) => {
+        let responseMessage = response.data;
+        state.isLoading = false;
+        commit("setResponseData", responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error fetching clotheDonorsList:", error);
       });
   },
 
@@ -550,6 +672,7 @@ export default {
       });
   },
 
+  //food
   async getAgentFoodsCharity({ state, commit }) {
     const config = {
       headers: {
@@ -597,6 +720,56 @@ export default {
       });
   },
 
+  //clothe
+  async getAgentClothesCharity({ state, commit }) {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .get("http://127.0.0.1:8000/clothes/agentClothes/", config)
+      .then((response) => {
+        let responseMessage = response.data;
+        commit("setResponseData", responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error fetching getAgentClothesCharity:", error);
+      });
+  },
+
+  async agentReceiveClothe({ state, commit }, { id }) {
+    // console.log("I am in: action->agentReceiveClothe");
+    console.log(`user_id is ${id[0]}`)
+    console.log(`clothes_id is ${id[1]}`)
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .post(
+        `http://127.0.0.1:8000/clothes/isCollected/`,
+        {
+          user_id: id[0],
+          clothes_id: id[1],
+        },
+        config
+      )
+      .then((response) => {
+        let responseMessage = response.data;
+        console.log(responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error fetching agentReceiveClothe:", error);
+        throw error;
+      });
+  },
+
   /////////////////////////////////////////////////////////////////////////////////////////////////
   //benefactor
 
@@ -613,6 +786,7 @@ export default {
       .get("http://127.0.0.1:8000/money/charityMoney/", config)
       .then((response) => {
         let responseMessage = response.data;
+        console.log(responseMessage)
         state.isLoading = false;
         commit("setResponseData", responseMessage);
       })
@@ -666,6 +840,74 @@ export default {
       .catch((error) => {
         console.error("Error:", error);
         throw error;
+      });
+  },
+
+  //clothes
+  async clotheCharities({ state, commit }) {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .get("http://127.0.0.1:8000/clothes/charityClothes/", config)
+      .then((response) => {
+        let responseMessage = response.data;
+        state.isLoading = false;
+        commit("setResponseData", responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error fetching clotheCharities:", error);
+      });
+  },
+
+  async donateClothe({ state, commit }, { id }) {
+    // console.log("I am in: action->donateClothe");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .post(
+        `http://127.0.0.1:8000/clothes/createDonor/`,
+        {
+          clothes: parseInt(id, 10),
+        },
+        config
+      )
+      .then((response) => {
+        let responseMessage = response.data;
+        console.log(responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error fetching donateClothe:", error);
+        throw error;
+      });
+  },
+
+  async getClothesCharityForBenefactor({ state, commit }, { id }) {
+    const config = {
+      params: { id: id },
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .get("http://127.0.0.1:8000/clothes/show/", config)
+      .then((response) => {
+        let responseMessage = response.data;
+        commit("setResponseData", responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error fetching getClothesCharityForBenefactor:", error.response.data);
       });
   },
 };

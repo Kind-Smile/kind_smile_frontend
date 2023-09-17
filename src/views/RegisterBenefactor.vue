@@ -32,7 +32,7 @@
                 dense
                 name="phoneNumber"
                 type="number"
-                v-model.trim="formData.phoneNumber"
+                v-model="formData.phoneNumber"
                 labelTag
                 labelText="شماره تماس"
                 placeholder="شماره تماس"
@@ -172,7 +172,7 @@ export default {
     return {
       formData: {
         name: "",
-        phoneNumber: "",
+        phoneNumber: this.$store.state.verificatedPhoneNumber,
         address: this.$store.state.benefactor.address,
         latitude: this.$store.state.benefactor.latitude,
         longitude: this.$store.state.benefactor.longitude,
@@ -232,8 +232,10 @@ export default {
   },
 
   mounted() {
-    this.formData.phoneNumber = this.$store.state.verificatedPhoneNumber;
-
+    // this.formData.phoneNumber = this.$store.state.verificatedPhoneNumber;
+    // console.log(`in register state ${this.$store.state.verificatedPhoneNumber}`)
+    // console.log(`in register formData ${this.formData.phoneNumber}`)
+    console.log(`in register formData ${this.formData.name}`)
     const formData = JSON.parse(localStorage.getItem("benefactorFormData"));
     if (formData) {
       this.formData = formData;

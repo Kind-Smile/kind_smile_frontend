@@ -19,15 +19,21 @@
         </v-img>
       </template>
 
-      <div class="pt-3 mr-2 ml-3">
+      <!-- <div class="pt-3 mr-2 ml-3">
         <router-link to="/">
           <v-icon :color="$vuetify.theme.currentTheme.text" size="22"
             >mdi-home-outline</v-icon
           >
         </router-link>
-      </div>
+      </div> -->
 
       <div v-if="this.$store.state.isAuthenticated" class="pt-3">
+        <router-link to="/" class="ml-3">
+          <v-icon :color="$vuetify.theme.currentTheme.text" size="22"
+            >mdi-home-outline</v-icon
+          >
+        </router-link>
+
         <router-link to="#" class="ml-3">
           <v-icon :color="$vuetify.theme.currentTheme.text" size="22"
             >mdi-account-outline</v-icon
@@ -45,6 +51,12 @@
 
       <div v-else class="pt-3 mr-2 d-flex justify-between">
         <div>
+          <router-link class="ml-3" to="/">
+            <small>صفحه اصلی</small>
+          </router-link>
+        </div>
+
+        <div>
           <a class="ml-3" @click="openDialog">
             <small>ثبت‌نام</small>
           </a>
@@ -56,11 +68,11 @@
           </router-link>
         </div>
 
-        <div>
+        <!-- <div>
           <router-link to="/register-charity">
             <small>ثبت‌نام خیریه</small>
           </router-link>
-        </div>
+        </div> -->
       </div>
 
       <Dialog
@@ -189,6 +201,7 @@ export default {
     },
 
     async checkVerifycode() {
+      console.log(`in appbar formData.phone ${this.formData.phoneNumber}`)
       this.$store.commit(
         "updateVerificatedPhoneNumber",
         this.formData.phoneNumber

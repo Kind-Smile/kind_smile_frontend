@@ -4,7 +4,7 @@
       <v-col lg="3" md="4" sm="4" cols="12">
         <a>
           <v-hover v-slot="{ hover }">
-            <div @click="charityAgentList">
+            <div @click="charityAgentList('foods')">
               <Card
                 :cardColor="getCardColor"
                 title
@@ -27,26 +27,28 @@
       </v-col>
 
       <v-col lg="3" md="4" sm="4" cols="12">
-        <router-link :to="`#`">
+        <a>
           <v-hover v-slot="{ hover }">
-            <Card
-              :cardColor="getCardColor"
-              title
-              localImage
-              cardImage="clothes.png"
-              :hover="hover"
-              :elevationValue="1"
-            >
-              <div
-                slot="cardTitle"
-                :style="{ color: $vuetify.theme.currentTheme.primary }"
-                class="bold pt-1"
+            <div @click="charityAgentList('clothes')">
+              <Card
+                :cardColor="getCardColor"
+                title
+                localImage
+                cardImage="clothes.png"
+                :hover="hover"
+                :elevationValue="1"
               >
-                پوشاک مهربانی
-              </div>
-            </Card>
+                <div
+                  slot="cardTitle"
+                  :style="{ color: $vuetify.theme.currentTheme.primary }"
+                  class="bold pt-1"
+                >
+                  پوشاک مهربانی
+                </div>
+              </Card>
+            </div>
           </v-hover>
-        </router-link>
+        </a>
       </v-col>
 
       <v-col lg="3" md="4" sm="4" cols="12">
@@ -278,13 +280,17 @@ export default {
       this.$updateAgentProperty("isClickPolygon", true);
     },
 
-    async charityAgentList() {
+    async charityAgentList(value) {
       try {
         await this.$store.dispatch("charityAgentList");
         if (this.$store.state.charityAgentList.length == 0) {
           this.openAddAgentDialog();
         } else {
-          router.push("charity-food");
+          if(value == 'foods'){
+            router.push("/charity-food");
+          }else if(value == 'clothes'){
+            router.push("/charity-clothes");
+          }
         }
       } catch (error) {
         console.error("Error during charityAgentList in component:", error);

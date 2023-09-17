@@ -5,18 +5,23 @@ import HomeView from "@/views/HomeView.vue";
 
 //benefactor account
 import FoodCharities from "@/views/benefactorUser/FoodCharitiesView.vue";
-import NotificationCharities from "@/views/benefactorUser/NotificationCharitiesView.vue";
 import FoodsCharity from "@/views/benefactorUser/FoodsCharity.vue"
 import MoneyCharities from "@/views/benefactorUser/MoneyCharities.vue"
 import MoniesCharity from "@/views/benefactorUser/MoniesCharity.vue"
+import ClotheCharities from "@/views/benefactorUser/ClotheCharities.vue"
+import ClothesCharity from "@/views/benefactorUser/ClothesCharity.vue"
+import NotificationCharities from "@/views/benefactorUser/NotificationCharitiesView.vue";
 
 //charity account
-import AgentFoods from "@/views/AgentUser/Food.vue"
 import CharityFood from "@/views/charityUser/Food.vue"
 import CharityMoney from "@/views/charityUser/Money.vue"
+import CharityClothes from "@/views/charityUser/Clothes.vue"
 
 //agent account
+import AgentFoods from "@/views/AgentUser/Food.vue"
 import FoodDonors from "@/views/AgentUser/FoodDonors.vue"
+import AgentClothe from "@/views/AgentUser/Clothe.vue"
+import ClotheDonors from "@/views/AgentUser/ClotheDonors.vue"
 
 import Map from "@/views/Map.vue";
 import Polygon from "@/views/Polygon.vue";
@@ -42,21 +47,27 @@ const routes = [
   },
 
   {
-    path: "/money-charities",
-    name: "money-charities",
-    component: MoneyCharities,
-  },
-
-  {
-    path: "/notification-charities",
-    name: "notification",
-    component: NotificationCharities,
-  },
-
-  {
     path: "/foods-charity/:id",
     name: "foodsCharity",
     component: FoodsCharity,
+  },
+
+  {
+    path: "/clothe-charities",
+    name: "clothe-charities",
+    component: ClotheCharities,
+  },
+
+  {
+    path: "/clothes-charity/:id",
+    name: "clothes-charity",
+    component: ClothesCharity,
+  },
+
+  {
+    path: "/money-charities",
+    name: "money-charities",
+    component: MoneyCharities,
   },
 
   {
@@ -64,6 +75,12 @@ const routes = [
     name: "moniesCharity",
     component: MoniesCharity,
   },  
+
+  {
+    path: "/notification-charities",
+    name: "notification",
+    component: NotificationCharities,
+  },
 
   {
     path: "/foods-agent",
@@ -78,6 +95,18 @@ const routes = [
   },
 
   {
+    path: "/clothes-agent",
+    name: "AgentClothe",
+    component: AgentClothe,
+  },
+
+  {
+    path: "/clothe-donors/:id",
+    name: "ClotheDonors",
+    component: ClotheDonors,
+  },
+
+  {
     path: "/charity-food",
     name: "charity-food",
     component: CharityFood,
@@ -87,6 +116,12 @@ const routes = [
     path: "/charity-money",
     name: "charity-money",
     component: CharityMoney,
+  },
+
+  {
+    path: "/charity-clothes",
+    name: "charity-clothes",
+    component: CharityClothes,
   },
 
   {

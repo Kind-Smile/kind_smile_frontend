@@ -9,20 +9,24 @@
       <v-row v-else>
         <v-col lg="12" md="12" sm="12" cols="12">
           <Card :cardColor="getCardColor" title text :image="false">
-            <div
-              slot="cardTitle"
-              :style="{ color: $vuetify.theme.currentTheme.primary }"
-              class="bold"
-            >
-              خیریه
-              <!-- {{ charityName }} -->
-            </div>
+            <v-row slot="cardTitle" class="d-flex justify-space-between pb-5 px-5">
+              <div
+                :style="{ color: $vuetify.theme.currentTheme.primary }"
+                class="bold"
+              >
+                خیریه {{ charityName }}
+              </div>
+              <small>
+                شماره کارت خیریه: <b>{{ cardNumber }}</b>
+              </small>
+            </v-row>
 
             <v-row slot="cardText">
               <template v-for="money in moniesList">
                 <v-col lg="4" md="6" sm="6" cols="12" :key="money.money.id">
                   <Card
                     text
+                    title
                     :actions="money.money_collect == null"
                     :image="false"
                     :cardColor="getMoneyCardColors(money.money)"
@@ -45,14 +49,14 @@
                         </p>
                       </div>
 
-                      <!-- <div class="mb-1" v-if="money.collection > 0">
+                      <div class="mb-1" v-if="money.collection > 0">
                         <p style="display: inline" class="ml-1">
                           میزان مشارکت ثبت‌شده:
                         </p>
                         <p style="display: inline">
                           <b>{{ money.collection }} تومان</b>
                         </p>
-                      </div> -->
+                      </div>
 
                       <div>
                         <p style="display: inline" class="ml-1">
@@ -92,7 +96,7 @@
                             }"
                             class="ml-1"
                           >
-                            از مشارکت شما نیکوکار گرامی متشکریم. 
+                            از مشارکت شما نیکوکار گرامی متشکریم.
                           </p>
                         </div>
                       </div>
@@ -124,11 +128,7 @@
         @update:dialogOpen="updateDonateMoneyDialog"
         title="برای ثبت مشارکت در این سفره، اطلاعات زیر را تکمیل نمایید:"
       >
-        <v-form
-          @submit.prevent="onSubmit"
-          slot="dialogText"
-          class="mb-n4"
-        >
+        <v-form @submit.prevent="onSubmit" slot="dialogText" class="mb-n4">
           <Input
             outlined
             dense
@@ -164,8 +164,6 @@ import Card from "@/components/basics/Card.vue";
 import Input from "@/components/basics/Input.vue";
 import Button from "@/components/basics/Button.vue";
 import Dialog from "@/components/basics/Dialog.vue";
-import * as turf from "@turf/turf";
-import router from "@/router";
 
 export default {
   name: "MoniesCharity",
@@ -174,6 +172,7 @@ export default {
     return {
       id: 0,
       charityName: "",
+      cardNumber: "",
       moniesList: [],
 
       formData: {
@@ -210,9 +209,10 @@ export default {
       try {
         await this.$store.dispatch("getMoniesCharity", { id });
         this.moniesList = this.$store.state.responseData;
-        // if (this.moniesList.length > 0) {
-        //   this.charityName = this.moniesList[0].food.charity.name;
-        // }
+        if (this.moniesList.length > 0) {
+          this.charityName = this.moniesList[0].money.charity.name;
+          this.cardNumber = this.moniesList[0].money.charity.cardNumber;
+        }
         this.$store.commit("clearResponseData");
       } catch (error) {
         console.error("Error during getMoniesCharity in component:", error);

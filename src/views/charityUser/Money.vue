@@ -100,7 +100,7 @@
                         dark
                         small
                         :color="$vuetify.theme.currentTheme.primary"
-                        input_value="حذف هدیه"
+                        input_value="حذف"
                         :class="{ 'mt-3': !$vuetify.breakpoint.mdAndUp }"
                         @click="removeMoney(moneyCharity.id)"
                       ></Button>
