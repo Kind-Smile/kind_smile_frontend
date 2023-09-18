@@ -1,124 +1,142 @@
 <template>
   <div>
-    <AppBar></AppBar>
-    <v-main class="mt-8 mb-5 mx-5">
-      <div v-if="this.$store.state.isLoading">
-        <h4>صبر کنید...</h4>
-      </div>
-
-      <v-row v-else class="pa-5">
-        <div v-if="isFinished">
-          <h6>دریافت غذا از تمام نیکوکاران مهربان به پایان رسید. با تشکر از زحمات شما</h6>
-          <router-link to="/foods-agent">بازگشت به صفحه قبل</router-link>
+    <div v-if="this.$store.state.role != 'Agent'">
+      <v-img src="@/assets/images/401error.png"></v-img>
+    </div>
+    <div v-else>
+      <AppBar></AppBar>
+      <v-main class="mt-8 mb-5 mx-5">
+        <div v-if="this.$store.state.isLoading">
+          <h4>صبر کنید...</h4>
         </div>
 
-        <v-col lg="12" md="12" sm="12" cols="12" v-else>
-          <Card :cardColor="getCardColor" title text :image="false">
-            <div
-              slot="cardTitle"
-              :style="{ color: $vuetify.theme.currentTheme.primary }"
-              class="bold"
-            >
-              سفره مهربانی
-            </div>
+        <v-row v-else class="pa-5">
+          <div v-if="isFinished">
+            <h6>
+              دریافت غذا از تمام نیکوکاران مهربان به پایان رسید. با تشکر از
+              زحمات شما
+            </h6>
+            <router-link to="/foods-agent">بازگشت به صفحه قبل</router-link>
+          </div>
 
-            <v-row slot="cardText">
-              <template v-for="donor in donorsList">
-                <v-col lg="4" md="4" sm="6" cols="12" :key="donor.id">
-                  <Card title text :actions="!donor.isCollected" :image="false">
-                    <div
-                      slot="cardTitle"
-                      :style="{ color: $vuetify.theme.currentTheme.primary }"
-                      class="semiSmall bold"
+          <v-col lg="12" md="12" sm="12" cols="12" v-else>
+            <Card :cardColor="getCardColor" title text :image="false">
+              <div
+                slot="cardTitle"
+                :style="{ color: $vuetify.theme.currentTheme.primary }"
+                class="bold"
+              >
+                سفره مهربانی
+              </div>
+
+              <v-row slot="cardText">
+                <template v-for="donor in donorsList">
+                  <v-col lg="4" md="4" sm="6" cols="12" :key="donor.id">
+                    <Card
+                      title
+                      text
+                      :actions="!donor.isCollected"
+                      :image="false"
                     >
-                      {{ donor.user.name }}
-                    </div>
-
-                    <div slot="cardText">
-                      <div class="mb-1">
-                        <p style="display: inline" class="ml-1">
-                          شماره تماس نیکوکار مهربان:
-                        </p>
-                        <p style="display: inline">
-                          <b>0{{ donor.user.phoneNumber }}</b>
-                        </p>
-                      </div>
-
-                      <div class="mb-1">
-                        <p style="display: inline" class="ml-1">
-                          تعداد غذای ثبت‌شده:
-                        </p>
-                        <p style="display: inline">
-                          <b>{{ donor.food_collect }} پرس</b>
-                        </p>
-                      </div>
-
-                      <div class="mb-1">
-                        <p style="display: inline" class="ml-1">
-                          نوع غذای ثبت‌شده:
-                        </p>
-                        <p style="display: inline">
-                          <b>{{ donor.food_type }}</b>
-                        </p>
-                      </div>
-
-                      <div class="mb-1">
-                        <p style="display: inline" class="ml-1">آدرس:</p>
-                        <p style="display: inline">
-                          <b>{{ donor.user.address.slice(7) }}</b>
-                        </p>
-                      </div>
-
-                      <router-link
-                        :to="{
-                          path: '/map',
-                          query: {
-                            coordinates: [
-                              donor.user.longitude,
-                              donor.user.latitude,
-                            ],
-                            disable: true,
-                          },
-                        }"
+                      <div
+                        slot="cardTitle"
+                        :style="{ color: $vuetify.theme.currentTheme.primary }"
+                        class="semiSmall bold"
                       >
-                        <div
-                          :style="{
-                            color: $vuetify.theme.currentTheme.thirdColor,
-                          }"
-                          class="mb-1"
-                        >
-                          مشاهده آدرس از روی نقشه
-                        </div>
-                      </router-link>
-
-                      <div class="mb-1" v-if="donor.isCollected">
-                        <p :style="{
-                            color: $vuetify.theme.currentTheme.primary,
-                          }" class="bold mb-0">دریافت شده</p>
+                        {{ donor.user.name }}
                       </div>
-                    </div>
 
-                    <v-row
-                      slot="cardActions"
-                      class="justify-end px-4 pt-5 pb-3"
-                      v-if="!donor.isCollected"
-                    >
-                      <Button
-                        :block="!$vuetify.breakpoint.mdAndUp"
-                        dark
-                        :color="$vuetify.theme.currentTheme.primary"
-                        input_value="دریافت شد"
-                        @click="received(donor.user.id)"
-                      ></Button>
-                    </v-row>
-                  </Card>
-                </v-col>
-              </template>
-            </v-row>
-          </Card>
-        </v-col>
-      </v-row>
-    </v-main>
+                      <div slot="cardText">
+                        <div class="mb-1">
+                          <p style="display: inline" class="ml-1">
+                            شماره تماس نیکوکار مهربان:
+                          </p>
+                          <p style="display: inline">
+                            <b>0{{ donor.user.phoneNumber }}</b>
+                          </p>
+                        </div>
+
+                        <div class="mb-1">
+                          <p style="display: inline" class="ml-1">
+                            تعداد غذای ثبت‌شده:
+                          </p>
+                          <p style="display: inline">
+                            <b>{{ donor.food_collect }} پرس</b>
+                          </p>
+                        </div>
+
+                        <div class="mb-1">
+                          <p style="display: inline" class="ml-1">
+                            نوع غذای ثبت‌شده:
+                          </p>
+                          <p style="display: inline">
+                            <b>{{ donor.food_type }}</b>
+                          </p>
+                        </div>
+
+                        <div class="mb-1">
+                          <p style="display: inline" class="ml-1">آدرس:</p>
+                          <p style="display: inline">
+                            <b>{{ donor.user.address.slice(7) }}</b>
+                          </p>
+                        </div>
+
+                        <router-link
+                          :to="{
+                            path: '/map',
+                            query: {
+                              coordinates: [
+                                donor.user.longitude,
+                                donor.user.latitude,
+                              ],
+                              disable: true,
+                            },
+                          }"
+                        >
+                          <div
+                            :style="{
+                              color: $vuetify.theme.currentTheme.thirdColor,
+                            }"
+                            class="mb-1"
+                          >
+                            مشاهده آدرس از روی نقشه
+                          </div>
+                        </router-link>
+
+                        <div class="mb-1" v-if="donor.isCollected">
+                          <p
+                            :style="{
+                              color: $vuetify.theme.currentTheme.primary,
+                            }"
+                            class="bold mb-0"
+                          >
+                            دریافت شده
+                          </p>
+                        </div>
+                      </div>
+
+                      <v-row
+                        slot="cardActions"
+                        class="justify-end px-4 pt-5 pb-3"
+                        v-if="!donor.isCollected"
+                      >
+                        <Button
+                          :block="!$vuetify.breakpoint.mdAndUp"
+                          dark
+                          :color="$vuetify.theme.currentTheme.primary"
+                          input_value="دریافت شد"
+                          @click="received(donor.user.id)"
+                        ></Button>
+                      </v-row>
+                    </Card>
+                  </v-col>
+                </template>
+              </v-row>
+            </Card>
+          </v-col>
+        </v-row>
+      </v-main>
+    </div>
   </div>
 </template>
 
@@ -152,7 +170,7 @@ export default {
         const id = this.id;
         await this.$store.dispatch("foodDonorsList", { id });
         this.donorsList = this.$store.state.responseData[0].donors;
-        this.isFinished= this.$store.state.responseData[0].finished
+        this.isFinished = this.$store.state.responseData[0].finished;
         console.log(this.donorsList);
         this.$store.commit("clearResponseData");
       } catch (error) {

@@ -1,252 +1,274 @@
 <template>
   <div>
-    <AppBar></AppBar>
-    <v-main class="mt-8 mb-5 mx-5">
-      <!-- <div v-if="this.$store.state.isLoading"><h4>صبر کنید...</h4></div> -->
-      <!-- v-else -->
-      <v-row>
-        <v-col lg="12" md="12" sm="12" cols="12">
-          <Card
-            :cardColor="getCardColor"
-            title
-            text
-            :image="false"
-            v-if="this.moniesCharity.length > 0"
-          >
-            <div
-              slot="cardTitle"
-              :style="{ color: $vuetify.theme.currentTheme.primary }"
-              class="bold"
+    <div v-if="this.$store.state.role != 'Charity'">
+      <v-img src="@/assets/images/401error.png"></v-img>
+    </div>
+    <div v-else>
+      <AppBar></AppBar>
+      <v-main class="mt-8 mb-5 mx-5">
+        <!-- <div v-if="this.$store.state.isLoading"><h4>صبر کنید...</h4></div> -->
+        <!-- v-else -->
+        <v-row>
+          <v-col lg="12" md="12" sm="12" cols="12">
+            <Card
+              :cardColor="getCardColor"
+              title
+              text
+              :image="false"
+              v-if="this.moniesCharity.length > 0"
             >
-              هدیه مهربانی
-            </div>
-
-            <v-row slot="cardText">
-              <template v-for="moneyCharity in moniesCharity">
-                <v-col lg="4" md="6" sm="6" cols="12" :key="moneyCharity.id">
-                  <Card
-                    title
-                    text
-                    actions
-                    :image="false"
-                    :cardColor="moneyCardColor(moneyCharity)"
-                  >
-                    <div
-                      slot="cardTitle"
-                      :style="{ color: $vuetify.theme.currentTheme.primary }"
-                      class="semiSmall bold"
-                    >
-                      {{ moneyCharity.name }}
-                    </div>
-
-                    <div slot="cardText">
-                      <div class="mb-1">
-                        <p style="display: inline" class="ml-1">
-                          کل هزینه مورد نیاز:
-                        </p>
-                        <p style="display: inline">
-                          <b>{{ moneyCharity.money_need }} تومان</b>
-                        </p>
-                      </div>
-
-                      <div class="mb-1" v-if="moneyCharity.collection > 0">
-                        <p style="display: inline" class="ml-1">
-                          میزان مشارکت ثبت‌شده:
-                        </p>
-                        <p style="display: inline">
-                          <b>{{ moneyCharity.collection }} تومان</b>
-                        </p>
-                      </div>
-
-                      <div>
-                        <p style="display: inline" class="ml-1">
-                          مورد نیاز تا تاریخ:
-                        </p>
-                        <p style="display: inline">
-                          <b>{{
-                            moneyCharity.expireDate
-                              .replace("-", "/")
-                              .replace("-", "/")
-                          }}</b>
-                        </p>
-                      </div>
-
-                      <div class="mb-1 mt-3">
-                        <small style="display: inline">
-                          <b>{{ moneyCharity.description }}</b>
-                        </small>
-                      </div>
-                    </div>
-
-                    <v-row
-                      no-gutters
-                      slot="cardActions"
-                      class="justify-space-between"
-                    >
-                      <Button
-                        :block="!$vuetify.breakpoint.mdAndUp"
-                        dark
-                        small
-                        input_value="مشاهده مشارکت ثبت شده"
-                        @click="openBenefactorListDialog(moneyCharity.id)"
-                      ></Button>
-
-                      <Button
-                        v-if="
-                          !moneyCharity.isExpired &&
-                          moneyCharity.collection == 0
-                        "
-                        :block="!$vuetify.breakpoint.mdAndUp"
-                        dark
-                        small
-                        :color="$vuetify.theme.currentTheme.primary"
-                        input_value="حذف"
-                        :class="{ 'mt-3': !$vuetify.breakpoint.mdAndUp }"
-                        @click="removeMoney(moneyCharity.id)"
-                      ></Button>
-                    </v-row>
-                  </Card>
-                </v-col>
-              </template>
-            </v-row>
-          </Card>
-
-          <div v-else>
-            <p>در حال حاضر هیچ هدیه مهربانی توسط شما ثبت نشده است.</p>
-            <a @click="addMoney">اضافه کردن هدیه مهربانی جدید</a>
-          </div>
-        </v-col>
-      </v-row>
-
-      <v-container>
-        <v-speed-dial right bottom fixed>
-          <template v-slot:activator>
-            <Button
-              fab
-              :color="$vuetify.theme.currentTheme.primary"
-              @click="addMoney"
-            >
-              <v-icon slot="buttonSlotBefor" color="white" large
-                >mdi-plus</v-icon
-              >
-            </Button>
-          </template>
-        </v-speed-dial>
-      </v-container>
-
-      <Dialog
-        :dialogOpen="benefactorListDialog"
-        @update:dialogOpen="updateBenefactorListDialog"
-        :title="benefactorListMessage"
-      >
-        <!-- need to edit -------------------------------------------------------------------------------- -->
-        <template v-for="donor in benefactorList" slot="dialogText">
-          <v-col lg="12" md="12" sm="12" cols="12" :key="donor.id">
-            <Card title text :image="false">
               <div
                 slot="cardTitle"
                 :style="{ color: $vuetify.theme.currentTheme.primary }"
-                class="semiSmall bold mt-n5"
+                class="bold"
               >
-                {{ donor.user.name }}
+                هدیه مهربانی
               </div>
 
-              <div slot="cardText">
-                <div class="mb-1">
-                  <p style="display: inline" class="ml-1">
-                    شماره تماس نیکوکار مهربان:
-                  </p>
-                  <p style="display: inline">
-                    <b>0{{ donor.user.phoneNumber }}</b>
-                  </p>
-                </div>
+              <v-row slot="cardText">
+                <template v-for="moneyCharity in moniesCharity">
+                  <v-col lg="4" md="6" sm="6" cols="12" :key="moneyCharity.id">
+                    <Card
+                      title
+                      text
+                      actions
+                      :image="false"
+                      :cardColor="moneyCardColor(moneyCharity)"
+                    >
+                      <div
+                        slot="cardTitle"
+                        :style="{ color: $vuetify.theme.currentTheme.primary }"
+                        class="semiSmall bold"
+                      >
+                        {{ moneyCharity.name }}
+                      </div>
 
-                <div class="mb-1">
-                  <p style="display: inline" class="ml-1">
-                    مبلغ اهدایی:
-                  </p>
-                  <p style="display: inline">
-                    <b>{{ donor.money_collect }} تومان</b>
-                  </p>
-                </div>
-              </div>
+                      <div slot="cardText">
+                        <div class="mb-1">
+                          <p style="display: inline" class="ml-1">
+                            کل هزینه مورد نیاز:
+                          </p>
+                          <p style="display: inline">
+                            <b
+                              >{{
+                                moneyCharity.money_need.toLocaleString("fa-IR")
+                              }}
+                              تومان</b
+                            >
+                          </p>
+                        </div>
+
+                        <div class="mb-1" v-if="moneyCharity.collection > 0">
+                          <p style="display: inline" class="ml-1">
+                            میزان مشارکت ثبت‌شده:
+                          </p>
+                          <p style="display: inline">
+                            <b
+                              >{{
+                                moneyCharity.collection.toLocaleString("fa-IR")
+                              }}
+                              تومان</b
+                            >
+                          </p>
+                        </div>
+
+                        <div>
+                          <p style="display: inline" class="ml-1">
+                            مورد نیاز تا تاریخ:
+                          </p>
+                          <p style="display: inline">
+                            <b>{{
+                              moneyCharity.expireDate
+                                .replace("-", "/")
+                                .replace("-", "/")
+                            }}</b>
+                          </p>
+                        </div>
+
+                        <div class="mb-1 mt-3">
+                          <small style="display: inline">
+                            <b>{{ moneyCharity.description }}</b>
+                          </small>
+                        </div>
+                      </div>
+
+                      <v-row
+                        no-gutters
+                        slot="cardActions"
+                        class="justify-space-between"
+                      >
+                        <Button
+                          :block="!$vuetify.breakpoint.mdAndUp"
+                          dark
+                          small
+                          input_value="مشاهده مشارکت ثبت شده"
+                          @click="openBenefactorListDialog(moneyCharity.id)"
+                        ></Button>
+
+                        <Button
+                          v-if="
+                            !moneyCharity.isExpired &&
+                            moneyCharity.collection == 0
+                          "
+                          :block="!$vuetify.breakpoint.mdAndUp"
+                          dark
+                          small
+                          :color="$vuetify.theme.currentTheme.primary"
+                          input_value="حذف"
+                          :class="{ 'mt-3': !$vuetify.breakpoint.mdAndUp }"
+                          @click="removeMoney(moneyCharity.id)"
+                        ></Button>
+                      </v-row>
+                    </Card>
+                  </v-col>
+                </template>
+              </v-row>
             </Card>
-          </v-col>
-        </template>
-      </Dialog>
 
-      <Dialog
-        :dialogOpen="addMoneyDialog"
-        @update:dialogOpen="updateaddMoneyDialog"
-        title="برای ثبت هدیه مهربانی جدید اطلاعات زیر را تکمیل نمایید:"
-      >
-        <v-form
-          @submit.prevent="onSubmit"
-          slot="dialogText"
-          class="mb-n4"
-          ref="addMoney"
-        >
-          <Input
-            outlined
-            dense
-            name="name"
-            type="text"
-            v-model="formData.name"
-            labelTag
-            labelText="نام هدیه نقدی"
-            placeholder="نام هدیه نقدی را وارد نمایید"
-            hide_details
-            class="mb-5"
-          />
-
-          <Input
-            outlined
-            dense
-            name="request"
-            type="number"
-            v-model.trim="formData.moneyNeed"
-            labelTag
-            labelText="هزینه مورد نیاز"
-            placeholder="هزینه مورد نیاز را وارد نمایید"
-            hide_details
-            suffix="تومان"
-            class="mb-5"
-          />
-
-          <div class="mb-5">
-            <label> تاریخ پایان نیازمندی </label>
-            <div class="mt-2">
-              <custom-date-picker
-                v-model="formData.expireDate"
-                auto-submit
-                placeholder="تاریخ پایان نیازمندی را انتخاب نمایید"
-                :min="getDate"
-              />
+            <div v-else>
+              <p>در حال حاضر هیچ هدیه مهربانی توسط شما ثبت نشده است.</p>
+              <a @click="addMoney">اضافه کردن هدیه مهربانی جدید</a>
             </div>
-          </div>
+          </v-col>
+        </v-row>
 
-          <label> توضیحات </label>
-          <v-textarea
-            outlined
-            clearable
-            hide-details
-            clear-icon="mdi-close"
-            v-model="formData.description"
-            class="my-2"
-          ></v-textarea>
+        <v-container>
+          <v-speed-dial right bottom fixed>
+            <template v-slot:activator>
+              <Button
+                fab
+                :color="$vuetify.theme.currentTheme.primary"
+                @click="addMoney"
+              >
+                <v-icon slot="buttonSlotBefor" color="white" large
+                  >mdi-plus</v-icon
+                >
+              </Button>
+            </template>
+          </v-speed-dial>
+        </v-container>
 
-          <Button
-            input_value="ثبت‌"
-            type="submit"
-            dark
-            block
-            large
-            class="mb-3 mt-5"
+        <Dialog
+          :dialogOpen="benefactorListDialog"
+          @update:dialogOpen="updateBenefactorListDialog"
+          :title="benefactorListMessage"
+        >
+          <template v-for="donor in benefactorList" slot="dialogText">
+            <v-col lg="12" md="12" sm="12" cols="12" :key="donor.id">
+              <Card title text :image="false">
+                <div
+                  slot="cardTitle"
+                  :style="{ color: $vuetify.theme.currentTheme.primary }"
+                  class="semiSmall bold mt-n5"
+                >
+                  {{ donor.user.name }}
+                </div>
+
+                <div slot="cardText">
+                  <div class="mb-1">
+                    <p style="display: inline" class="ml-1">
+                      شماره تماس نیکوکار مهربان:
+                    </p>
+                    <p style="display: inline">
+                      <b>0{{ donor.user.phoneNumber }}</b>
+                    </p>
+                  </div>
+
+                  <div class="mb-1">
+                    <p style="display: inline" class="ml-1">مبلغ اهدایی:</p>
+                    <p style="display: inline">
+                      <b
+                        >{{
+                          donor.money_collect.toLocaleString("fa-IR")
+                        }}
+                        تومان</b
+                      >
+                    </p>
+                  </div>
+                </div>
+              </Card>
+            </v-col>
+          </template>
+        </Dialog>
+
+        <Dialog
+          :dialogOpen="addMoneyDialog"
+          @update:dialogOpen="updateaddMoneyDialog"
+          title="برای ثبت هدیه مهربانی جدید اطلاعات زیر را تکمیل نمایید:"
+        >
+          <v-form
+            @submit.prevent="onSubmit"
+            slot="dialogText"
+            class="mb-n4"
+            ref="addMoney"
           >
-          </Button>
-        </v-form>
-      </Dialog>
-    </v-main>
+            <Input
+              outlined
+              dense
+              name="name"
+              type="text"
+              v-model="formData.name"
+              labelTag
+              labelText="نام هدیه نقدی"
+              placeholder="نام هدیه نقدی را وارد نمایید"
+              hide_details
+              class="mb-5"
+            />
+
+            <Input
+              outlined
+              dense
+              name="request"
+              type="number"
+              v-model.trim="formData.moneyNeed"
+              labelTag
+              labelText="هزینه مورد نیاز"
+              placeholder="هزینه مورد نیاز را وارد نمایید"
+              hide_details
+              suffix="تومان"
+              class="mb-5"
+            />
+
+            <div class="mb-5">
+              <label> تاریخ پایان نیازمندی </label>
+              <div class="mt-2">
+                <custom-date-picker
+                  v-model="formData.expireDate"
+                  auto-submit
+                  placeholder="تاریخ پایان نیازمندی را انتخاب نمایید"
+                  :min="getDate"
+                />
+              </div>
+            </div>
+
+            <label> توضیحات </label>
+            <v-textarea
+              outlined
+              clearable
+              hide-details
+              clear-icon="mdi-close"
+              v-model="formData.description"
+              class="my-2"
+            ></v-textarea>
+
+            <Button
+              input_value="ثبت‌"
+              type="submit"
+              block
+              large
+              class="mb-3 mt-5"
+              :disabled="
+                this.formData.name === '' ||
+                this.formData.moneyNeed === '' ||
+                this.formData.expireDate === '' ||
+                this.formData.description === ''
+              "
+            >
+            </Button>
+          </v-form>
+        </Dialog>
+      </v-main>
+    </div>
   </div>
 </template>
 
@@ -354,6 +376,7 @@ export default {
     async onSubmit() {
       console.log(this.formData);
       const data = this.formData;
+      console.log(data);
 
       try {
         await this.$store.dispatch("addMoney", { data });

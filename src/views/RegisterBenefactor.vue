@@ -36,11 +36,26 @@
                 labelTag
                 labelText="شماره تماس"
                 placeholder="شماره تماس"
-                suffix="| 98+"
                 hide_details
                 disabled
                 class="mb-2"
               />
+            </v-col>
+
+            <v-col cols="12" sm="12" md="12" lg="12">
+              <label> استان </label>
+              <v-autocomplete
+                outlined
+                v-model="formData.selectedState"
+                :items="this.$store.state.states"
+                item-text="name"
+                item-value="id"
+                hide-details
+                placeholder="استان خود را انتخاب کنید"
+                @change="stateSelectedName"
+                class="ma-2"
+              >
+              </v-autocomplete>
             </v-col>
 
             <v-col
@@ -123,10 +138,15 @@
               <Button
                 input_value="ثبت نام"
                 type="submit"
-                dark
                 block
                 large
                 class="my-2"
+                :disabled="
+                  this.formData.name === '' ||
+                  this.formData.phoneNumber === '' ||
+                  this.formData.address === '' ||
+                  this.formData.password === ''
+                "
               >
               </Button>
             </v-col>
@@ -173,11 +193,14 @@ export default {
       formData: {
         name: "",
         phoneNumber: this.$store.state.verificatedPhoneNumber,
+        selectedState: "",
         address: this.$store.state.benefactor.address,
         latitude: this.$store.state.benefactor.latitude,
         longitude: this.$store.state.benefactor.longitude,
         password: "",
       },
+
+      selectedState: "",
 
       coordinates: [51.420296, 35.732379],
 
@@ -197,12 +220,27 @@ export default {
   },
 
   methods: {
+    stateSelectedName() {
+      const selectedStateObject = this.$store.state.states.find(
+        (state) => state.id == this.formData.selectedState
+      );
+
+      if (selectedStateObject) {
+        this.selectedState = selectedStateObject.name;
+        if (!this.$store.state.charity.isSetAddress) {
+          this.coordinates[1] = selectedStateObject.latitude;
+          this.coordinates[0] = selectedStateObject.longitude;
+        }
+      }
+    },
+
     clickAddress() {
       localStorage.setItem("benefactorFormData", JSON.stringify(this.formData));
       this.$updateBenefactorProperty("isClickAddress", true);
     },
 
     async onSubmit() {
+      this.formData.selectedState = this.selectedState;
       console.log(this.formData);
       const data = this.formData;
 
@@ -211,6 +249,7 @@ export default {
 
         localStorage.removeItem("benefactorFormData");
         this.$refs.benefactorForm.reset();
+        this.formData.selectedState = "";
         this.$updateBenefactorProperty("isSetAddress", false);
         this.$updateBenefactorProperty("address", "");
         this.$updateBenefactorProperty("latitude", 0.0);
@@ -232,16 +271,18 @@ export default {
   },
 
   mounted() {
-    // this.formData.phoneNumber = this.$store.state.verificatedPhoneNumber;
-    // console.log(`in register state ${this.$store.state.verificatedPhoneNumber}`)
-    // console.log(`in register formData ${this.formData.phoneNumber}`)
-    console.log(`in register formData ${this.formData.name}`)
+    console.log(`in register formData ${this.formData.phoneNumber}`);
     const formData = JSON.parse(localStorage.getItem("benefactorFormData"));
     if (formData) {
       this.formData = formData;
       this.formData.address = this.$store.state.benefactor.address;
       this.formData.latitude = this.$store.state.benefactor.latitude;
       this.formData.longitude = this.$store.state.benefactor.longitude;
+      this.formData.phoneNumber = this.$store.state.verificatedPhoneNumber;
+      if (this.formData.address == "") {
+        this.formData.selectedState = "";
+      }
+      this.stateSelectedName();
     }
 
     if (this.$store.state.benefactor.isSetAddress) {

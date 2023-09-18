@@ -92,7 +92,6 @@
             placeholder="شماره تلفن همراه خود را وارد نمایید"
             hide_details
             :disabled="isSendVerifycode"
-            suffix="| 98+"
             class="mb-3"
           />
 
@@ -113,11 +112,11 @@
             <Button
               input_value="تایید"
               type="button"
-              dark
               block
               large
               class="mb-3 mt-7"
               @click="checkVerifycode"
+              :disabled="formData.verifycode === ''"
             >
             </Button>
           </div>
@@ -126,11 +125,11 @@
             v-else
             input_value="دریافت کد تایید"
             type="button"
-            dark
             block
             large
             class="mb-3 mt-7"
             @click="getVerifycode"
+            :disabled="formData.phoneNumber === ''"
           >
           </Button>
         </div>
@@ -181,9 +180,11 @@ export default {
     openDialog() {
       this.dialogOpen = !this.dialogOpen;
     },
-
     updateDialogOpen(newVal) {
       this.dialogOpen = newVal;
+    },
+    closeDialogOpen() {
+      this.dialogOpen = false;
     },
 
     logoutHandler() {
@@ -206,10 +207,14 @@ export default {
         "updateVerificatedPhoneNumber",
         this.formData.phoneNumber
       );
-
+      console.log(this.$store.state.verificatedPhoneNumber)
       const data = this.formData;
       this.$store.dispatch("checkVerifycode", { data });
-      router.push("/register-benefactor");
+      if (this.$route.path !== "/register-benefactor"){
+        router.push("/register-benefactor");
+      }else{
+        this.closeDialogOpen()
+      }
     },
   },
 

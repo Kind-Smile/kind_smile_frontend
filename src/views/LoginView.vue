@@ -47,23 +47,6 @@
             hide_details
           />
 
-          <v-row class="ma-1">
-            <v-col cols="12" sm="12" md="12" lg="6" class="mt-5 mb-0">
-              <p>
-                <!-- class="text-lg-left" -->
-                <small>
-                  <a
-                    href="/forget-password"
-                    :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
-                    title="Forget Password"
-                  >
-                    رمز عبورتان را فراموش کرده اید؟
-                  </a>
-                </small>
-              </p>
-            </v-col>
-          </v-row>
-
           <Button
             :disabled="
               this.formData.phoneNumber === '' || this.formData.password === ''
@@ -72,7 +55,7 @@
             block
             large
             @click="onSubmit"
-            class="mb-3"
+            class="mb-3 mt-10"
           >
           </Button>
         </v-form>
@@ -82,7 +65,7 @@
           <small>حسابی ندارید؟</small>
           <small>
             <router-link
-              to="/register"
+              to="/register-benefactor"
               :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
               title="Register"
             >

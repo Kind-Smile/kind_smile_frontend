@@ -53,7 +53,6 @@
                   labelTag
                   labelText="شماره تلفن"
                   placeholder="شماره تلفن"
-                  suffix="| 98+"
                   hide_details
                   class="mb-2 mx-2"
                 />
@@ -131,7 +130,6 @@
                 labelTag
                 labelText="شماره ارتباط مردمی"
                 placeholder="شماره ارتباط مردمی"
-                suffix="| 98+"
                 hide_details
                 append-icon="''"
                 class="mb-2 mx-2 custom-input"
@@ -184,31 +182,31 @@
             ></v-col>
 
             <v-col lg="12" md="12" sm="12" cols="12">
-            <v-row>
-              <v-col cols="12" sm="12" md="12" lg="4">
-                <label> هیئت امنا </label>
-                <v-textarea
-                  outlined
-                  clearable
-                  hide-details
-                  clear-icon="mdi-close"
-                  v-model="formData.institute"
-                  class="my-2"
-                ></v-textarea>
-              </v-col>
+              <v-row>
+                <v-col cols="12" sm="12" md="12" lg="4">
+                  <label> هیئت امنا </label>
+                  <v-textarea
+                    outlined
+                    clearable
+                    hide-details
+                    clear-icon="mdi-close"
+                    v-model="formData.institute"
+                    class="my-2"
+                  ></v-textarea>
+                </v-col>
 
-              <v-col cols="12" sm="12" md="12" lg="4">
-                <label> توضیحات </label>
-                <v-textarea
-                  outlined
-                  clearable
-                  hide-details
-                  clear-icon="mdi-close"
-                  v-model="formData.description"
-                  class="my-2"
-                ></v-textarea>
-              </v-col>
-            </v-row>
+                <v-col cols="12" sm="12" md="12" lg="4">
+                  <label> توضیحات </label>
+                  <v-textarea
+                    outlined
+                    clearable
+                    hide-details
+                    clear-icon="mdi-close"
+                    v-model="formData.description"
+                    class="my-2"
+                  ></v-textarea>
+                </v-col>
+              </v-row>
             </v-col>
 
             <v-col
@@ -290,10 +288,24 @@
               <Button
                 input_value="ثبت نام"
                 type="submit"
-                dark
                 block
                 large
                 class="my-2"
+                :disabled="
+                  this.formData.name === '' ||
+                  this.formData.boss === '' ||
+                  this.formData.phoneNumber === '' ||
+                  this.formData.selectedState === '' ||
+                  this.formData.other === '' ||
+                  this.formData.officer === '' ||
+                  this.formData.officerPhone === '' ||
+                  this.formData.cardNumber === '' ||
+                  this.formData.code === '' ||
+                  this.formData.logo === '' ||
+                  this.formData.institute === '' ||
+                  this.formData.address === '' ||
+                  this.formData.password === ''
+                "
               >
               </Button>
             </v-col>
@@ -419,8 +431,8 @@ export default {
     },
 
     async onSubmit() {
-      this.formData.selectedState = this.selectedState
-      console.log(this.formData)
+      this.formData.selectedState = this.selectedState;
+      console.log(this.formData);
       const data = this.formData;
 
       try {
@@ -452,8 +464,8 @@ export default {
       this.formData.address = this.$store.state.charity.address;
       this.formData.latitude = this.$store.state.charity.latitude;
       this.formData.longitude = this.$store.state.charity.longitude;
-      if(this.formData.address == ""){
-        this.formData.selectedState = ""
+      if (this.formData.address == "") {
+        this.formData.selectedState = "";
       }
       this.stateSelectedName();
     }
@@ -469,8 +481,8 @@ export default {
       handler() {
         localStorage.setItem("charityFormData", JSON.stringify(this.formData));
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 };
 </script>

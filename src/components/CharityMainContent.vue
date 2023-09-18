@@ -148,7 +148,6 @@
           labelText="تلفن همراه"
           placeholder="تلفن همراه"
           hide_details
-          suffix="| 98+"
           class="mb-3"
         />
 
@@ -205,10 +204,15 @@
         <Button
           input_value="ثبت‌نام"
           type="submit"
-          dark
           block
           large
           class="mb-3 mt-5"
+          :disabled="
+            this.formData.name === '' ||
+            this.formData.phoneNumber === '' ||
+            this.formData.polygon.length === 0 ||
+            this.formData.password === ''
+          "
         >
         </Button>
       </v-form>
@@ -286,9 +290,9 @@ export default {
         if (this.$store.state.charityAgentList.length == 0) {
           this.openAddAgentDialog();
         } else {
-          if(value == 'foods'){
+          if (value == "foods") {
             router.push("/charity-food");
-          }else if(value == 'clothes'){
+          } else if (value == "clothes") {
             router.push("/charity-clothes");
           }
         }

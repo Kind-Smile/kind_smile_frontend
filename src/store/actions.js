@@ -3,6 +3,9 @@ import axios from "axios";
 export default {
   async login({ commit }, { data }) {
     // console.log("I am in: action->login");
+    if (data.phoneNumber[0]==0 && data.phoneNumber.length==11){
+      data.phoneNumber=data.phoneNumber.slice(1)
+    }
     await axios
       .post(`http://127.0.0.1:8000/auth/token/`, {
         phoneNumber: parseInt(data.phoneNumber, 10),
@@ -24,6 +27,9 @@ export default {
 
   async registerBenefactor({ commit }, { data }) {
     // console.log("I am in: action->register");
+    if (data.phoneNumber[0]==0 && data.phoneNumber.length==11){
+      data.phoneNumber=data.phoneNumber.slice(1)
+    }
     await axios
       .post(`http://127.0.0.1:8000/auth/PersonRegister/`, {
         name: data.name,
@@ -45,6 +51,9 @@ export default {
 
   async registerCharity({ commit }, { data }) {
     // console.log("I am in: action->register");
+    if (data.phoneNumber[0]==0 && data.phoneNumber.length==11){
+      data.phoneNumber=data.phoneNumber.slice(1)
+    }
     const charityData = new FormData();
 
     charityData.append("name", data.name);
@@ -92,6 +101,9 @@ export default {
       },
     };
 
+    if (data.phoneNumber[0]==0 && data.phoneNumber.length==11){
+      data.phoneNumber=data.phoneNumber.slice(1)
+    }
     const agentData = new FormData();
     agentData.append("name", data.name);
     agentData.append("phoneNumber", parseInt(data.phoneNumber, 10));
@@ -150,6 +162,9 @@ export default {
   },
 
   async getVerifycode({ commit }, { data }) {
+    if (data[0]==0 && data.length==11){
+      data=data.slice(1)
+    }
     await axios
       .post(`http://127.0.0.1:8000/auth/sendSms/`, {
         phoneNumber: parseInt(data, 10),
@@ -164,6 +179,9 @@ export default {
   },
 
   async checkVerifycode({ commit }, { data }) {
+    if (data.phoneNumber[0]==0 && data.phoneNumber.length==11){
+      data.phoneNumber=data.phoneNumber.slice(1)
+    }
     await axios
       .post(`http://127.0.0.1:8000/auth/validate/`, {
         validationCode: parseInt(data.verifycode, 10),
@@ -533,6 +551,7 @@ export default {
   //money
   async addMoney({ state }, { data }) {
     // console.log("I am in: action->addMoney");
+    console.log(data)
     const config = {
       headers: {
         Authorization: `Bearer ${state.token}`,

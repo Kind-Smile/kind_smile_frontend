@@ -1,5 +1,9 @@
 <template>
   <div>
+    <div v-if="this.$store.state.role != 'User'">
+      <v-img src="@/assets/images/401error.png"></v-img>
+    </div>
+    <div v-else>
     <AppBar></AppBar>
     <v-main class="mt-8 mb-5 mx-5">
       <div v-if="this.$store.state.isLoading"><h4>صبر کنید...</h4></div>
@@ -69,6 +73,7 @@
         </div>
       </Dialog>
     </v-main>
+  </div>
   </div>
 </template>
 

@@ -1,145 +1,155 @@
 <template>
   <div>
-    <AppBar></AppBar>
-    <v-main class="mt-8 mb-5 mx-5">
-      <div v-if="this.$store.state.isLoading">
-        <h4>صبر کنید...</h4>
-      </div>
+    <div v-if="this.$store.state.role != 'User'">
+      <v-img src="@/assets/images/401error.png"></v-img>
+    </div>
+    <div v-else>
+      <AppBar></AppBar>
+      <v-main class="mt-8 mb-5 mx-5">
+        <div v-if="this.$store.state.isLoading">
+          <h4>صبر کنید...</h4>
+        </div>
 
-      <v-row v-else>
-        <v-col lg="12" md="12" sm="12" cols="12">
-          <Card :cardColor="getCardColor" title text :image="false">
-            <div
-              slot="cardTitle"
-              :style="{ color: $vuetify.theme.currentTheme.primary }"
-              class="bold"
-            >
-              خیریه {{ charityName }}
-            </div>
+        <v-row v-else>
+          <v-col lg="12" md="12" sm="12" cols="12">
+            <Card :cardColor="getCardColor" title text :image="false">
+              <div
+                slot="cardTitle"
+                :style="{ color: $vuetify.theme.currentTheme.primary }"
+                class="bold"
+              >
+                خیریه {{ charityName }}
+              </div>
 
-            <v-row slot="cardText">
-              <template v-for="clothe in clothesList">
-                <v-col lg="4" md="6" sm="6" cols="12" :key="clothe.clothes.id">
-                  <!-- <div>{{ clothe.clothes }}</div> -->
-
-                  <Card
-                    text
-                    :actions="
-                      clothe.donateDate == null && clothe.clothes.isInside
-                    "
-                    :image="false"
-                    :cardColor="getClotheCardColors(clothe.clothes)"
+              <v-row slot="cardText">
+                <template v-for="clothe in clothesList">
+                  <v-col
+                    lg="4"
+                    md="6"
+                    sm="6"
+                    cols="12"
+                    :key="clothe.clothes.id"
                   >
-                    <div slot="cardText">
-                      <div class="mb-1" v-if="clothe.clothes.collection > 0">
-                        <p style="display: inline" class="ml-1">
-                          تعداد مشارکت ثبت شده تاکنون:
-                        </p>
-                        <p style="display: inline">
-                          <b>{{ clothe.clothes.collection }} نفر</b>
-                        </p>
-                      </div>
+                    <!-- <div>{{ clothe.clothes }}</div> -->
 
-                      <div class="mb-1">
-                        <p style="display: inline" class="ml-1">
-                          زمان جمع‌آوری:
-                        </p>
-                        <p style="display: inline">
-                          <b
-                            >{{
-                              clothe.clothes.eventDate
-                                .replace("-", "/")
-                                .replace("-", "/")
-                            }}
-                            ساعت
-                            {{ clothe.clothes.eventTime.slice(0, -3) }}
-                          </b>
-                        </p>
-                      </div>
-
-                      <div class="mt-3" v-if="!clothe.clothes.isInside">
-                        <p style="display: inline">
-                          <v-icon
-                            size="15"
-                            :color="$vuetify.theme.currentTheme.primary"
-                            >mdi-alert-circle-outline</v-icon
-                          >
-                        </p>
-                        <small
-                          style="display: inline"
-                          class="ml-1 bold"
-                          :style="{
-                            color: $vuetify.theme.currentTheme.primary,
-                          }"
-                        >
-                          خارج از محدوده
-                        </small>
-                      </div>
-
-                      <div v-if="clothe.donateDate != null">
-                        <v-divider class="my-3"></v-divider>
-
-                        <div class="mb-1">
-                          <p style="display: inline" class="ml-1">
-                            نام سفیر مهربانی:
-                          </p>
-                          <p style="display: inline">
-                            <b>{{ clothe.clothes.agent.name }}</b>
-                          </p>
-                        </div>
-
-                        <div class="mb-1">
-                          <p style="display: inline" class="ml-1">
-                            شماره تماس سفیر مهربانی:
-                          </p>
-                          <p style="display: inline">
-                            <b>0{{ clothe.clothes.agent.phoneNumber }}</b>
-                          </p>
-                        </div>
-
-                        <div class="mt-3 mb-1">
-                          <p
-                            style="display: inline"
-                            :style="{
-                              color: $vuetify.theme.currentTheme.thirdColor,
-                            }"
-                            class="ml-1"
-                          >
-                            از مشارکت شما نیکوکار گرامی متشکریم. <br />در صورت
-                            نیاز با سفیر مهربانی تماس حاصل فرمایید.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <v-row
-                      slot="cardActions"
-                      class="justify-end px-4 pt-5 pb-3"
-                      v-if="
+                    <Card
+                      text
+                      :actions="
                         clothe.donateDate == null && clothe.clothes.isInside
                       "
+                      :image="false"
+                      :cardColor="getClotheCardColors(clothe.clothes)"
                     >
-                      <Button
-                        :block="!$vuetify.breakpoint.mdAndUp"
-                        dark
-                        :color="$vuetify.theme.currentTheme.primary"
-                        input_value="ثبت مشارکت"
-                        @click="openDonateClotheDialog(clothe.clothes.id)"
-                      ></Button>
-                    </v-row>
-                  </Card>
-                </v-col>
-              </template>
-            </v-row>
-          </Card>
-        </v-col>
-      </v-row>
+                      <div slot="cardText">
+                        <div class="mb-1" v-if="clothe.clothes.collection > 0">
+                          <p style="display: inline" class="ml-1">
+                            تعداد مشارکت ثبت شده تاکنون:
+                          </p>
+                          <p style="display: inline">
+                            <b>{{ clothe.clothes.collection }} نفر</b>
+                          </p>
+                        </div>
 
-      <Dialog
-        :dialogOpen="donateClotheDialog"
-        @update:dialogOpen="updateDonateClotheDialog"
-        title="آیا از ثبت مشارکت در این پوشاک مهربانی اطمینان دارید؟"
-      >
+                        <div class="mb-1">
+                          <p style="display: inline" class="ml-1">
+                            زمان جمع‌آوری:
+                          </p>
+                          <p style="display: inline">
+                            <b
+                              >{{
+                                clothe.clothes.eventDate
+                                  .replace("-", "/")
+                                  .replace("-", "/")
+                              }}
+                              ساعت
+                              {{ clothe.clothes.eventTime.slice(0, -3) }}
+                            </b>
+                          </p>
+                        </div>
+
+                        <div class="mt-3" v-if="!clothe.clothes.isInside">
+                          <p style="display: inline">
+                            <v-icon
+                              size="15"
+                              :color="$vuetify.theme.currentTheme.primary"
+                              >mdi-alert-circle-outline</v-icon
+                            >
+                          </p>
+                          <small
+                            style="display: inline"
+                            class="ml-1 bold"
+                            :style="{
+                              color: $vuetify.theme.currentTheme.primary,
+                            }"
+                          >
+                            خارج از محدوده
+                          </small>
+                        </div>
+
+                        <div v-if="clothe.donateDate != null">
+                          <v-divider class="my-3"></v-divider>
+
+                          <div class="mb-1">
+                            <p style="display: inline" class="ml-1">
+                              نام سفیر مهربانی:
+                            </p>
+                            <p style="display: inline">
+                              <b>{{ clothe.clothes.agent.name }}</b>
+                            </p>
+                          </div>
+
+                          <div class="mb-1">
+                            <p style="display: inline" class="ml-1">
+                              شماره تماس سفیر مهربانی:
+                            </p>
+                            <p style="display: inline">
+                              <b>0{{ clothe.clothes.agent.phoneNumber }}</b>
+                            </p>
+                          </div>
+
+                          <div class="mt-3 mb-1">
+                            <p
+                              style="display: inline"
+                              :style="{
+                                color: $vuetify.theme.currentTheme.thirdColor,
+                              }"
+                              class="ml-1"
+                            >
+                              از مشارکت شما نیکوکار گرامی متشکریم. <br />در صورت
+                              نیاز با سفیر مهربانی تماس حاصل فرمایید.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <v-row
+                        slot="cardActions"
+                        class="justify-end px-4 pt-5 pb-3"
+                        v-if="
+                          clothe.donateDate == null && clothe.clothes.isInside
+                        "
+                      >
+                        <Button
+                          :block="!$vuetify.breakpoint.mdAndUp"
+                          dark
+                          :color="$vuetify.theme.currentTheme.primary"
+                          input_value="ثبت مشارکت"
+                          @click="openDonateClotheDialog(clothe.clothes.id)"
+                        ></Button>
+                      </v-row>
+                    </Card>
+                  </v-col>
+                </template>
+              </v-row>
+            </Card>
+          </v-col>
+        </v-row>
+
+        <Dialog
+          :dialogOpen="donateClotheDialog"
+          @update:dialogOpen="updateDonateClotheDialog"
+          title="آیا از ثبت مشارکت در این پوشاک مهربانی اطمینان دارید؟"
+        >
           <Button
             slot="dialogText"
             input_value="ثبت‌ مشارکت"
@@ -151,8 +161,9 @@
             @click="onSubmit"
           >
           </Button>
-      </Dialog>
-    </v-main>
+        </Dialog>
+      </v-main>
+    </div>
   </div>
 </template>
 

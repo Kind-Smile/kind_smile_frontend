@@ -98,10 +98,13 @@
           <Button
             input_value="تغییر رمز"
             type="submit"
-            dark
             block
             large
             class="mb-3 mt-5"
+            :disabled="
+              this.formData.oldPassword === '' ||
+              this.formData.newPassword === ''
+            "
           >
           </Button>
         </v-form>

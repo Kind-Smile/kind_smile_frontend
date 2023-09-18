@@ -2,7 +2,7 @@
   <v-main class="mt-8 mb-5 mx-5">
     <v-row>
       <v-col lg="4" md="6" sm="6" cols="12">
-        <router-link :to="`/food-charities`">
+        <a @click="handleFood">
           <v-hover v-slot="{ hover }">
             <Card
               :cardColor="getCardColor"
@@ -26,11 +26,11 @@
               </div>
             </Card>
           </v-hover>
-        </router-link>
+        </a>
       </v-col>
 
       <v-col lg="4" md="6" sm="6" cols="12">
-        <router-link :to="`/clothe-charities`">
+        <a @click="handleClothe">
           <v-hover v-slot="{ hover }">
             <Card
               :cardColor="getCardColor"
@@ -55,11 +55,11 @@
               </div>
             </Card>
           </v-hover>
-        </router-link>
+        </a>
       </v-col>
 
       <v-col lg="4" md="6" sm="6" cols="12">
-        <router-link :to="`/money-charities`">
+        <a @click="handleMoney">
           <v-hover v-slot="{ hover }">
             <Card
               :cardColor="getCardColor"
@@ -84,11 +84,11 @@
               </div>
             </Card>
           </v-hover>
-        </router-link>
+        </a>
       </v-col>
 
       <v-col lg="4" md="6" sm="6" cols="12">
-        <router-link :to="`/notification-charities`">
+        <a @click="handleNotification">
           <v-hover v-slot="{ hover }">
             <Card
               :cardColor="getCardColor"
@@ -113,25 +113,99 @@
               </div>
             </Card>
           </v-hover>
-        </router-link>
+        </a>
       </v-col>
     </v-row>
+
+    <Dialog
+      :dialogOpen="notAuthenticatedDialog"
+      @update:dialogOpen="updateNotAuthenticatedDialog"
+      title="برای ادامه باید وارد سامانه شوید."
+    >
+      <div slot="dialogText" class="mb-n4 mt-2">
+          <Button
+            input_value="ورود"
+            type="button"
+            :color="this.$vuetify.theme.currentTheme.primary"
+            dark
+            block
+            large
+            to="/login"
+          >
+          </Button>
+      </div>
+    </Dialog>
   </v-main>
 </template>
 
 <script>
 import Card from "@/components/basics/Card.vue";
+import Button from "@/components/basics/Button.vue";
+import Dialog from "@/components/basics/Dialog.vue";
+import router from "@/router";
 
 export default {
   name: "BenefactorMainContent",
 
   components: {
     Card,
+    Button,
+    Dialog,
+  },
+
+  data() {
+    return {
+      notAuthenticatedDialog: false,
+    };
   },
 
   computed: {
     getCardColor() {
       return this.$hexToRgba(this.$vuetify.theme.currentTheme.secondary, 0.15);
+    },
+  },
+
+  methods: {
+    openNotAuthenticatedDialog() {
+      this.notAuthenticatedDialog = !this.notAuthenticatedDialog;
+    },
+    updateNotAuthenticatedDialog(newVal) {
+      this.notAuthenticatedDialog = newVal;
+    },
+    closeNotAuthenticatedDialog() {
+      this.notAuthenticatedDialog = false;
+    },
+
+    handleFood() {
+      if (this.$store.state.token == "") {
+        this.openNotAuthenticatedDialog();
+      } else {
+        router.push(`/food-charities`);
+      }
+    },
+
+    handleClothe() {
+      if (this.$store.state.token == "") {
+        this.openNotAuthenticatedDialog();
+      } else {
+        router.push(`/clothe-charities`);
+      }
+    },
+
+    handleMoney() {
+      if (this.$store.state.token == "") {
+        this.openNotAuthenticatedDialog();
+      } else {
+        router.push(`/money-charities`);
+      }
+    },
+
+    handleNotification() {
+      if (this.$store.state.token == "") {
+        this.openNotAuthenticatedDialog();
+      } else {
+        router.push(`/notification-charities`);
+      }
     },
   },
 };
