@@ -174,7 +174,7 @@
                 outlined
                 color="#ffcc66"
                 accept="image/png, image/jpeg, image/jpg"
-                placeholder="لوگوی خود را بارگزاری کنید"
+                placeholder="لوگوی خود را بارگذاری کنید"
                 prepend-icon="mdi-camera"
                 @change="handleLogoChange"
                 class="my-2"

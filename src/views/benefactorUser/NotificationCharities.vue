@@ -24,7 +24,7 @@
                 :style="{ color: $vuetify.theme.currentTheme.primary }"
                 class="bold"
               >
-                سفره مهربانی
+                اخبار مهربانی
               </div>
 
               <v-row slot="cardText">
@@ -33,7 +33,7 @@
                     <Card
                       title
                       text
-                      :actions="charity.isInside"
+                      actions
                       imageNewLine
                       :cardImage="charity.logo"
                       :cardColor="getCharityCardColors(charity)"
@@ -71,38 +71,18 @@
                             <b>{{ charity.other }}</b>
                           </p>
                         </div>
-
-                        <div class="mt-3" v-if="!charity.isInside">
-                          <p style="display: inline">
-                            <v-icon
-                              size="15"
-                              :color="$vuetify.theme.currentTheme.primary"
-                              >mdi-alert-circle-outline</v-icon
-                            >
-                          </p>
-                          <small
-                            style="display: inline"
-                            class="ml-1 bold"
-                            :style="{
-                              color: $vuetify.theme.currentTheme.primary,
-                            }"
-                          >
-                            خارج از محدوده
-                          </small>
-                        </div>
                       </div>
 
                       <v-row
                         slot="cardActions"
                         class="justify-end px-4 pt-5 pb-3"
-                        v-if="charity.isInside"
                       >
                         <Button
                           :block="!$vuetify.breakpoint.mdAndUp"
                           dark
                           :color="$vuetify.theme.currentTheme.primary"
-                          input_value="مشاهده سفره‌های مهربانی"
-                          @click="seeFoodsCharity(charity.id)"
+                          input_value="مشاهده اخبار مهربانی"
+                          @click="seeNotificationsCharity(charity.id)"
                         ></Button>
                       </v-row>
                     </Card>
@@ -112,7 +92,7 @@
             </Card>
 
             <div v-else>
-              <p>در حال حاضر هیچ خیریه‌ای دارای سفره مهربانی موجود نمی‌باشد.</p>
+              <p>در حال حاضر هیچ خیریه‌ای دارای هدیه مهربانی موجود نمی‌باشد.</p>
               <router-link to="/">بازگشت به صفحه اصلی</router-link>
             </div>
           </v-col>
@@ -210,19 +190,16 @@ import AppBar from "@/components/basics/AppBar.vue";
 import Card from "@/components/basics/Card.vue";
 import Button from "@/components/basics/Button.vue";
 import Dialog from "@/components/basics/Dialog.vue";
-import * as turf from "@turf/turf";
 import router from "@/router";
 
 export default {
-  name: "FoodCharities",
+  name: "NotificationCharities",
 
   data() {
     return {
       charityInfoDialog: false,
       charityList: [],
       charityInfo: [],
-
-      isInside: false,
     };
   },
 
@@ -249,19 +226,18 @@ export default {
       this.charityInfoDialog = newVal;
     },
 
-    async getFoodCharities() {
+    async getNotificationCharities() {
       try {
-        await this.$store.dispatch("foodCharities");
+        await this.$store.dispatch("notificationCharities");
         this.charityList = this.$store.state.responseData;
-        // console.log(this.$store.state.responseData);
         this.$store.commit("clearResponseData");
       } catch (error) {
-        console.error("Error during getFoodCharities in component:", error);
+        console.error("Error during getNotificationCharities in component:", error);
       }
     },
 
-    seeFoodsCharity(id) {
-      router.push(`/foods-charity/${id}`);
+    seeNotificationsCharity(id) {
+      router.push(`/notifications-charity/${id}`);
     },
   },
 
@@ -272,50 +248,23 @@ export default {
 
     getCharityCardColors() {
       return (charity) => {
-        const agents = charity.agents;
-        
-        console.log(charity)
-        for (const agent of agents) {
-          const coordinatesArray = [];
-
-          for (const point of agent.polygon) {
-            coordinatesArray.push([point.longitude, point.latitude]);
-          }
-
-          if (coordinatesArray.length > 0) {
-            coordinatesArray.push(coordinatesArray[0]);
-          }
-
-          const lat = this.$store.state.benefactorLat;
-          const lng = this.$store.state.benefactorLng;
-
-          const isInside = turf.booleanPointInPolygon(
-            [lng, lat],
-            turf.polygon([coordinatesArray])
+        if (charity.isDone) {
+          return this.$hexToRgba(
+            this.$vuetify.theme.currentTheme.thirdColor,
+            0.15
           );
-
-          // console.log(`${charity.name} ${isInside}`);
-
-          
-          agent.isInside = isInside;
-          // console.log(this.charityList);
-
-          if (agent.isInside) {
-            charity.isInside = agent.isInside;
-            return this.$hexToRgba(
-              this.$vuetify.theme.currentTheme.primary,
-              0.15
-            );
-          }
+        } else {
+          return this.$hexToRgba(
+            this.$vuetify.theme.currentTheme.primary,
+            0.15
+          );
         }
-
-        return this.$hexToRgba(this.$vuetify.theme.currentTheme.text, 0.15);
       };
     },
   },
 
   created() {
-    this.getFoodCharities();
+    this.getNotificationCharities();
   },
 };
 </script>

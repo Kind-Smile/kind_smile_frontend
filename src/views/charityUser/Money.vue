@@ -193,7 +193,7 @@
 
         <Dialog
           :dialogOpen="addMoneyDialog"
-          @update:dialogOpen="updateaddMoneyDialog"
+          @update:dialogOpen="updateAddMoneyDialog"
           title="برای ثبت هدیه مهربانی جدید اطلاعات زیر را تکمیل نمایید:"
         >
           <v-form
@@ -321,13 +321,13 @@ export default {
     },
 
     //handle addMoneyDialog
-    openaddMoneyDialog() {
+    openAddMoneyDialog() {
       this.addMoneyDialog = !this.addMoneyDialog;
     },
-    updateaddMoneyDialog(newVal) {
+    updateAddMoneyDialog(newVal) {
       this.addMoneyDialog = newVal;
     },
-    closeaddMoneyDialog() {
+    closeAddMoneyDialog() {
       this.addMoneyDialog = false;
     },
 
@@ -361,7 +361,7 @@ export default {
     },
 
     addMoney() {
-      this.openaddMoneyDialog();
+      this.openAddMoneyDialog();
     },
 
     async removeMoney(id) {
@@ -381,7 +381,7 @@ export default {
       try {
         await this.$store.dispatch("addMoney", { data });
         this.getMoneyCharity();
-        this.closeaddMoneyDialog();
+        this.closeAddMoneyDialog();
         this.formData.name = "";
         this.formData.moneyNeed = "";
         this.formData.expireDate = "";

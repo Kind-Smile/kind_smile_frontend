@@ -10,12 +10,15 @@ import MoneyCharities from "@/views/benefactorUser/MoneyCharities.vue"
 import MoniesCharity from "@/views/benefactorUser/MoniesCharity.vue"
 import ClotheCharities from "@/views/benefactorUser/ClotheCharities.vue"
 import ClothesCharity from "@/views/benefactorUser/ClothesCharity.vue"
-import NotificationCharities from "@/views/benefactorUser/NotificationCharitiesView.vue";
+import NotificationCharities from "@/views/benefactorUser/NotificationCharities.vue";
+import NotificationsCharity from "@/views/benefactorUser/NotificationsCharity.vue"
+// /notifications-charity/${id}
 
 //charity account
 import CharityFood from "@/views/charityUser/Food.vue"
 import CharityMoney from "@/views/charityUser/Money.vue"
 import CharityClothes from "@/views/charityUser/Clothes.vue"
+import CharityNotifications from "@/views/charityUser/Notification.vue"
 
 //agent account
 import AgentFoods from "@/views/AgentUser/Food.vue"
@@ -83,6 +86,12 @@ const routes = [
   },
 
   {
+    path: "/notifications-charity/:id",
+    name: "notifications-charity",
+    component: NotificationsCharity,
+  },
+
+  {
     path: "/foods-agent",
     name: "AgentFoods",
     component: AgentFoods,
@@ -122,6 +131,12 @@ const routes = [
     path: "/charity-clothes",
     name: "charity-clothes",
     component: CharityClothes,
+  },
+
+  {
+    path: "/charity-notifications",
+    name: "charity-notifications",
+    component: CharityNotifications,
   },
 
   {

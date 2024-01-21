@@ -3,8 +3,8 @@ import axios from "axios";
 export default {
   async login({ commit }, { data }) {
     // console.log("I am in: action->login");
-    if (data.phoneNumber[0]==0 && data.phoneNumber.length==11){
-      data.phoneNumber=data.phoneNumber.slice(1)
+    if (data.phoneNumber[0] == 0 && data.phoneNumber.length == 11) {
+      data.phoneNumber = data.phoneNumber.slice(1);
     }
     await axios
       .post(`http://127.0.0.1:8000/auth/token/`, {
@@ -27,8 +27,8 @@ export default {
 
   async registerBenefactor({ commit }, { data }) {
     // console.log("I am in: action->register");
-    if (data.phoneNumber[0]==0 && data.phoneNumber.length==11){
-      data.phoneNumber=data.phoneNumber.slice(1)
+    if (data.phoneNumber[0] == 0 && data.phoneNumber.length == 11) {
+      data.phoneNumber = data.phoneNumber.slice(1);
     }
     await axios
       .post(`http://127.0.0.1:8000/auth/PersonRegister/`, {
@@ -51,8 +51,8 @@ export default {
 
   async registerCharity({ commit }, { data }) {
     // console.log("I am in: action->register");
-    if (data.phoneNumber[0]==0 && data.phoneNumber.length==11){
-      data.phoneNumber=data.phoneNumber.slice(1)
+    if (data.phoneNumber[0] == 0 && data.phoneNumber.length == 11) {
+      data.phoneNumber = data.phoneNumber.slice(1);
     }
     const charityData = new FormData();
 
@@ -101,8 +101,8 @@ export default {
       },
     };
 
-    if (data.phoneNumber[0]==0 && data.phoneNumber.length==11){
-      data.phoneNumber=data.phoneNumber.slice(1)
+    if (data.phoneNumber[0] == 0 && data.phoneNumber.length == 11) {
+      data.phoneNumber = data.phoneNumber.slice(1);
     }
     const agentData = new FormData();
     agentData.append("name", data.name);
@@ -162,8 +162,8 @@ export default {
   },
 
   async getVerifycode({ commit }, { data }) {
-    if (data[0]==0 && data.length==11){
-      data=data.slice(1)
+    if (data[0] == 0 && data.length == 11) {
+      data = data.slice(1);
     }
     await axios
       .post(`http://127.0.0.1:8000/auth/sendSms/`, {
@@ -179,8 +179,8 @@ export default {
   },
 
   async checkVerifycode({ commit }, { data }) {
-    if (data.phoneNumber[0]==0 && data.phoneNumber.length==11){
-      data.phoneNumber=data.phoneNumber.slice(1)
+    if (data.phoneNumber[0] == 0 && data.phoneNumber.length == 11) {
+      data.phoneNumber = data.phoneNumber.slice(1);
     }
     await axios
       .post(`http://127.0.0.1:8000/auth/validate/`, {
@@ -369,7 +369,7 @@ export default {
       .get("http://127.0.0.1:8000/food/charityFood/", config)
       .then((response) => {
         let responseMessage = response.data;
-        console.log(responseMessage)
+        console.log(responseMessage);
         state.isLoading = false;
         commit("setResponseData", responseMessage);
       })
@@ -450,7 +450,9 @@ export default {
       )
       .then((response) => {
         let responseMessage = response.data;
-        console.log(`addClothes successfully! this is response: ${responseMessage}`);
+        console.log(
+          `addClothes successfully! this is response: ${responseMessage}`
+        );
       })
       .catch((error) => {
         console.error("Error fetching addClothes:", error);
@@ -497,7 +499,7 @@ export default {
   },
 
   async editClothe({ state }, { data }) {
-    console.log(data.id)
+    console.log(data.id);
     // console.log("I am in: action->editClothe");
     const config = {
       headers: {
@@ -551,7 +553,6 @@ export default {
   //money
   async addMoney({ state }, { data }) {
     // console.log("I am in: action->addMoney");
-    console.log(data)
     const config = {
       headers: {
         Authorization: `Bearer ${state.token}`,
@@ -566,7 +567,7 @@ export default {
           name: data.name,
           money_need: parseInt(data.moneyNeed, 10),
           expireDate: data.expireDate.replace("/", "-").replace("/", "-"),
-          description: data.description
+          description: data.description,
         },
         config
       )
@@ -640,6 +641,78 @@ export default {
   },
 
   //notif
+  async addNotification({ state }, { data }) {
+    // console.log("I am in: action->addNotification");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    const notificationData = new FormData();
+
+    notificationData.append("name", data.name);
+    notificationData.append("description", data.description);
+    notificationData.append(
+      "expireDate",
+      data.expireDate.replace("/", "-").replace("/", "-")
+    );
+
+    if (data.picture) {
+      notificationData.append("picture", data.picture);
+    }
+
+    await axios
+      .post(`http://127.0.0.1:8000/notif/create/`, notificationData, config)
+      .then((response) => {
+        let responseMessage = response.data;
+        console.log(`addNotification successfully! this is response: ${responseMessage}`);
+      })
+      .catch((error) => {
+        console.error("Error addNotification:", error);
+      });
+  },
+
+  async getNotificationsCharity({ state, commit }) {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .get("http://127.0.0.1:8000/notif/ownNotif/", config)
+      .then((response) => {
+        let responseMessage = response.data;
+        commit("setResponseData", responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error fetching getNotificationsCharity:", error);
+      });
+  },
+
+  async removeNotification({ state }, { id }) {
+    // console.log("I am in: action->removeNotification");
+    const config = {
+      data: { id },
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+    await axios
+      .delete(`http://127.0.0.1:8000/notif/delete/`, config)
+      .then((response) => {
+        let responseMessage = response.data;
+        console.log(responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error removeNotification:", error);
+      });
+  },
+
   async notificationCharities({ state, commit }) {
     const config = {
       headers: {
@@ -656,7 +729,27 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        console.error("Error fetching notificationCharity:", error);
+        console.error("Error fetching notificationCharities:", error);
+      });
+  },
+
+  async getNotificationsCharityForBenefactor({ state, commit }, { id }) {
+    const config = {
+      params: { id: id },
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .get("http://127.0.0.1:8000/notif/show/", config)
+      .then((response) => {
+        let responseMessage = response.data;
+        commit("setResponseData", responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error fetching getNotificationsCharityForBenefactor:", error);
       });
   },
 
@@ -761,8 +854,8 @@ export default {
 
   async agentReceiveClothe({ state, commit }, { id }) {
     // console.log("I am in: action->agentReceiveClothe");
-    console.log(`user_id is ${id[0]}`)
-    console.log(`clothes_id is ${id[1]}`)
+    console.log(`user_id is ${id[0]}`);
+    console.log(`clothes_id is ${id[1]}`);
     const config = {
       headers: {
         Authorization: `Bearer ${state.token}`,
@@ -805,7 +898,7 @@ export default {
       .get("http://127.0.0.1:8000/money/charityMoney/", config)
       .then((response) => {
         let responseMessage = response.data;
-        console.log(responseMessage)
+        console.log(responseMessage);
         state.isLoading = false;
         commit("setResponseData", responseMessage);
       })
@@ -926,7 +1019,10 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        console.error("Error fetching getClothesCharityForBenefactor:", error.response.data);
+        console.error(
+          "Error fetching getClothesCharityForBenefactor:",
+          error.response.data
+        );
       });
   },
 };

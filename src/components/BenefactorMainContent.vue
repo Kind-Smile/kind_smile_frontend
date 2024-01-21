@@ -104,7 +104,7 @@
                 :style="{ color: $vuetify.theme.currentTheme.primary }"
                 class="bold"
               >
-                اطلاعیه‌ها
+                اخبار مهربانی
               </div>
 
               <div slot="cardText" class="textColor">

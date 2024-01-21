@@ -75,7 +75,7 @@
       </v-col>
 
       <v-col lg="3" md="4" sm="4" cols="12">
-        <router-link :to="`#`">
+        <router-link :to="`/charity-notifications`">
           <v-hover v-slot="{ hover }">
             <Card
               :cardColor="getCardColor"
@@ -90,7 +90,7 @@
                 :style="{ color: $vuetify.theme.currentTheme.primary }"
                 class="bold pt-1"
               >
-                اطلاعیه‌ها
+                اخبار مهربانی
               </div>
             </Card>
           </v-hover>
