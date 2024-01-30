@@ -81,6 +81,19 @@
         title="برای دریافت کد  تایید، شماره تلفن همراه خود را وارد نمایید."
       >
         <div slot="dialogText" class="mb-n4">
+          <v-alert
+            v-if="alert"
+            dense
+            :color="
+              this.$hexToRgba(this.$vuetify.theme.currentTheme.primary, 0.3)
+            "
+            type="error"
+            icon="mdi-alert-circle-outline"
+            border="left"
+            class="mb-1"
+          >
+            {{ verifyError }}
+          </v-alert>
           <Input
             outlined
             dense
@@ -173,6 +186,8 @@ export default {
         verifycode: "",
       },
       isSendVerifycode: false,
+      alert: false,
+      verifyError: "",
     };
   },
 
@@ -197,23 +212,32 @@ export default {
 
     async getVerifycode() {
       const data = this.formData.phoneNumber;
-      this.$store.dispatch("getVerifycode", { data });
-      this.isSendVerifycode = true;
+
+      try {
+        this.alert = false;
+        await this.$store.dispatch("getVerifycode", { data });
+        this.isSendVerifycode = true;
+      } catch (error) {
+        console.error("Error during get verify code:", error);
+        this.alert = true;
+        console.log(this.alert)
+        this.verifyError = error;
+      }
     },
 
     async checkVerifycode() {
-      console.log(`in appbar formData.phone ${this.formData.phoneNumber}`)
+      console.log(`in appbar formData.phone ${this.formData.phoneNumber}`);
       this.$store.commit(
         "updateVerificatedPhoneNumber",
         this.formData.phoneNumber
       );
-      console.log(this.$store.state.verificatedPhoneNumber)
+      console.log(this.$store.state.verificatedPhoneNumber);
       const data = this.formData;
       this.$store.dispatch("checkVerifycode", { data });
-      if (this.$route.path !== "/register-benefactor"){
+      if (this.$route.path !== "/register-benefactor") {
         router.push("/register-benefactor");
-      }else{
-        this.closeDialogOpen()
+      } else {
+        this.closeDialogOpen();
       }
     },
   },

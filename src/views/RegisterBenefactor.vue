@@ -271,7 +271,7 @@ export default {
   },
 
   mounted() {
-    console.log(`in register formData ${this.formData.phoneNumber}`);
+    console.log(`in register formData: mounted ${this.formData.phoneNumber}`);
     const formData = JSON.parse(localStorage.getItem("benefactorFormData"));
     if (formData) {
       this.formData = formData;
@@ -290,6 +290,10 @@ export default {
       this.coordinates[1] = this.$store.state.benefactor.latitude;
     }
   },
+  // updated(){
+  //   console.log(`in register formData: updated ${this.formData.phoneNumber}`);
+  //   const formData = JSON.parse(localStorage.getItem("benefactorFormData"));
+  // }
 };
 </script>
 

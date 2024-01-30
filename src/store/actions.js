@@ -1,4 +1,5 @@
 import axios from "axios";
+import { BASE_URL } from "@/globalFunctions";
 
 export default {
   async login({ commit }, { data }) {
@@ -7,7 +8,7 @@ export default {
       data.phoneNumber = data.phoneNumber.slice(1);
     }
     await axios
-      .post(`http://127.0.0.1:8000/auth/token/`, {
+      .post(`${BASE_URL}auth/token/`, {
         phoneNumber: parseInt(data.phoneNumber, 10),
         password: data.password,
       })
@@ -31,7 +32,7 @@ export default {
       data.phoneNumber = data.phoneNumber.slice(1);
     }
     await axios
-      .post(`http://127.0.0.1:8000/auth/PersonRegister/`, {
+      .post(`${BASE_URL}auth/PersonRegister/`, {
         name: data.name,
         phoneNumber: parseInt(data.phoneNumber, 10),
         address: data.address,
@@ -45,7 +46,8 @@ export default {
         console.log(`registerBenefactor successfully!`);
       })
       .catch((error) => {
-        console.error("Error:", error);
+        console.error("Error:", error.response.data);
+        // throw error.response.data;
       });
   },
 
@@ -78,7 +80,7 @@ export default {
     }
 
     await axios
-      .post(`http://127.0.0.1:8000/auth/CharityRegister/`, charityData, {
+      .post(`${BASE_URL}auth/CharityRegister/`, charityData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -111,7 +113,7 @@ export default {
     agentData.append("password", data.password);
 
     await axios
-      .post(`http://127.0.0.1:8000/auth/AgentRegister/`, agentData, config)
+      .post(`${BASE_URL}auth/AgentRegister/`, agentData, config)
       .then((response) => {
         let data = response.data;
         // commit("registerAgent", data.access);
@@ -132,7 +134,7 @@ export default {
     };
 
     await axios
-      .get("http://127.0.0.1:8000/auth/userProfile/", config)
+      .get(`${BASE_URL}auth/userProfile/`, config)
       .then((response) => {
         let responseMessage = response.data;
         state.isLoading = false;
@@ -150,7 +152,7 @@ export default {
     console.log(`in regionsByState actions: data is: ${data}`);
 
     await axios
-      .get("http://127.0.0.1:8000/auth/citiesByState/", config)
+      .get(`${BASE_URL}auth/citiesByState/`, config)
       .then((response) => {
         let responseMessage = response.data.cities;
         console.log(`action response: ${responseMessage}`);
@@ -166,7 +168,7 @@ export default {
       data = data.slice(1);
     }
     await axios
-      .post(`http://127.0.0.1:8000/auth/sendSms/`, {
+      .post(`${BASE_URL}auth/sendSms/`, {
         phoneNumber: parseInt(data, 10),
       })
       .then((response) => {
@@ -174,7 +176,8 @@ export default {
         console.log(`this is response of getVerifycode: ${responseMessage}`);
       })
       .catch((error) => {
-        console.error("Error:", error.response.data.phoneNumber[0]);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -183,7 +186,7 @@ export default {
       data.phoneNumber = data.phoneNumber.slice(1);
     }
     await axios
-      .post(`http://127.0.0.1:8000/auth/validate/`, {
+      .post(`${BASE_URL}auth/validate/`, {
         validationCode: parseInt(data.verifycode, 10),
         phoneNumber: parseInt(data.phoneNumber, 10),
       })
@@ -205,7 +208,7 @@ export default {
     };
 
     await axios
-      .get("http://127.0.0.1:8000/auth/agentList/", config)
+      .get(`${BASE_URL}auth/agentList/`, config)
       .then((response) => {
         let responseMessage = response.data;
         state.isLoading = false;
@@ -226,7 +229,7 @@ export default {
     };
 
     await axios
-      .get("http://127.0.0.1:8000/food/foodDonors/", config)
+      .get(`${BASE_URL}food/foodDonors/`, config)
       .then((response) => {
         let responseMessage = response.data;
         state.isLoading = false;
@@ -248,7 +251,7 @@ export default {
 
     await axios
       .post(
-        `http://127.0.0.1:8000/food/create/`,
+        `${BASE_URL}food/create/`,
         {
           request: parseInt(data.request, 10),
           eventDate: data.eventDate.replace("/", "-").replace("/", "-"),
@@ -277,7 +280,7 @@ export default {
       },
     };
     await axios
-      .delete(`http://127.0.0.1:8000/food/delete/`, config)
+      .delete(`${BASE_URL}food/delete/`, config)
       .then((response) => {
         let responseMessage = response.data;
         console.log(responseMessage);
@@ -298,7 +301,7 @@ export default {
 
     await axios
       .put(
-        `http://127.0.0.1:8000/food/editFood/`,
+        `${BASE_URL}food/editFood/`,
         {
           id: data.id,
           request: parseInt(data.request, 10),
@@ -327,7 +330,7 @@ export default {
     };
 
     await axios
-      .get("http://127.0.0.1:8000/food/own/", config)
+      .get(`${BASE_URL}food/own/`, config)
       .then((response) => {
         let responseMessage = response.data;
         commit("setResponseData", responseMessage);
@@ -347,7 +350,7 @@ export default {
     };
 
     await axios
-      .get("http://127.0.0.1:8000/charityInfo/", config)
+      .get(`${BASE_URL}charityInfo/`, config)
       .then((response) => {
         let responseMessage = response.data;
         commit("setResponseData", responseMessage);
@@ -366,7 +369,7 @@ export default {
     };
 
     await axios
-      .get("http://127.0.0.1:8000/food/charityFood/", config)
+      .get(`${BASE_URL}food/charityFood/`, config)
       .then((response) => {
         let responseMessage = response.data;
         console.log(responseMessage);
@@ -388,7 +391,7 @@ export default {
     };
 
     await axios
-      .get("http://127.0.0.1:8000/food/show/", config)
+      .get(`${BASE_URL}food/show/`, config)
       .then((response) => {
         let responseMessage = response.data;
         commit("setResponseData", responseMessage);
@@ -409,7 +412,7 @@ export default {
 
     await axios
       .post(
-        `http://127.0.0.1:8000/food/createDonor/`,
+        `${BASE_URL}food/createDonor/`,
         {
           food_type: data.selectedFood,
           food_collect: parseInt(data.foodCollect, 10),
@@ -439,7 +442,7 @@ export default {
 
     await axios
       .post(
-        `http://127.0.0.1:8000/clothes/create/`,
+        `${BASE_URL}clothes/create/`,
         {
           eventDate: data.eventDate.replace("/", "-").replace("/", "-"),
           eventTime: data.eventTime,
@@ -468,7 +471,7 @@ export default {
     };
 
     await axios
-      .get("http://127.0.0.1:8000/clothes/own/", config)
+      .get(`${BASE_URL}clothes/own/`, config)
       .then((response) => {
         let responseMessage = response.data;
         commit("setResponseData", responseMessage);
@@ -488,7 +491,7 @@ export default {
       },
     };
     await axios
-      .delete(`http://127.0.0.1:8000/clothes/delete/`, config)
+      .delete(`${BASE_URL}clothes/delete/`, config)
       .then((response) => {
         let responseMessage = response.data;
         console.log(responseMessage);
@@ -510,7 +513,7 @@ export default {
 
     await axios
       .put(
-        `http://127.0.0.1:8000/clothes/editClothes/`,
+        `${BASE_URL}clothes/editClothes/`,
         {
           id: data.id,
           eventDate: data.eventDate.replace("/", "-").replace("/", "-"),
@@ -539,7 +542,7 @@ export default {
     };
 
     await axios
-      .get("http://127.0.0.1:8000/clothes/clothesDonors/", config)
+      .get(`${BASE_URL}clothes/clothesDonors/`, config)
       .then((response) => {
         let responseMessage = response.data;
         state.isLoading = false;
@@ -562,7 +565,7 @@ export default {
 
     await axios
       .post(
-        `http://127.0.0.1:8000/money/create/`,
+        `${BASE_URL}money/create/`,
         {
           name: data.name,
           money_need: parseInt(data.moneyNeed, 10),
@@ -589,7 +592,7 @@ export default {
     };
 
     await axios
-      .get("http://127.0.0.1:8000/money/own/", config)
+      .get(`${BASE_URL}money/own/`, config)
       .then((response) => {
         let responseMessage = response.data;
         commit("setResponseData", responseMessage);
@@ -609,7 +612,7 @@ export default {
     };
 
     await axios
-      .get("http://127.0.0.1:8000/money/moneyDonors/", config)
+      .get(`${BASE_URL}money/moneyDonors/`, config)
       .then((response) => {
         let responseMessage = response.data;
         state.isLoading = false;
@@ -630,7 +633,7 @@ export default {
       },
     };
     await axios
-      .delete(`http://127.0.0.1:8000/money/delete/`, config)
+      .delete(`${BASE_URL}money/delete/`, config)
       .then((response) => {
         let responseMessage = response.data;
         console.log(responseMessage);
@@ -664,10 +667,12 @@ export default {
     }
 
     await axios
-      .post(`http://127.0.0.1:8000/notif/create/`, notificationData, config)
+      .post(`${BASE_URL}notif/create/`, notificationData, config)
       .then((response) => {
         let responseMessage = response.data;
-        console.log(`addNotification successfully! this is response: ${responseMessage}`);
+        console.log(
+          `addNotification successfully! this is response: ${responseMessage}`
+        );
       })
       .catch((error) => {
         console.error("Error addNotification:", error);
@@ -683,7 +688,7 @@ export default {
     };
 
     await axios
-      .get("http://127.0.0.1:8000/notif/ownNotif/", config)
+      .get(`${BASE_URL}notif/ownNotif/`, config)
       .then((response) => {
         let responseMessage = response.data;
         commit("setResponseData", responseMessage);
@@ -703,7 +708,7 @@ export default {
       },
     };
     await axios
-      .delete(`http://127.0.0.1:8000/notif/delete/`, config)
+      .delete(`${BASE_URL}notif/delete/`, config)
       .then((response) => {
         let responseMessage = response.data;
         console.log(responseMessage);
@@ -722,7 +727,7 @@ export default {
     };
 
     await axios
-      .get("http://127.0.0.1:8000/notif/charityNotif/", config)
+      .get(`${BASE_URL}notif/charityNotif/`, config)
       .then((response) => {
         let responseMessage = response.data;
         state.isLoading = false;
@@ -743,13 +748,16 @@ export default {
     };
 
     await axios
-      .get("http://127.0.0.1:8000/notif/show/", config)
+      .get(`${BASE_URL}notif/show/`, config)
       .then((response) => {
         let responseMessage = response.data;
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        console.error("Error fetching getNotificationsCharityForBenefactor:", error);
+        console.error(
+          "Error fetching getNotificationsCharityForBenefactor:",
+          error
+        );
       });
   },
 
@@ -767,7 +775,7 @@ export default {
 
     await axios
       .put(
-        `http://127.0.0.1:8000/auth/changePassword/`,
+        `${BASE_URL}auth/changePassword/`,
         {
           old_password: data.oldPassword,
           new_password: data.newPassword,
@@ -794,7 +802,7 @@ export default {
     };
 
     await axios
-      .get("http://127.0.0.1:8000/food/agentFood/", config)
+      .get(`${BASE_URL}food/agentFood/`, config)
       .then((response) => {
         let responseMessage = response.data;
         commit("setResponseData", responseMessage);
@@ -815,7 +823,7 @@ export default {
 
     await axios
       .post(
-        `http://127.0.0.1:8000/food/isCollected/`,
+        `${BASE_URL}food/isCollected/`,
         {
           user_id: id[0],
           food_id: id[1],
@@ -842,7 +850,7 @@ export default {
     };
 
     await axios
-      .get("http://127.0.0.1:8000/clothes/agentClothes/", config)
+      .get(`${BASE_URL}clothes/agentClothes/`, config)
       .then((response) => {
         let responseMessage = response.data;
         commit("setResponseData", responseMessage);
@@ -865,7 +873,7 @@ export default {
 
     await axios
       .post(
-        `http://127.0.0.1:8000/clothes/isCollected/`,
+        `${BASE_URL}clothes/isCollected/`,
         {
           user_id: id[0],
           clothes_id: id[1],
@@ -895,7 +903,7 @@ export default {
     };
 
     await axios
-      .get("http://127.0.0.1:8000/money/charityMoney/", config)
+      .get(`${BASE_URL}money/charityMoney/`, config)
       .then((response) => {
         let responseMessage = response.data;
         console.log(responseMessage);
@@ -917,7 +925,7 @@ export default {
     };
 
     await axios
-      .get("http://127.0.0.1:8000/money/show/", config)
+      .get(`${BASE_URL}money/show/`, config)
       .then((response) => {
         let responseMessage = response.data;
         commit("setResponseData", responseMessage);
@@ -938,7 +946,7 @@ export default {
 
     await axios
       .post(
-        `http://127.0.0.1:8000/money/createDonor/`,
+        `${BASE_URL}money/createDonor/`,
         {
           money_collect: parseInt(data.moneyCollect, 10),
           money: parseInt(data.id, 10),
@@ -965,7 +973,7 @@ export default {
     };
 
     await axios
-      .get("http://127.0.0.1:8000/clothes/charityClothes/", config)
+      .get(`${BASE_URL}clothes/charityClothes/`, config)
       .then((response) => {
         let responseMessage = response.data;
         state.isLoading = false;
@@ -987,7 +995,7 @@ export default {
 
     await axios
       .post(
-        `http://127.0.0.1:8000/clothes/createDonor/`,
+        `${BASE_URL}clothes/createDonor/`,
         {
           clothes: parseInt(id, 10),
         },
@@ -1013,7 +1021,7 @@ export default {
     };
 
     await axios
-      .get("http://127.0.0.1:8000/clothes/show/", config)
+      .get(`${BASE_URL}clothes/show/`, config)
       .then((response) => {
         let responseMessage = response.data;
         commit("setResponseData", responseMessage);

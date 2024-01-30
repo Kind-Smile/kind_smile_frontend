@@ -19,3 +19,5 @@ export function updateCharityProperty(property, newVal) {
 export function updateAgentProperty(property, newVal) {
   this.$store.commit("updateAgent", { property, newVal });
 }
+
+export const BASE_URL = "http://127.0.0.1:8000/";
