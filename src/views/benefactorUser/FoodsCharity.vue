@@ -117,7 +117,7 @@
                               شماره تماس سفیر مهربانی:
                             </p>
                             <p style="display: inline">
-                              <b>0{{ food.food.agent.phoneNumber }}</b>
+                              <b>{{ food.food.agent.phoneNumber }}</b>
                             </p>
                           </div>
 

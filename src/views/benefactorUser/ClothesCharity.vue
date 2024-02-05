@@ -103,7 +103,7 @@
                               شماره تماس سفیر مهربانی:
                             </p>
                             <p style="display: inline">
-                              <b>0{{ clothe.clothes.agent.phoneNumber }}</b>
+                              <b>{{ clothe.clothes.agent.phoneNumber }}</b>
                             </p>
                           </div>
 

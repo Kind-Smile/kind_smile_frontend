@@ -14,7 +14,7 @@
           border="left"
           class="mb-1"
         >
-          نام کاربری یا رمز عبور اشتباه است.
+          {{ this.alertMessage }}.
         </v-alert>
 
         <v-toolbar class="elevation-0 ma-0">
@@ -103,6 +103,7 @@ export default {
       },
 
       alert: false,
+      alertMessage: "",
     };
   },
 
@@ -114,9 +115,11 @@ export default {
       try {
         this.alert = false;
         await this.$store.dispatch("login", { data });
+        // alert.success('fsaf')
         router.push("/");
       } catch (error) {
         this.alert = true;
+        this.alertMessage = error
         console.error("Error during login:", error);
         // Handle error, show error message, etc.
       }

@@ -271,8 +271,9 @@ export default {
   },
 
   mounted() {
-    console.log(`in register formData: mounted ${this.formData.phoneNumber}`);
     const formData = JSON.parse(localStorage.getItem("benefactorFormData"));
+    // console.log(`in register formData: mounted ${this.$store.state.verificatedPhoneNumber} and this is localStorage: ${formData.name}`);
+    console.log(this.$store.state.verificatedPhoneNumber)
     if (formData) {
       this.formData = formData;
       this.formData.address = this.$store.state.benefactor.address;

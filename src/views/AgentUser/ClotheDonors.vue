@@ -52,7 +52,7 @@
                             شماره تماس نیکوکار مهربان:
                           </p>
                           <p style="display: inline">
-                            <b>0{{ donor.user.phoneNumber }}</b>
+                            <b>{{ donor.user.phoneNumber }}</b>
                           </p>
                         </div>
 

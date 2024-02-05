@@ -4,12 +4,9 @@ import { BASE_URL } from "@/globalFunctions";
 export default {
   async login({ commit }, { data }) {
     // console.log("I am in: action->login");
-    if (data.phoneNumber[0] == 0 && data.phoneNumber.length == 11) {
-      data.phoneNumber = data.phoneNumber.slice(1);
-    }
     await axios
       .post(`${BASE_URL}auth/token/`, {
-        phoneNumber: parseInt(data.phoneNumber, 10),
+        phoneNumber: data.phoneNumber,
         password: data.password,
       })
       .then((response) => {
@@ -21,20 +18,17 @@ export default {
         });
       })
       .catch((error) => {
-        console.error("Error:", error.response.data.detail);
-        throw error.response.data.detail;
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
   async registerBenefactor({ commit }, { data }) {
     // console.log("I am in: action->register");
-    if (data.phoneNumber[0] == 0 && data.phoneNumber.length == 11) {
-      data.phoneNumber = data.phoneNumber.slice(1);
-    }
     await axios
       .post(`${BASE_URL}auth/PersonRegister/`, {
         name: data.name,
-        phoneNumber: parseInt(data.phoneNumber, 10),
+        phoneNumber: data.phoneNumber,
         address: data.address,
         latitude: data.latitude,
         longitude: data.longitude,
@@ -47,28 +41,25 @@ export default {
       })
       .catch((error) => {
         console.error("Error:", error.response.data);
-        // throw error.response.data;
+        throw error.response.data;
       });
   },
 
   async registerCharity({ commit }, { data }) {
     // console.log("I am in: action->register");
-    if (data.phoneNumber[0] == 0 && data.phoneNumber.length == 11) {
-      data.phoneNumber = data.phoneNumber.slice(1);
-    }
     const charityData = new FormData();
 
     charityData.append("name", data.name);
     charityData.append("boss", data.boss);
-    charityData.append("phoneNumber", parseInt(data.phoneNumber, 10));
+    charityData.append("phoneNumber", data.phoneNumber);
     charityData.append("correlation", data.correlation);
     charityData.append("state", data.selectedState);
     charityData.append("region", data.selectedRegion);
     charityData.append("other", data.other);
     charityData.append("officer", data.officer);
-    charityData.append("officerPhone", parseInt(data.officerPhone, 10));
-    charityData.append("cardNumber", parseInt(data.cardNumber, 10));
-    charityData.append("code", parseInt(data.code, 10));
+    charityData.append("officerPhone", data.officerPhone);
+    charityData.append("cardNumber", data.cardNumber);
+    charityData.append("code", data.code);
     charityData.append("institute", data.institute);
     charityData.append("description", data.description);
     charityData.append("latitude", data.latitude);
@@ -91,7 +82,8 @@ export default {
         console.log(`registered successfully!`);
       })
       .catch((error) => {
-        console.error("Error:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -103,12 +95,9 @@ export default {
       },
     };
 
-    if (data.phoneNumber[0] == 0 && data.phoneNumber.length == 11) {
-      data.phoneNumber = data.phoneNumber.slice(1);
-    }
     const agentData = new FormData();
     agentData.append("name", data.name);
-    agentData.append("phoneNumber", parseInt(data.phoneNumber, 10));
+    agentData.append("phoneNumber", data.phoneNumber);
     agentData.append("polygon", JSON.stringify(data.polygon));
     agentData.append("password", data.password);
 
@@ -120,8 +109,10 @@ export default {
         console.log(`registerAgent successfully!`);
       })
       .catch((error) => {
-        console.log("in action error");
-        console.error("Error:", error);
+        // console.log("in action error");
+        // console.error("Error:", error);
+        console.error("Error:", error.response.data);
+        // throw error.response.data;
       });
   },
 
@@ -141,7 +132,9 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        console.error("Error fetching userProfile:", error);
+        // console.error("Error fetching userProfile:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -159,17 +152,16 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        console.error("Error fetching regionsByState:", error);
+        // console.error("Error fetching regionsByState:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
   async getVerifycode({ commit }, { data }) {
-    if (data[0] == 0 && data.length == 11) {
-      data = data.slice(1);
-    }
     await axios
       .post(`${BASE_URL}auth/sendSms/`, {
-        phoneNumber: parseInt(data, 10),
+        phoneNumber: data,
       })
       .then((response) => {
         let responseMessage = response.data;
@@ -182,20 +174,19 @@ export default {
   },
 
   async checkVerifycode({ commit }, { data }) {
-    if (data.phoneNumber[0] == 0 && data.phoneNumber.length == 11) {
-      data.phoneNumber = data.phoneNumber.slice(1);
-    }
     await axios
       .post(`${BASE_URL}auth/validate/`, {
-        validationCode: parseInt(data.verifycode, 10),
-        phoneNumber: parseInt(data.phoneNumber, 10),
+        validationCode: data.verifycode,
+        phoneNumber: data.phoneNumber,
       })
       .then((response) => {
         let responseMessage = response.data;
         console.log(responseMessage);
       })
       .catch((error) => {
-        console.error("Error:", error);
+        // console.error("Error:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -215,7 +206,9 @@ export default {
         commit("setCharityAgentList", responseMessage);
       })
       .catch((error) => {
-        console.error("Error fetching charityAgentList:", error);
+        // console.error("Error fetching charityAgentList:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -236,7 +229,9 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        console.error("Error fetching foodDonorsList:", error);
+        // console.error("Error fetching foodDonorsList:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -266,7 +261,9 @@ export default {
         console.log(`addFood successfully! this is response: ${data}`);
       })
       .catch((error) => {
-        console.error("Error:", error);
+        // console.error("Error:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -286,7 +283,9 @@ export default {
         console.log(responseMessage);
       })
       .catch((error) => {
-        console.error("Error removeFood:", error);
+        // console.error("Error removeFood:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -317,7 +316,9 @@ export default {
         console.log(`editFood successfully! this is response: ${data}`);
       })
       .catch((error) => {
-        console.error("Error:", error);
+        // console.error("Error:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -336,7 +337,9 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        console.error("Error fetching getFoodsCharity:", error);
+        // console.error("Error fetching getFoodsCharity:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -356,7 +359,9 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        console.error("Error fetching charityInfo:", error);
+        // console.error("Error fetching charityInfo:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -377,7 +382,9 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        console.error("Error fetching foodCharities:", error);
+        // console.error("Error fetching foodCharities:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -397,7 +404,9 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        console.error("Error fetching getFoodsCharityForBenefactor:", error);
+        // console.error("Error fetching getFoodsCharityForBenefactor:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -458,7 +467,9 @@ export default {
         );
       })
       .catch((error) => {
-        console.error("Error fetching addClothes:", error);
+        // console.error("Error fetching addClothes:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -477,7 +488,9 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        console.error("Error fetching getClothesCharity:", error);
+        // console.error("Error fetching getClothesCharity:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -497,7 +510,9 @@ export default {
         console.log(responseMessage);
       })
       .catch((error) => {
-        console.error("Error removeClothe:", error);
+        // console.error("Error removeClothe:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -528,7 +543,9 @@ export default {
         console.log(`editClothe successfully! this is response: ${data}`);
       })
       .catch((error) => {
-        console.error("Error fetching editClothe:", error);
+        // console.error("Error fetching editClothe:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -549,7 +566,9 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        console.error("Error fetching clotheDonorsList:", error);
+        // console.error("Error fetching clotheDonorsList:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -579,7 +598,9 @@ export default {
         console.log(`addMoney successfully! this is response: ${data}`);
       })
       .catch((error) => {
-        console.error("Error:", error);
+        // console.error("Error:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -598,7 +619,9 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        console.error("Error fetching getMoneyCharity:", error);
+        // console.error("Error fetching getMoneyCharity:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -619,7 +642,9 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        console.error("Error fetching moneyDonorsList:", error);
+        // console.error("Error fetching moneyDonorsList:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -639,7 +664,9 @@ export default {
         console.log(responseMessage);
       })
       .catch((error) => {
-        console.error("Error removeMoney:", error);
+        // console.error("Error removeMoney:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -675,7 +702,9 @@ export default {
         );
       })
       .catch((error) => {
-        console.error("Error addNotification:", error);
+        // console.error("Error addNotification:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -694,7 +723,9 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        console.error("Error fetching getNotificationsCharity:", error);
+        // console.error("Error fetching getNotificationsCharity:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -714,7 +745,9 @@ export default {
         console.log(responseMessage);
       })
       .catch((error) => {
-        console.error("Error removeNotification:", error);
+        // console.error("Error removeNotification:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -734,7 +767,9 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        console.error("Error fetching notificationCharities:", error);
+        // console.error("Error fetching notificationCharities:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -754,10 +789,12 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        console.error(
-          "Error fetching getNotificationsCharityForBenefactor:",
-          error
-        );
+        // console.error(
+        //   "Error fetching getNotificationsCharityForBenefactor:",
+        //   error
+        // );
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -788,7 +825,8 @@ export default {
       })
       .catch((error) => {
         console.error("Error:", error.response.data);
-        throw error.response.data[0].Error[0][0];
+        // throw error.response.data[0].Error[0][0];
+        throw error.response.data;
       });
   },
 
@@ -808,7 +846,9 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        console.error("Error fetching getAgentFoodsCharity:", error);
+        // console.error("Error fetching getAgentFoodsCharity:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -835,8 +875,10 @@ export default {
         console.log(responseMessage);
       })
       .catch((error) => {
-        console.error("Error:", error);
-        throw error;
+        // console.error("Error:", error);
+        // throw error;
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -856,7 +898,9 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        console.error("Error fetching getAgentClothesCharity:", error);
+        // console.error("Error fetching getAgentClothesCharity:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -885,8 +929,10 @@ export default {
         console.log(responseMessage);
       })
       .catch((error) => {
-        console.error("Error fetching agentReceiveClothe:", error);
-        throw error;
+        // console.error("Error fetching agentReceiveClothe:", error);
+        // throw error;
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -911,7 +957,9 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        console.error("Error fetching moneyCharities:", error);
+        // console.error("Error fetching moneyCharities:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -931,7 +979,9 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        console.error("Error fetching getMoniesCharity:", error);
+        // console.error("Error fetching getMoniesCharity:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -958,8 +1008,10 @@ export default {
         console.log(responseMessage);
       })
       .catch((error) => {
-        console.error("Error:", error);
-        throw error;
+        // console.error("Error:", error);
+        // throw error;
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -980,7 +1032,9 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        console.error("Error fetching clotheCharities:", error);
+        // console.error("Error fetching clotheCharities:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -1006,8 +1060,10 @@ export default {
         console.log(responseMessage);
       })
       .catch((error) => {
-        console.error("Error fetching donateClothe:", error);
-        throw error;
+        // console.error("Error fetching donateClothe:", error);
+        // throw error;
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 
@@ -1027,10 +1083,12 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        console.error(
-          "Error fetching getClothesCharityForBenefactor:",
-          error.response.data
-        );
+        // console.error(
+        //   "Error fetching getClothesCharityForBenefactor:",
+        //   error.response.data
+        // );
+        console.error("Error:", error.response.data);
+        throw error.response.data;
       });
   },
 };
