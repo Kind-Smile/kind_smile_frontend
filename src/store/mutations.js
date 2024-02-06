@@ -108,6 +108,14 @@ export default {
     state.charityAgentList.push(data);
   },
 
+  setSnackbar(state, newVal){
+    state.snackbar = newVal
+  },
+
+  snackbarMessage(state, newVal){
+    state.snackbarMessage = newVal
+  },
+
   setCharityAgentList(state, data) {
     state.charityAgentList = data;
   },

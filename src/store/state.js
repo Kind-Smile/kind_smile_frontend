@@ -40,6 +40,9 @@ export default {
   // ToDo: it should be true by default
   responseData: null,
 
+  snackbar: false,
+  snackbarMessage: ``,
+
   charityAgentList: [],
 
   states: [

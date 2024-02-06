@@ -116,6 +116,11 @@ export default {
         this.alert = false;
         await this.$store.dispatch("login", { data });
         // alert.success('fsaf')
+        this.$store.commit("setSnackbar", true);
+        this.$store.commit("snackbarMessage", `ورود شما با موفقیت انجام شد.`);
+        setTimeout(() => {
+          this.$store.commit('setSnackbar', false);
+        }, 2000);
         router.push("/");
       } catch (error) {
         this.alert = true;
