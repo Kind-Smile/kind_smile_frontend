@@ -31,8 +31,7 @@
                     <Card
                       :text="notification.description != null"
                       title
-                      :image="notification.picture != null"
-                      :imageNewLine="notification.picture != null"
+
                       :cardImage="notification.picture"
                     >
                       <div

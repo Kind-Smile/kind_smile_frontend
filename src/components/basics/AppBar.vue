@@ -2,7 +2,7 @@
   <v-card>
     <v-snackbar
       v-model="this.$store.state.snackbar"
-      :timeout="2000"
+      :timeout="3000"
       text
       top
       color="success"
@@ -63,13 +63,13 @@
           </div>
         </a>
 
-        <a
+        <!-- <a
           class="mr-3"
           @click="openRegisterAgentDialog"
           v-if="this.$store.state.role == 'Charity'"
         >
           <small>ثبت‌ نماینده جدید</small>
-        </a>
+        </a> -->
       </div>
 
       <div v-else class="pt-3 mr-2 d-flex justify-between">
@@ -115,7 +115,7 @@
             border="left"
             class="mb-1"
           >
-            {{ verifyError }}
+            {{ alertMessage }}
           </v-alert>
           <Input
             outlined
@@ -145,7 +145,7 @@
               class="mb-3"
             />
 
-            <Button
+            <!-- <Button
               input_value="تایید"
               type="button"
               block
@@ -154,7 +154,30 @@
               @click="checkVerifycode"
               :disabled="formData.verifycode === ''"
             >
-            </Button>
+            </Button> -->
+
+            <v-row no-gutters class="justify-space-between mb-3 mt-7">
+              <v-col lg="5" md="12" sm="12" cols="12">
+                <Button
+                  block
+                  small
+                  input_value="تایید"
+                  @click="checkVerifycode"
+                  :disabled="formData.verifycode === ''"
+                ></Button>
+              </v-col>
+
+              <v-col lg="5" md="12" sm="12" cols="12">
+                <Button
+                  block
+                  small
+                  :color="$vuetify.theme.currentTheme.primary"
+                  input_value="ویرایش"
+                  :class="{ 'mt-3': !$vuetify.breakpoint.mdAndUp }"
+                  @click="isSendVerifycode = false"
+                ></Button>
+              </v-col>
+            </v-row>
           </div>
 
           <Button
@@ -181,7 +204,7 @@
       </v-row> -->
     </v-app-bar>
 
-    <Dialog
+    <!-- <Dialog
       :dialogOpen="registerAgentDialog"
       @update:dialogOpen="updateRegisterAgentDialog"
       title="برای ثبت نماینده جدید، اطلاعات زیر را تکمیل نمایید:"
@@ -278,7 +301,7 @@
         >
         </Button>
       </v-form>
-    </Dialog>
+    </Dialog> -->
   </v-card>
 </template>
 
@@ -303,20 +326,20 @@ export default {
     return {
       message: `hello1`,
       dialogOpen: false,
-      agentFormData: {
-        name: "",
-        phoneNumber: "",
-        polygon: this.$store.state.agent.polygonPoints,
-        password: "",
-      },
+      // agentFormData: {
+      //   name: "",
+      //   phoneNumber: "",
+      //   polygon: this.$store.state.agent.polygonPoints,
+      //   password: "",
+      // },
       formData: {
         phoneNumber: "",
         verifycode: "",
       },
       isSendVerifycode: false,
       alert: false,
-      verifyError: "",
-      registerAgentDialog: false,
+      alertMessage: "",
+      // registerAgentDialog: false,
     };
   },
 
@@ -325,38 +348,38 @@ export default {
       this.$store.commit("setSnackbar", false);
     },
 
-    openRegisterAgentDialog() {
-      this.addAgentDialog = !this.addAgentDialog;
-      this.registerAgentDialog = !this.registerAgentDialog;
-    },
-    updateRegisterAgentDialog(newVal) {
-      this.registerAgentDialog = newVal;
-    },
-    closeRegisterAgentDialog() {
-      this.registerAgentDialog = false;
-    },
-    clickPolygon() {
-      localStorage.setItem("agentFormData", JSON.stringify(this.formData));
-      this.$updateAgentProperty("isClickPolygon", true);
-    },
-    async onSubmit() {
-      console.log(this.formData);
-      const data = this.formData;
+    // openRegisterAgentDialog() {
+    //   this.addAgentDialog = !this.addAgentDialog;
+    //   this.registerAgentDialog = !this.registerAgentDialog;
+    // },
+    // updateRegisterAgentDialog(newVal) {
+    //   this.registerAgentDialog = newVal;
+    // },
+    // closeRegisterAgentDialog() {
+    //   this.registerAgentDialog = false;
+    // },
+    // clickPolygon() {
+    //   localStorage.setItem("agentFormData", JSON.stringify(this.formData));
+    //   this.$updateAgentProperty("isClickPolygon", true);
+    // },
+    // async onSubmit() {
+    //   console.log(this.formData);
+    //   const data = this.formData;
 
-      try {
-        await this.$store.dispatch("registerAgent", { data });
+    //   try {
+    //     await this.$store.dispatch("registerAgent", { data });
 
-        localStorage.removeItem("agentFormData");
-        this.$updateAgentProperty("isClickPolygon", false);
-        this.$updateAgentProperty("isSetPolygon", false);
-        this.$updateAgentProperty("polygonPoints", []);
+    //     localStorage.removeItem("agentFormData");
+    //     this.$updateAgentProperty("isClickPolygon", false);
+    //     this.$updateAgentProperty("isSetPolygon", false);
+    //     this.$updateAgentProperty("polygonPoints", []);
 
-        this.closeRegisterAgentDialog();
-      } catch (error) {
-        console.error("Error during benefactor register:", error);
-        // Handle error, show error message, etc.
-      }
-    },
+    //     this.closeRegisterAgentDialog();
+    //   } catch (error) {
+    //     console.error("Error during benefactor register:", error);
+    //     // Handle error, show error message, etc.
+    //   }
+    // },
 
     openDialog() {
       this.dialogOpen = !this.dialogOpen;
@@ -372,6 +395,7 @@ export default {
       if (this.$route.path !== "/") {
         router.push("/");
       }
+
       this.$store.commit("setSnackbar", true);
       this.$store.commit(
         "snackbarMessage",
@@ -379,7 +403,8 @@ export default {
       );
       setTimeout(() => {
         this.$store.commit("setSnackbar", false);
-      }, 2000);
+      }, 3000);
+
       this.$store.commit("logout");
     },
 
@@ -394,17 +419,21 @@ export default {
         console.error("Error during get verify code:", error);
         this.alert = true;
         console.log(this.alert);
-        this.verifyError = error;
+        this.alertMessage = error;
       }
     },
 
     async checkVerifycode() {
       console.log(`in appbar formData.phone ${this.formData.phoneNumber}`);
-      this.$store.commit(
-        "updateVerificatedPhoneNumber",
-        this.formData.phoneNumber
+      // this.$store.commit(
+      //   "updateVerificatedPhoneNumber",
+      //   this.formData.phoneNumber
+      // );
+      // console.log(this.$store.state.verificatedPhoneNumber);
+      localStorage.setItem(
+        "verificatedPhoneNumber",
+        JSON.stringify(this.formData.phoneNumber)
       );
-      console.log(this.$store.state.verificatedPhoneNumber);
       const data = this.formData;
       this.$store.dispatch("checkVerifycode", { data });
       if (this.$route.path !== "/register-benefactor") {

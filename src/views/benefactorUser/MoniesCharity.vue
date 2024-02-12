@@ -47,7 +47,7 @@
                       </div>
 
                       <div slot="cardText">
-                        <div class="mb-1">
+                        <div class="mb-2">
                           <p style="display: inline" class="ml-1">
                             کل هزینه مورد نیاز:
                           </p>
@@ -61,14 +61,31 @@
                           </p>
                         </div>
 
-                        <div class="mb-1" v-if="money.collection > 0">
+                        <div class="mb-2" v-if="money.money.collection > 0">
                           <p style="display: inline" class="ml-1">
                             میزان مشارکت ثبت‌شده:
                           </p>
                           <p style="display: inline">
                             <b
                               >{{
-                                money.collection.toLocaleString("fa-IR")
+                                money.money.collection.toLocaleString("fa-IR")
+                              }}
+                              تومان</b
+                            >
+                          </p>
+                        </div>
+
+                        <div class="mb-2" v-if="money.money.collection > 0">
+                          <p style="display: inline" class="ml-1">
+                            میزان مورد نیاز باقیمانده:
+                          </p>
+                          <p style="display: inline">
+                            <b
+                              >{{
+                                (
+                                  money.money.money_need -
+                                  money.money.collection
+                                ).toLocaleString("fa-IR")
                               }}
                               تومان</b
                             >
@@ -150,31 +167,47 @@
           @update:dialogOpen="updateDonateMoneyDialog"
           title="برای ثبت مشارکت در این سفره، اطلاعات زیر را تکمیل نمایید:"
         >
-          <v-form @submit.prevent="onSubmit" slot="dialogText" class="mb-n4">
-            <Input
-              outlined
+          <div slot="dialogText" class="mb-n4">
+            <v-alert
+              v-if="alert"
               dense
-              name="moneyCollect"
-              type="number"
-              v-model.trim="formData.moneyCollect"
-              labelTag
-              labelText="مبلغ اهدایی"
-              placeholder="مبلغ اهدایی"
-              hide_details
-              suffix="تومان"
-              class="mb-5"
-            />
-
-            <Button
-              input_value="ثبت‌"
-              type="submit"
-              block
-              large
-              class="mb-3 mt-5"
-              :disabled="this.formData.moneyCollect === ''"
+              :color="
+                this.$hexToRgba(this.$vuetify.theme.currentTheme.primary, 0.3)
+              "
+              type="error"
+              icon="mdi-alert-circle-outline"
+              border="left"
+              class="mb-1"
             >
-            </Button>
-          </v-form>
+              {{ alertMessage }}
+            </v-alert>
+
+            <v-form @submit.prevent="onSubmit">
+              <Input
+                outlined
+                dense
+                name="moneyCollect"
+                type="number"
+                v-model.trim="formData.moneyCollect"
+                labelTag
+                labelText="مبلغ اهدایی"
+                placeholder="مبلغ اهدایی"
+                hide_details
+                suffix="تومان"
+                class="mb-5"
+              />
+
+              <Button
+                input_value="ثبت‌"
+                type="submit"
+                block
+                large
+                class="mb-3 mt-5"
+                :disabled="this.formData.moneyCollect === ''"
+              >
+              </Button>
+            </v-form>
+          </div>
         </Dialog>
       </v-main>
     </div>
@@ -204,6 +237,9 @@ export default {
       },
 
       donateMoneyDialog: false,
+
+      alert: false,
+      alertMessage: "",
     };
   },
 
@@ -247,6 +283,7 @@ export default {
       console.log(this.formData);
 
       try {
+        this.alert = false;
         await this.$store.dispatch("donateMoney", { data });
         this.getMoniesCharity();
         this.closeDonateMoneyDialog();
@@ -254,6 +291,8 @@ export default {
         this.formData.moneyCollect = "";
       } catch (error) {
         console.error("Error during onSubmit in component:", error);
+        this.alert = true;
+        this.alertMessage = error;
       }
     },
   },

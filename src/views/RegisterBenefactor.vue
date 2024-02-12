@@ -192,7 +192,7 @@ export default {
     return {
       formData: {
         name: "",
-        phoneNumber: this.$store.state.verificatedPhoneNumber,
+        phoneNumber: JSON.parse(localStorage.getItem("benefactorFormData")),
         selectedState: "",
         address: this.$store.state.benefactor.address,
         latitude: this.$store.state.benefactor.latitude,
@@ -254,7 +254,17 @@ export default {
         this.$updateBenefactorProperty("address", "");
         this.$updateBenefactorProperty("latitude", 0.0);
         this.$updateBenefactorProperty("longitude", 0.0);
-        this.$store.commit("updateVerificatedPhoneNumber", "");
+        // this.$store.commit("updateVerificatedPhoneNumber", "");
+        localStorage.removeItem("verificatedPhoneNumber");
+
+        this.$store.commit("setSnackbar", true);
+        this.$store.commit(
+          "snackbarMessage",
+          `ثبت نام شما با موفقیت انجام شد.`
+        );
+        setTimeout(() => {
+          this.$store.commit("setSnackbar", false);
+        }, 3000);
 
         router.push("/login");
       } catch (error) {
@@ -270,16 +280,17 @@ export default {
     },
   },
 
-  mounted() {
+  created() {
     const formData = JSON.parse(localStorage.getItem("benefactorFormData"));
-    // console.log(`in register formData: mounted ${this.$store.state.verificatedPhoneNumber} and this is localStorage: ${formData.name}`);
-    console.log(this.$store.state.verificatedPhoneNumber)
+    const phone = JSON.parse(localStorage.getItem("verificatedPhoneNumber"));
+    this.formData.phoneNumber = phone;
+    // console.log(this.$store.state.verificatedPhoneNumber);
     if (formData) {
       this.formData = formData;
       this.formData.address = this.$store.state.benefactor.address;
       this.formData.latitude = this.$store.state.benefactor.latitude;
       this.formData.longitude = this.$store.state.benefactor.longitude;
-      this.formData.phoneNumber = this.$store.state.verificatedPhoneNumber;
+      // this.formData.phoneNumber = this.$store.state.verificatedPhoneNumber;
       if (this.formData.address == "") {
         this.formData.selectedState = "";
       }
@@ -291,10 +302,6 @@ export default {
       this.coordinates[1] = this.$store.state.benefactor.latitude;
     }
   },
-  // updated(){
-  //   console.log(`in register formData: updated ${this.formData.phoneNumber}`);
-  //   const formData = JSON.parse(localStorage.getItem("benefactorFormData"));
-  // }
 };
 </script>
 

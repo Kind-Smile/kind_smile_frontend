@@ -50,6 +50,10 @@ a,
   color: #312e2e;
 }
 
+.gray{
+  color: #524d4d9b;
+}
+
 .h2,
 h2 {
   font-size: 2.13rem;

@@ -386,6 +386,16 @@ export default {
         this.formData.moneyNeed = "";
         this.formData.expireDate = "";
         this.formData.description = "";
+
+        this.$store.commit("setSnackbar", true);
+        this.$store.commit(
+          "snackbarMessage",
+          `هدیه مهربانی جدید با موفقیت ایجاد شد.`
+        );
+        setTimeout(() => {
+          this.$store.commit("setSnackbar", false);
+        }, 3000);
+
       } catch (error) {
         console.error("Error during add Money in component:", error);
       }

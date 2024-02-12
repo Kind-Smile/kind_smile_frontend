@@ -77,7 +77,7 @@
                               :style="{
                                 color: $vuetify.theme.currentTheme.thirdColor,
                               }"
-                              >این پوشاک مهربانی برای ۳۰ روز آینده تمدید خواهد
+                              >این پوشاک مهربانی برای یک ماه آینده تمدید خواهد
                               شد.</small
                             >
                           </v-col>
@@ -200,7 +200,7 @@
 
             <v-checkbox
               v-model.trim="editedFormData.recreate"
-              label="پوشاک را برای ۳۰ روز آینده تمدید کن."
+              label="پوشاک را برای یک ماه آینده تمدید کن."
               :color="$vuetify.theme.currentTheme.thirdColor"
               hide-details
               class="mb-5"
@@ -302,7 +302,7 @@
 
             <v-checkbox
               v-model.trim="formData.recreate"
-              label="پوشاک را برای ۳۰ روز آینده تمدید کن."
+              label="پوشاک را برای یک ماه آینده تمدید کن."
               :color="$vuetify.theme.currentTheme.thirdColor"
               hide-details
               class="mb-5"
@@ -372,7 +372,7 @@ export default {
         eventDate: "",
         eventTime: "",
         agent: "",
-        recreate: "",
+        recreate: false,
       },
 
       editedFormData: {
@@ -380,7 +380,7 @@ export default {
         eventDate: "",
         eventTime: "",
         agent: "",
-        recreate: "",
+        recreate: false,
       },
     };
   },
@@ -505,6 +505,16 @@ export default {
         this.formData.eventTime = "";
         this.formData.agent = "";
         this.formData.recreate = false;
+
+        this.$store.commit("setSnackbar", true);
+        this.$store.commit(
+          "snackbarMessage",
+          `پوشاک مهربانی جدید با موفقیت ایجاد شد.`
+        );
+        setTimeout(() => {
+          this.$store.commit("setSnackbar", false);
+        }, 3000);
+
       } catch (error) {
         console.error("Error during add clothes in component:", error);
       }

@@ -26,7 +26,11 @@
                   <v-col lg="4" md="6" sm="6" cols="12" :key="food.food.id">
                     <Card
                       text
-                      :actions="food.food_collect == null && food.food.isInside"
+                      :actions="
+                        food.food_collect == null &&
+                        food.food.isInside &&
+                        !food.food.isDone
+                      "
                       :image="false"
                       :cardColor="getFoodCardColors(food.food)"
                     >
@@ -85,6 +89,21 @@
                           </small>
                         </div>
 
+                        <div v-if="food.food.isDone">
+                          <div class="mt-3 mb-1">
+                            <v-icon
+                              :style="{
+                                color: $vuetify.theme.currentTheme.thirdColor,
+                              }"
+                              >mdi-check-circle</v-icon
+                            >
+                            <p style="display: inline">
+                              به لطف مشارکت‌های مردمی، تعداد غذای مورد نیاز در
+                              این سفره تامین شده است.
+                            </p>
+                          </div>
+                        </div>
+
                         <div v-if="food.food_collect != null">
                           <v-divider class="my-3"></v-divider>
                           <div class="mb-1">
@@ -139,7 +158,11 @@
                       <v-row
                         slot="cardActions"
                         class="justify-end px-4 pt-5 pb-3"
-                        v-if="food.food_collect == null && food.food.isInside"
+                        v-if="
+                          food.food_collect == null &&
+                          food.food.isInside &&
+                          !food.food.isDone
+                        "
                       >
                         <Button
                           :block="!$vuetify.breakpoint.mdAndUp"

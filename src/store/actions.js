@@ -18,8 +18,8 @@ export default {
         });
       })
       .catch((error) => {
-        console.error("Error:", error.response.data);
-        throw error.response.data;
+        console.error("Error:", error.response.data.non_field_errors[0]);
+        throw error.response.data.non_field_errors[0];
       });
   },
 

@@ -36,10 +36,10 @@
                   >
                     <Card
                       title
-                      :text="notificationCharity.description!=''"
+                      :text="notificationCharity.description != ''"
                       actions
-                      :image="notificationCharity.picture!=null"
-                      :imageNewLine="notificationCharity.picture!=null"
+                      :image="notificationCharity.picture != null"
+                      :imageNewLine="notificationCharity.picture != null"
                       :cardImage="notificationCharity.picture"
                       :cardColor="notificationCardColor(notificationCharity)"
                     >
@@ -62,10 +62,14 @@
                       <v-row
                         no-gutters
                         slot="cardActions"
-                        class="justify-space-between"
+                        class="justify-center"
                       >
+                        <div v-if="notificationCharity.isExpired">
+                          <small style="display: inline" class="gray">منقضی شده</small>
+                        </div>
+
                         <Button
-                          v-if="!notificationCharity.isExpired"
+                          v-else
                           :block="!$vuetify.breakpoint.mdAndUp"
                           dark
                           small
@@ -232,7 +236,7 @@ export default {
         await this.$store.dispatch("getNotificationsCharity");
         this.notificationsCharity = this.$store.state.responseData;
         this.notificationsCharity.forEach((notification) => {
-          notification.picture = "http://127.0.0.1:8000" + notification.picture
+          notification.picture = "http://127.0.0.1:8000" + notification.picture;
         });
         this.$store.commit("clearResponseData");
       } catch (error) {
@@ -286,6 +290,15 @@ export default {
         this.formData.expireDate = "";
         this.formData.description = "";
         this.formData.picture = null;
+
+        this.$store.commit("setSnackbar", true);
+        this.$store.commit(
+          "snackbarMessage",
+          `اخبار مهربانی جدید با موفقیت ایجاد شد.`
+        );
+        setTimeout(() => {
+          this.$store.commit("setSnackbar", false);
+        }, 3000);
       } catch (error) {
         console.error("Error during addNotification in component:", error);
       }

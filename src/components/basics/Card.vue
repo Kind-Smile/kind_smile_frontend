@@ -16,7 +16,11 @@
         :class="{ 'my-auto': !imageNewLine, 'mt-lg-5 mt-md-5': imageNewLine }"
         v-if="image"
       >
-        <v-img max-height="100px" :src="getImagePath(cardImage)" class="mr-3"></v-img>
+        <v-img
+          max-height="100px"
+          :src="getImagePath(cardImage)"
+          class="mr-3"
+        ></v-img>
       </v-col>
 
       <v-col
@@ -30,7 +34,15 @@
             imageNewLine,
         }"
       >
-        <v-card-title v-if="title" class="px-4 pb-3">
+        <v-card-title
+          v-if="title"
+          class="px-4 pb-3"
+          :class="{
+            'justify-center':
+              (this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm) &&
+              imageNewLine,
+          }"
+        >
           <slot name="cardTitle"></slot>
         </v-card-title>
 
@@ -82,10 +94,10 @@ export default {
 
   methods: {
     getImagePath(imagePath) {
-      if(this.localImage){
+      if (this.localImage) {
         return require(`@/assets/images/${imagePath}`);
-      }else{
-        return imagePath
+      } else {
+        return imagePath;
       }
     },
 

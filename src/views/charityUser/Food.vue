@@ -579,6 +579,16 @@ export default {
         this.formData.eventTime = "";
         this.formData.agent = "";
         this.formData.recreate = false;
+
+        this.$store.commit("setSnackbar", true);
+        this.$store.commit(
+          "snackbarMessage",
+          `سفره مهربانی جدید با موفقیت ایجاد شد.`
+        );
+        setTimeout(() => {
+          this.$store.commit("setSnackbar", false);
+        }, 3000);
+        
       } catch (error) {
         console.error("Error during add food in component:", error);
       }
