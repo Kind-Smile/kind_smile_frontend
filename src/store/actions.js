@@ -10,11 +10,11 @@ export default {
         password: data.password,
       })
       .then((response) => {
-        let data = response.data;
+        let responseMessage = response.data;
         commit("login", {
-          access: data.access,
-          role: data.role,
-          completeData: data,
+          access: responseMessage.access,
+          role: responseMessage.role,
+          completeData: responseMessage,
         });
       })
       .catch((error) => {
@@ -23,8 +23,29 @@ export default {
       });
   },
 
+  async getCharityList({ state, commit }) {
+    const config = {
+      headers: {
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .get(`${BASE_URL}auth/GetCharityList/`, config)
+      .then((response) => {
+        let responseMessage = response.data;
+        state.isLoading = false;
+        commit("setResponseData", responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error fetching getCharityList:", error.response.data);
+        throw error.response.data;
+      });
+  },
+
   async registerBenefactor({ commit }, { data }) {
     // console.log("I am in: action->register");
+    console.log(`action: ${typeof data.selectedRocommender}`)
     await axios
       .post(`${BASE_URL}auth/PersonRegister/`, {
         name: data.name,
@@ -32,12 +53,20 @@ export default {
         address: data.address,
         latitude: data.latitude,
         longitude: data.longitude,
+        recommender: data.selectedRocommender,
         password: data.password,
+        repeatPassword: data.confirmPassword,
       })
       .then((response) => {
-        let data = response.data;
-        commit("registerBenefactor", data.access);
-        console.log(`registerBenefactor successfully!`);
+        let responseMessage = response.data;
+        console.log(responseMessage)
+        commit("registerBenefactor", responseMessage.access);
+        commit("login", {
+          access: responseMessage.access,
+          role: responseMessage.role,
+          completeData: responseMessage,
+        });
+        console.log(`registerBenefactor and login successfully!`);
       })
       .catch((error) => {
         console.error("Error:", error.response.data);
@@ -100,6 +129,7 @@ export default {
     agentData.append("phoneNumber", data.phoneNumber);
     agentData.append("polygon", JSON.stringify(data.polygon));
     agentData.append("password", data.password);
+    agentData.append("repeatPassword", data.confirmPassword);
 
     await axios
       .post(`${BASE_URL}auth/AgentRegister/`, agentData, config)
@@ -109,10 +139,9 @@ export default {
         console.log(`registerAgent successfully!`);
       })
       .catch((error) => {
-        // console.log("in action error");
         // console.error("Error:", error);
         console.error("Error:", error.response.data);
-        // throw error.response.data;
+        throw error.response.data;
       });
   },
 
@@ -800,8 +829,8 @@ export default {
 
   /////////////////////////////////////////////////////////////////////////////////////////////
   //Agent
-  async agentChangePass({ state, commit }, { data }) {
-    // console.log("I am in: action->agentChangePass");
+  async changePass({ state, commit }, { data }) {
+    // console.log("I am in: action->changePass");
     console.log(data);
     const config = {
       headers: {

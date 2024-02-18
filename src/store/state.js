@@ -6,7 +6,7 @@ export default {
   benefactorLng: 0.0,
   benefactorLat: 0.0,
 
-  agentHasChangePass: false,
+  hasChangePass: false,
 
   benefactorUsers: [],
   charityUsers: [],

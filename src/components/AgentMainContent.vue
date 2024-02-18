@@ -109,7 +109,7 @@
           </Button>
         </v-form>
       </div>
-    </Dialog>
+    </Dialog>  
   </v-main>
 </template>
 
@@ -156,11 +156,11 @@ export default {
 
       try {
         this.alert = false;
-        await this.$store.dispatch("agentChangePass", { data });
-        this.$store.commit("updateAgentHasChangePass", true);
+        await this.$store.dispatch("changePass", { data });
+        this.$store.commit("updateHasChangePass", true);
         this.closeChangePassDialog();
       } catch (error) {
-        console.error("Error during agentChangePass in component:", error);
+        console.error("Error during changePass in component:", error);
         this.alert = true;
         this.alertMessage = error;
       }
@@ -174,7 +174,7 @@ export default {
   },
 
   created() {
-    this.hasChangePass = this.$store.state.agentHasChangePass;
+    this.hasChangePass = this.$store.state.hasChangePass;
   },
 };
 </script>

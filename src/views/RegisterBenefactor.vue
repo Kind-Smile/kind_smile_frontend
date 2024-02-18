@@ -3,6 +3,21 @@
     <AppBar></AppBar>
     <card-with-image class="my-3">
       <div slot="rightPart">
+        <v-alert
+          v-if="alert"
+          dense
+          :color="
+            this.$hexToRgba(this.$vuetify.theme.currentTheme.primary, 0.3)
+          "
+          type="error"
+          icon="mdi-alert-circle-outline"
+          border="left"
+          class="mb-1"
+        >
+          {{ this.alertMessage }}.
+        </v-alert>
+
+
         <v-toolbar class="elevation-0 ma-0">
           <v-toolbar-title class="mx-auto semi-larg"
             >ثبت‌نام نیکوکار مهربان</v-toolbar-title
@@ -40,6 +55,22 @@
                 disabled
                 class="mb-2"
               />
+            </v-col>
+
+            <v-col cols="12" sm="12" md="12" lg="12">
+              <label> معرفی شده توسط </label>
+              <v-autocomplete
+                outlined
+                v-model="formData.selectedRocommender"
+                :items="this.charityList"
+                hide-details
+                placeholder="معرف خود را انتخاب کنید"
+                class="ma-2"
+              >
+                <!-- item-text="name"
+                item-value="id"
+                @change="rocommenderSelectedName" -->
+              </v-autocomplete>
             </v-col>
 
             <v-col cols="12" sm="12" md="12" lg="12">
@@ -128,7 +159,23 @@
                 labelTag
                 labelText="رمز عبور"
                 placeholder="رمز عبور"
-                hint="حداقل 8 کاراکتر"
+                hint="حداقل 8 کاراکتر و دارای حداقل یک حرف"
+                class="mb-n2"
+              />
+              <!-- :rules="[rules.password]" -->
+            </v-col>
+
+            <v-col cols="12" sm="12" md="12" lg="12">
+              <Input
+                outlined
+                dense
+                name="confirmPassword"
+                type="password"
+                v-model.trim="formData.confirmPassword"
+                labelTag
+                labelText="تکرار رمز عبور"
+                placeholder="تکرار رمز عبور"
+                hint="رمز عبور را تکرار کنید"
                 class="mb-n2"
               />
               <!-- :rules="[rules.password]" -->
@@ -145,7 +192,8 @@
                   this.formData.name === '' ||
                   this.formData.phoneNumber === '' ||
                   this.formData.address === '' ||
-                  this.formData.password === ''
+                  this.formData.password === '' ||
+                  this.formData.confirmPassword === ''
                 "
               >
               </Button>
@@ -197,12 +245,19 @@ export default {
         address: this.$store.state.benefactor.address,
         latitude: this.$store.state.benefactor.latitude,
         longitude: this.$store.state.benefactor.longitude,
+        selectedRocommender: "",
         password: "",
+        confirmPassword: "",
       },
 
-      selectedState: "",
+      charityList: [],
+      selectedRocommender: "",
+      rocommender: "",
 
       coordinates: [51.420296, 35.732379],
+
+      alert: false,
+      alertMessage: "",
 
       rules: {
         required: (value) => {
@@ -220,6 +275,17 @@ export default {
   },
 
   methods: {
+    async getCharityList() {
+      try {
+        await this.$store.dispatch("getCharityList");
+        this.charityList = this.$store.state.responseData;
+        console.log(this.$store.state.responseData);
+        this.$store.commit("clearResponseData");
+      } catch (error) {
+        console.error("Error during getCharityList in component:", error);
+      }
+    },
+
     stateSelectedName() {
       const selectedStateObject = this.$store.state.states.find(
         (state) => state.id == this.formData.selectedState
@@ -234,6 +300,16 @@ export default {
       }
     },
 
+    // rocommenderSelectedName() {
+    //   const selectedRocommenderObject = this.charityList.find(
+    //     (state) => state.id == this.formData.selectedRocommender
+    //   );
+
+    //   if (selectedRocommenderObject) {
+    //     this.selectedRocommender = selectedRocommenderObject.name;
+    //   }
+    // },
+
     clickAddress() {
       localStorage.setItem("benefactorFormData", JSON.stringify(this.formData));
       this.$updateBenefactorProperty("isClickAddress", true);
@@ -241,15 +317,18 @@ export default {
 
     async onSubmit() {
       this.formData.selectedState = this.selectedState;
+      // this.formData.selectedRocommender = this.selectedRocommender;
       console.log(this.formData);
       const data = this.formData;
 
       try {
+        this.alert = false;
         await this.$store.dispatch("registerBenefactor", { data });
 
         localStorage.removeItem("benefactorFormData");
         this.$refs.benefactorForm.reset();
         this.formData.selectedState = "";
+        this.formData.selectedRocommender = "";
         this.$updateBenefactorProperty("isSetAddress", false);
         this.$updateBenefactorProperty("address", "");
         this.$updateBenefactorProperty("latitude", 0.0);
@@ -260,16 +339,17 @@ export default {
         this.$store.commit("setSnackbar", true);
         this.$store.commit(
           "snackbarMessage",
-          `ثبت نام شما با موفقیت انجام شد.`
+          `ثبت نام و ورود شما با موفقیت انجام شد.`
         );
         setTimeout(() => {
           this.$store.commit("setSnackbar", false);
         }, 3000);
 
-        router.push("/login");
+        router.push("/");
       } catch (error) {
+        this.alert = true;
+        this.alertMessage = error
         console.error("Error during benefactor register:", error);
-        // Handle error, show error message, etc.
       }
     },
   },
@@ -281,6 +361,7 @@ export default {
   },
 
   created() {
+    this.getCharityList();
     const formData = JSON.parse(localStorage.getItem("benefactorFormData"));
     const phone = JSON.parse(localStorage.getItem("verificatedPhoneNumber"));
     this.formData.phoneNumber = phone;
