@@ -293,6 +293,8 @@ export default {
           const lat = this.$store.state.benefactorLat;
           const lng = this.$store.state.benefactorLng;
 
+          const poly = { type: 'Polygon', coordinates: coordinatesArray }
+
           const isInside = turf.booleanPointInPolygon(
             [lng, lat],
             turf.polygon([coordinatesArray])

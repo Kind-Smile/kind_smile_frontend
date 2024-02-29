@@ -22,10 +22,6 @@ export default {
     }
   },
 
-  // updateVerificatedPhoneNumber(state, newPhoneNumber) {t
-  //   state.verificatedPhoneNumber = newPhoneNumber;
-  // },
-
   updateHasChangePass(state, newstate) {
     state.hasChangePass = newstate;
     localStorage.setItem("hasChangePass", newstate);
@@ -49,7 +45,6 @@ export default {
       }
 
       else  {
-        console.log(data.completeData.hasChangePass)
         state.hasChangePass = data.completeData.hasChangePass
         localStorage.setItem("hasChangePass", data.completeData.hasChangePass);
       }

@@ -33,6 +33,7 @@
                       "
                       :image="false"
                       :cardColor="getFoodCardColors(food.food)"
+                      :showBorder="showBorder[food.food.id]"
                     >
                       <div slot="cardText">
                         <div class="mb-1">
@@ -46,12 +47,28 @@
 
                         <div class="mb-1" v-if="food.food.collection > 0">
                           <p style="display: inline" class="ml-1">
-                            تعداد غذای جمع‌آوری شده تاکنون:
+                            تعداد غذای ثبت شده تاکنون:
                           </p>
                           <p style="display: inline">
                             <b>{{ food.food.collection }} پرس</b>
                           </p>
                         </div>
+
+                        <!-- <div class="mb-1" v-if="food.food.collection > 0">
+                          <v-icon
+                            :style="{
+                              color: $vuetify.theme.currentTheme.thirdColor,
+                            }"
+                            size="16"
+                            >mdi-check</v-icon
+                          >
+                          <p style="display: inline" class="ml-1">
+                            تعداد غذای جمع‌آوری شده تاکنون:
+                          </p>
+                          <p style="display: inline">
+                            <b>{{ food.food.collection }} پرس</b>
+                          </p>
+                        </div> -->
 
                         <div class="mb-1">
                           <p style="display: inline" class="ml-1">
@@ -258,6 +275,8 @@ export default {
       },
 
       donateFoodDialog: false,
+
+      showBorder: [],
     };
   },
 
@@ -290,6 +309,8 @@ export default {
           this.charityName = this.foodsList[0].food.charity.name;
         }
         this.$store.commit("clearResponseData");
+
+        this.showBorder = new Array(this.foodsList.length).fill(false);
       } catch (error) {
         console.error(
           "Error during getFoodsCharityForBenefactor in component:",
@@ -344,13 +365,22 @@ export default {
 
         food.isInside = isInside;
 
-        if (!isInside) {
+        if (!isInside || food.isExpired) {
           return this.$hexToRgba(this.$vuetify.theme.currentTheme.text, 0.15);
         }
 
-        if (food.isDone) {
+        if (food.isDone && food.isAllCollected) {
           return this.$hexToRgba(
             this.$vuetify.theme.currentTheme.thirdColor,
+            0.15
+          );
+        }
+
+        if (food.isDone || food.isAllCollected) {
+          this.showBorder[food.id] = true;
+
+          return this.$hexToRgba(
+            this.$vuetify.theme.currentTheme.primary,
             0.15
           );
         }

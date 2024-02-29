@@ -104,7 +104,7 @@
                               :class="{
                                 'text-lg-left': foodCharity.recreate,
                                 'text-md-left': foodCharity.recreate,
-                              }"
+                              }" class="ma-0"
                             >
                               <small>
                                 <a @click="openEditFoodDialog(foodCharity.id)">
@@ -114,6 +114,10 @@
                             </p>
                           </v-col>
                         </v-row>
+
+                        <small v-else style="display: block" class="gray mt-2 my-auto"
+                          >منقضی شده</small
+                        >
                       </div>
 
                       <v-row
@@ -588,7 +592,6 @@ export default {
         setTimeout(() => {
           this.$store.commit("setSnackbar", false);
         }, 3000);
-        
       } catch (error) {
         console.error("Error during add food in component:", error);
       }

@@ -4,7 +4,7 @@
     :dark="dark"
     class="rounded-lg pa-3"
     :elevation="elevation"
-    :class="{ 'on-hover': hover }"
+    :class="{ 'on-hover': hover, 'show-border': showBorder }"
   >
     <v-row no-gutters>
       <v-col
@@ -76,6 +76,9 @@ export default {
       type: Number,
       default: 0,
     },
+
+    showBorder: Boolean,
+
     cardImage: String,
     dark: Boolean,
 
@@ -113,3 +116,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.show-border {
+  border: 5px solid #299c63;
+}
+</style>

@@ -67,9 +67,6 @@
                 placeholder="معرف خود را انتخاب کنید"
                 class="ma-2"
               >
-                <!-- item-text="name"
-                item-value="id"
-                @change="rocommenderSelectedName" -->
               </v-autocomplete>
             </v-col>
 
@@ -300,16 +297,6 @@ export default {
       }
     },
 
-    // rocommenderSelectedName() {
-    //   const selectedRocommenderObject = this.charityList.find(
-    //     (state) => state.id == this.formData.selectedRocommender
-    //   );
-
-    //   if (selectedRocommenderObject) {
-    //     this.selectedRocommender = selectedRocommenderObject.name;
-    //   }
-    // },
-
     clickAddress() {
       localStorage.setItem("benefactorFormData", JSON.stringify(this.formData));
       this.$updateBenefactorProperty("isClickAddress", true);
@@ -317,7 +304,6 @@ export default {
 
     async onSubmit() {
       this.formData.selectedState = this.selectedState;
-      // this.formData.selectedRocommender = this.selectedRocommender;
       console.log(this.formData);
       const data = this.formData;
 
@@ -333,7 +319,6 @@ export default {
         this.$updateBenefactorProperty("address", "");
         this.$updateBenefactorProperty("latitude", 0.0);
         this.$updateBenefactorProperty("longitude", 0.0);
-        // this.$store.commit("updateVerificatedPhoneNumber", "");
         localStorage.removeItem("verificatedPhoneNumber");
 
         this.$store.commit("setSnackbar", true);
@@ -365,13 +350,11 @@ export default {
     const formData = JSON.parse(localStorage.getItem("benefactorFormData"));
     const phone = JSON.parse(localStorage.getItem("verificatedPhoneNumber"));
     this.formData.phoneNumber = phone;
-    // console.log(this.$store.state.verificatedPhoneNumber);
     if (formData) {
       this.formData = formData;
       this.formData.address = this.$store.state.benefactor.address;
       this.formData.latitude = this.$store.state.benefactor.latitude;
       this.formData.longitude = this.$store.state.benefactor.longitude;
-      // this.formData.phoneNumber = this.$store.state.verificatedPhoneNumber;
       if (this.formData.address == "") {
         this.formData.selectedState = "";
       }

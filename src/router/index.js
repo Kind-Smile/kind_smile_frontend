@@ -19,6 +19,7 @@ import CharityFood from "@/views/charityUser/Food.vue"
 import CharityMoney from "@/views/charityUser/Money.vue"
 import CharityClothes from "@/views/charityUser/Clothes.vue"
 import CharityNotifications from "@/views/charityUser/Notification.vue"
+import CharityEditProfile from "@/views/Profile.vue"
 
 //agent account
 import AgentFoods from "@/views/AgentUser/Food.vue"
@@ -159,6 +160,12 @@ const routes = [
     path: "/login",
     name: "login",
     component: Login,
+  },
+
+  {
+    path: "/profile",
+    name: "profile",
+    component: CharityEditProfile,
   },
 
   {

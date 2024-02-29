@@ -10,7 +10,7 @@
           <slot name="dialogText"></slot>
         </div>
 
-        <div slot="cardActions" class="close-button">
+        <div slot="cardActions" class="close-button" v-if="closeButton">
           <Button
             large
             icon
@@ -51,6 +51,11 @@ export default {
       required: true,
     },
     title: String,
+
+    closeButton: {
+      type: Boolean,
+      default: true,
+    },
   },
 
   data() {

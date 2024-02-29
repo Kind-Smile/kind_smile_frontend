@@ -253,7 +253,6 @@ export default {
       try {
         await this.$store.dispatch("foodCharities");
         this.charityList = this.$store.state.responseData;
-        // console.log(this.$store.state.responseData);
         this.$store.commit("clearResponseData");
       } catch (error) {
         console.error("Error during getFoodCharities in component:", error);
@@ -273,8 +272,8 @@ export default {
     getCharityCardColors() {
       return (charity) => {
         const agents = charity.agents;
-        
-        console.log(charity)
+
+        console.log(charity);
         for (const agent of agents) {
           const coordinatesArray = [];
 
@@ -289,16 +288,19 @@ export default {
           const lat = this.$store.state.benefactorLat;
           const lng = this.$store.state.benefactorLng;
 
+          // const poly = { type: "Polygon", coordinates: coordinatesArray };
+          const poly = turf.polygon([coordinatesArray]);
+
           const isInside = turf.booleanPointInPolygon(
-            [lng, lat],
-            turf.polygon([coordinatesArray])
+            turf.point([lng, lat]),
+            poly
           );
 
-          // console.log(`${charity.name} ${isInside}`);
+          console.log(
+            `${charity.name} is ${isInside}`
+          );
 
-          
           agent.isInside = isInside;
-          // console.log(this.charityList);
 
           if (agent.isInside) {
             charity.isInside = agent.isInside;

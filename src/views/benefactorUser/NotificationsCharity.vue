@@ -93,6 +93,7 @@ export default {
           id,
         });
         this.notificationsList = this.$store.state.responseData;
+        console.log(this.$store.state.responseData)
         if (this.notificationsList.length > 0) {
           this.charityName = this.notificationsList[0].charity.name;
         }

@@ -53,6 +53,7 @@
       :dialogOpen="changePassDialog"
       @update:dialogOpen="updateChangePassDialog"
       title="برای حفظ امنیت، در اولین ورود به سامانه باید رمز عبور خود را تغییر دهید."
+      :closeButton="false"
     >
       <div slot="dialogText">
         <v-alert
@@ -109,7 +110,7 @@
           </Button>
         </v-form>
       </div>
-    </Dialog>  
+    </Dialog>
   </v-main>
 </template>
 

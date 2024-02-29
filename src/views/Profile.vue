@@ -5,12 +5,43 @@
       <div slot="rightPart">
         <v-toolbar class="elevation-0 ma-0">
           <v-toolbar-title class="mx-auto semi-larg"
-            >ثبت‌نام خیریه</v-toolbar-title
+            >اطلاعات حساب کاربری</v-toolbar-title
           >
         </v-toolbar>
 
-        <v-form @submit.prevent="onSubmit" ref="charityForm">
+        <v-form @submit.prevent="onSubmit" ref="editProfileForm">
           <v-row class="mb-2 mt-4 justify-start">
+            <v-col cols="12" sm="12" md="12" lg="12">
+              <v-badge bottom overlap class="custom-badge">
+                <!-- d-flex justify-center -->
+                <v-icon slot="badge" style="z-index: 1" @click="changeLogo">
+                  mdi-account-edit
+                </v-icon>
+
+                <v-avatar
+                  size="80"
+                  style="border: 2px solid #312e2e3b"
+                  class="pa-12"
+                >
+                  <img :src="formData.logo" />
+                </v-avatar>
+              </v-badge>
+
+              <v-file-input
+                v-model="formData.newLogo"
+                :rules="rules.fileInput"
+                outlined
+                color="#ffcc66"
+                accept="image/png, image/jpeg, image/jpg"
+                placeholder="لوگوی خود را بارگذاری کنید"
+                prepend-icon=""
+                @change="handleLogoChange"
+                class="my-2"
+                hide-input
+                id="fileUpload"
+              ></v-file-input>
+            </v-col>
+
             <v-col cols="12" sm="12" md="12" lg="4">
               <Input
                 outlined
@@ -35,8 +66,8 @@
                 type="text"
                 v-model.trim="formData.boss"
                 labelTag
-                labelText="نام مدیر"
-                placeholder="نام مدیر"
+                labelText="نام مدیر عامل"
+                placeholder="نام مدیر عامل"
                 hide_details
                 class="mb-2 mx-2"
               />
@@ -55,6 +86,7 @@
                   placeholder="شماره تلفن"
                   hide_details
                   class="mb-2 mx-2"
+                  disabled
                 />
               </div>
             </v-col>
@@ -72,22 +104,6 @@
                 hide_details
                 class="mb-2 mx-2"
               />
-            </v-col>
-
-            <v-col cols="12" sm="12" md="12" lg="4">
-              <label> استان </label>
-              <v-autocomplete
-                outlined
-                v-model="formData.selectedState"
-                :items="this.$store.state.states"
-                item-text="name"
-                item-value="id"
-                hide-details
-                placeholder="استان خود را انتخاب کنید"
-                @change="stateSelectedName"
-                class="ma-2"
-              >
-              </v-autocomplete>
             </v-col>
 
             <v-col cols="12" sm="12" md="12" lg="4">
@@ -163,23 +179,9 @@
                 placeholder="شماره ثبت"
                 hide_details
                 class="mb-2 mx-2"
+                disabled
               />
             </v-col>
-
-            <v-col cols="12" sm="12" md="12" lg="4">
-              <label class="mr-3"> لوگوی خیریه </label>
-              <v-file-input
-                v-model="formData.logo"
-                :rules="rules.fileInput"
-                outlined
-                color="#ffcc66"
-                accept="image/png, image/jpeg, image/jpg"
-                placeholder="لوگوی خود را بارگذاری کنید"
-                prepend-icon="mdi-camera"
-                @change="handleLogoChange"
-                class="my-2"
-              ></v-file-input
-            ></v-col>
 
             <v-col lg="12" md="12" sm="12" cols="12">
               <v-row>
@@ -209,30 +211,31 @@
               </v-row>
             </v-col>
 
-            <v-col
-              cols="12"
-              sm="12"
-              md="12"
-              lg="4"
-              v-if="!this.$store.state.charity.isSetAddress"
-              class="ma-2 mr-0"
-            >
-              <router-link
-                :to="{
-                  path: '/map',
-                  query: { coordinates: this.coordinates },
-                }"
+            <!-- <v-col
+                cols="12"
+                sm="12"
+                md="12"
+                lg="4"
+                v-if="!this.$store.state.charity.isSetAddress"
+                class="ma-2 mr-0"
               >
-                <div
-                  @click="clickAddress"
-                  :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
+                <router-link
+                  :to="{
+                    path: '/map',
+                    query: { coordinates: this.coordinates },
+                  }"
                 >
-                  انتخاب آدرس خیریه از روی نقشه
-                </div>
-              </router-link>
-            </v-col>
+                  <div
+                    @click="clickAddress"
+                    :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
+                  >
+                    انتخاب آدرس خیریه از روی نقشه
+                  </div>
+                </router-link>
+              </v-col> -->
 
-            <v-col cols="12" sm="12" md="12" lg="12" v-else class="pa-0">
+            <!-- v-else -->
+            <v-col cols="12" sm="12" md="12" lg="12" class="pa-0">
               <v-col cols="12" sm="12" md="12" lg="12">
                 <Input
                   outlined
@@ -246,6 +249,7 @@
                   placeholder="آدرس"
                   hide_details
                   disabled
+                  ref="abcd"
                 />
               </v-col>
 
@@ -286,45 +290,32 @@
 
             <v-col cols="12" sm="12" md="12">
               <Button
-                input_value="ثبت نام"
+                input_value="ثبت تغییرات"
                 type="submit"
                 block
                 large
                 class="my-2"
-                :disabled="
-                  this.formData.name === '' ||
-                  this.formData.boss === '' ||
-                  this.formData.phoneNumber === '' ||
-                  this.formData.selectedState === '' ||
-                  this.formData.other === '' ||
-                  this.formData.officer === '' ||
-                  this.formData.officerPhone === '' ||
-                  this.formData.cardNumber === '' ||
-                  this.formData.code === '' ||
-                  this.formData.logo === '' ||
-                  this.formData.institute === '' ||
-                  this.formData.address === '' ||
-                  this.formData.password === ''
-                "
               >
+                <!-- :disabled="
+                    this.formData.name === '' ||
+                    this.formData.boss === '' ||
+                    this.formData.phoneNumber === '' ||
+                    this.formData.selectedState === '' ||
+                    this.formData.other === '' ||
+                    this.formData.officer === '' ||
+                    this.formData.officerPhone === '' ||
+                    this.formData.cardNumber === '' ||
+                    this.formData.code === '' ||
+                    this.formData.logo === '' ||
+                    this.formData.institute === '' ||
+                    this.formData.address === '' ||
+                    this.formData.password === ''
+                  " -->
               </Button>
             </v-col>
           </v-row>
         </v-form>
         <v-divider class="mt-1 mb-5"></v-divider>
-
-        <p class="ma-0 text-center text--secondary">
-          <small>حساب کاربری دارید؟</small>
-          <small>
-            <router-link
-              to="/login"
-              title="login"
-              :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
-            >
-              ورود
-            </router-link>
-          </small>
-        </p>
       </div>
     </card-with-image>
   </div>
@@ -349,18 +340,21 @@ export default {
 
   data() {
     return {
+      prevRoute: null,
+      showFileInput: true,
+
       formData: {
         name: "",
         boss: "",
         phoneNumber: "",
         correlation: "",
-        selectedState: "",
         other: "",
         officer: "",
         officerPhone: "",
         cardNumber: "",
         code: "",
         logo: null,
+        newLogo: null,
         institute: "",
         description: "",
         address: this.$store.state.charity.address,
@@ -368,8 +362,6 @@ export default {
         longitude: this.$store.state.charity.longitude,
         password: "",
       },
-
-      selectedState: "",
 
       coordinates: [51.420296, 35.732379],
 
@@ -404,20 +396,6 @@ export default {
   },
 
   methods: {
-    stateSelectedName() {
-      const selectedStateObject = this.$store.state.states.find(
-        (state) => state.id == this.formData.selectedState
-      );
-
-      if (selectedStateObject) {
-        this.selectedState = selectedStateObject.name;
-        if (!this.$store.state.charity.isSetAddress) {
-          this.coordinates[1] = selectedStateObject.latitude;
-          this.coordinates[0] = selectedStateObject.longitude;
-        }
-      }
-    },
-
     clickAddress() {
       this.$updateCharityProperty("isClickAddress", true);
     },
@@ -425,27 +403,59 @@ export default {
     handleLogoChange(event) {
       const file = event;
       if (file) {
-        this.formData.logo = file;
+        this.formData.newLogo = file;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.formData.logo = e.target.result;
+        };
+        reader.readAsDataURL(this.formData.newLogo);
+      }
+    },
+
+    changeLogo() {
+      let fileUpload = document.getElementById("fileUpload");
+      if (fileUpload != null) {
+        fileUpload.click();
       }
     },
 
     async onSubmit() {
-      this.formData.selectedState = this.selectedState;
       console.log(this.formData);
       const data = this.formData;
 
       try {
-        await this.$store.dispatch("registerCharity", { data });
+        await this.$store.dispatch("editProfile", { data });
 
-        localStorage.removeItem("charityFormData");
+        localStorage.removeItem("charityEditProfile");
         this.$updateCharityProperty("isSetAddress", false);
         this.$updateCharityProperty("address", "");
         this.$updateCharityProperty("latitude", 0.0);
         this.$updateCharityProperty("longitude", 0.0);
 
-        router.push("/login");
+        this.$store.commit("setSnackbar", true);
+        this.$store.commit("snackbarMessage", `تغییرات با موفقیت انجام شد.`);
+        setTimeout(() => {
+          this.$store.commit('setSnackbar', false);
+        }, 3000);
       } catch (error) {
         console.error("Error during charity register:", error);
+      }
+    },
+
+    async getCharityProfile() {
+      try {
+        await this.$store.dispatch("userProfile");
+        this.formData = this.$store.state.responseData;
+        console.log(this.formData);
+        this.$store.commit("clearResponseData");
+
+        this.coordinates[0] = this.formData.longitude;
+        this.coordinates[1] = this.formData.latitude;
+
+        this.$updateCharityProperty("isSetAddress", true);
+      } catch (error) {
+        console.error("Error during getCharityProfile in component:", error);
       }
     },
   },
@@ -457,31 +467,38 @@ export default {
   },
 
   mounted() {
-    const formData = JSON.parse(localStorage.getItem("charityFormData"));
-    if (formData) {
-      this.formData = formData;
-      this.formData.address = this.$store.state.charity.address;
-      this.formData.latitude = this.$store.state.charity.latitude;
-      this.formData.longitude = this.$store.state.charity.longitude;
-      if (this.formData.address == "") {
-        this.formData.selectedState = "";
-      }
-      this.stateSelectedName();
-    }
+    this.getCharityProfile();
 
-    if (this.$store.state.charity.isSetAddress) {
-      this.coordinates[0] = this.$store.state.charity.longitude;
-      this.coordinates[1] = this.$store.state.charity.latitude;
+    const path = this.prevRoute.path;
+    if (path.includes("map")) {
+      const formData = JSON.parse(localStorage.getItem("charityEditProfile"));
+      if (formData) {
+        this.formData = formData;
+        this.formData.address = this.$store.state.charity.address;
+        this.formData.latitude = this.$store.state.charity.latitude;
+        this.formData.longitude = this.$store.state.charity.longitude;
+      }
+
+      if (this.$store.state.charity.isSetAddress) {
+        this.coordinates[0] = this.$store.state.charity.longitude;
+        this.coordinates[1] = this.$store.state.charity.latitude;
+      }
     }
   },
 
   watch: {
     formData: {
       handler() {
-        localStorage.setItem("charityFormData", JSON.stringify(this.formData));
+        localStorage.setItem("charityEditProfile", JSON.stringify(this.formData));
       },
       deep: true,
     },
+  },
+
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.prevRoute = from;
+    });
   },
 };
 </script>

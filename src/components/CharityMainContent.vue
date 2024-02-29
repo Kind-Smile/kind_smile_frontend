@@ -253,6 +253,7 @@
       :dialogOpen="changePassDialog"
       @update:dialogOpen="updateChangePassDialog"
       title="برای حفظ امنیت، در اولین ورود به سامانه باید رمز عبور خود را تغییر دهید."
+      :closeButton="false"
     >
       <div slot="dialogText">
         <v-alert
@@ -380,7 +381,6 @@ export default {
       try {
         this.changePassAlert = false;
         await this.$store.dispatch("changePass", { data });
-        this.$store.commit("updateChangePass", true);
         this.closeChangePassDialog();
       } catch (error) {
         console.error("Error during changePass in component:", error);

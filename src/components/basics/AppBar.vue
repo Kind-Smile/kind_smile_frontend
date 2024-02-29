@@ -49,11 +49,11 @@
           >
         </router-link>
 
-        <!-- <router-link to="#" class="ml-3">
+        <router-link to="/profile" class="ml-3">
           <v-icon :color="$vuetify.theme.currentTheme.text" size="22"
             >mdi-account-outline</v-icon
           >
-        </router-link> -->
+        </router-link>
 
         <a>
           <div style="display: inline" @click="logoutHandler">
@@ -425,11 +425,6 @@ export default {
 
     async checkVerifycode() {
       console.log(`in appbar formData.phone ${this.formData.phoneNumber}`);
-      // this.$store.commit(
-      //   "updateVerificatedPhoneNumber",
-      //   this.formData.phoneNumber
-      // );
-      // console.log(this.$store.state.verificatedPhoneNumber);
       localStorage.setItem(
         "verificatedPhoneNumber",
         JSON.stringify(this.formData.phoneNumber)
@@ -438,7 +433,9 @@ export default {
       this.$store.dispatch("checkVerifycode", { data });
       if (this.$route.path !== "/register-benefactor") {
         router.push("/register-benefactor");
-      } else {
+      }if (this.$route.path === "/register-benefactor") {
+        router.go();
+      }else {
         this.closeDialogOpen();
       }
     },

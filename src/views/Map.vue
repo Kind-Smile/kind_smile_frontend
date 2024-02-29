@@ -161,7 +161,7 @@ export default {
   created() {
     console.log(`charity.isClickAddress ${this.$store.state.charity.isClickAddress}`)
     console.log(`benefactor.isClickAddress ${this.$store.state.benefactor.isClickAddress}`)
-
+    
     this.coordinates = this.$route.query.coordinates;
     this.disable = this.$route.query.disable;
     if (

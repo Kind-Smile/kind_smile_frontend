@@ -39,6 +39,7 @@
                       "
                       :image="false"
                       :cardColor="getClotheCardColors(clothe.clothes)"
+                      :showBorder="showBorder"
                     >
                       <div slot="cardText">
                         <div class="mb-1" v-if="clothe.clothes.collection > 0">
@@ -190,6 +191,8 @@ export default {
       },
 
       donateClotheDialog: false,
+
+      showBorder: false,
     };
   },
 
@@ -278,9 +281,17 @@ export default {
           return this.$hexToRgba(this.$vuetify.theme.currentTheme.text, 0.15);
         }
 
-        if (clothe.isDone) {
+        if (clothe.isDone && clothe.isAllCollected) {
           return this.$hexToRgba(
             this.$vuetify.theme.currentTheme.thirdColor,
+            0.15
+          );
+        }
+
+        if (clothe.isDone || clothe.isAllCollected) {
+          this.showBorder = true;
+          return this.$hexToRgba(
+            this.$vuetify.theme.currentTheme.primary,
             0.15
           );
         }
