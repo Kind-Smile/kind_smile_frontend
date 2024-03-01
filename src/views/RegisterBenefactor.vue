@@ -61,7 +61,7 @@
               <label> معرفی شده توسط </label>
               <v-autocomplete
                 outlined
-                v-model="formData.selectedRocommender"
+                v-model="formData.selectedRecommender"
                 :items="this.charityList"
                 hide-details
                 placeholder="معرف خود را انتخاب کنید"
@@ -242,14 +242,13 @@ export default {
         address: this.$store.state.benefactor.address,
         latitude: this.$store.state.benefactor.latitude,
         longitude: this.$store.state.benefactor.longitude,
-        selectedRocommender: "",
+        selectedRecommender: "",
         password: "",
         confirmPassword: "",
       },
 
       charityList: [],
-      selectedRocommender: "",
-      rocommender: "",
+      selectedRecommender: "",
 
       coordinates: [51.420296, 35.732379],
 
@@ -314,7 +313,7 @@ export default {
         localStorage.removeItem("benefactorFormData");
         this.$refs.benefactorForm.reset();
         this.formData.selectedState = "";
-        this.formData.selectedRocommender = "";
+        this.formData.selectedRecommender = "";
         this.$updateBenefactorProperty("isSetAddress", false);
         this.$updateBenefactorProperty("address", "");
         this.$updateBenefactorProperty("latitude", 0.0);

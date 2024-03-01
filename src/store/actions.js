@@ -45,7 +45,7 @@ export default {
 
   async registerBenefactor({ commit }, { data }) {
     // console.log("I am in: action->register");
-    console.log(`action: ${typeof data.selectedRocommender}`)
+    console.log(`action: ${typeof data.selectedRecommender}`);
     await axios
       .post(`${BASE_URL}auth/PersonRegister/`, {
         name: data.name,
@@ -53,13 +53,13 @@ export default {
         address: data.address,
         latitude: data.latitude,
         longitude: data.longitude,
-        recommender: data.selectedRocommender,
+        recommender: data.selectedRecommender,
         password: data.password,
         repeatPassword: data.confirmPassword,
       })
       .then((response) => {
         let responseMessage = response.data;
-        console.log(responseMessage)
+        console.log(responseMessage);
         commit("registerBenefactor", responseMessage.access);
         commit("login", {
           access: responseMessage.access,
@@ -163,6 +163,99 @@ export default {
       .catch((error) => {
         // console.error("Error fetching userProfile:", error);
         console.error("Error:", error.response.data);
+        throw error.response.data;
+      });
+  },
+
+  async editCharityProfile({ state }, { data }) {
+    // console.log("I am in: action->editCharityProfile");
+    const charityData = new FormData();
+
+    charityData.append("name", data.name);
+    charityData.append("boss", data.boss);
+    charityData.append("correlation", data.correlation);
+    charityData.append("other", data.other);
+    charityData.append("officer", data.officer);
+    charityData.append("officerPhone", data.officerPhone);
+    charityData.append("cardNumber", data.cardNumber);
+    charityData.append("institute", data.institute);
+    charityData.append("description", data.description);
+    charityData.append("latitude", data.latitude);
+    charityData.append("longitude", data.longitude);
+
+    if (data.newLogo) {
+      charityData.append("logo", data.newLogo);
+    }
+
+    console.log(`--------------- lat: ${data.latitude} +++++++ lng: ${data.longitude}`)
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    await axios
+      .put(`${BASE_URL}auth/editProfile/`, charityData, config)
+      .then((response) => {
+        let data = response.data;
+        console.log(`editCharityProfile successfully! this is response: ${data}`);
+      })
+      .catch((error) => {
+        // console.error("Error:", error);
+        console.error("Error editCharityProfile:", error.response.data);
+        throw error.response.data;
+      });
+  },
+
+  async editBenefactorProfile({ state }, { data }) {
+    // console.log("I am in: action->editBenefactorProfile");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .put(`${BASE_URL}auth/editProfile/`, {
+        name: data.name,
+        address: data.address,
+        latitude: data.latitude,
+        longitude: data.longitude,
+      }, config)
+      .then((response) => {
+        let data = response.data;
+        console.log(`editBenefactorProfile successfully! this is response: ${data}`);
+      })
+      .catch((error) => {
+        // console.error("Error:", error);
+        console.error("Error editBenefactorProfile:", error.response.data);
+        throw error.response.data;
+      });
+  },
+
+  async editAgentProfile({ state }, { data }) {
+    // console.log("I am in: action->editAgentProfile");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .put(`${BASE_URL}auth/editProfile/`, {
+        name: data.name,
+      }, config)
+      .then((response) => {
+        let data = response.data;
+        console.log(`editAgentProfile successfully! this is response: ${data}`);
+      })
+      .catch((error) => {
+        // console.error("Error:", error);
+        console.error("Error editAgentProfile:", error.response.data);
         throw error.response.data;
       });
   },

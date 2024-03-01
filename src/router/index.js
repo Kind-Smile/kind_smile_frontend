@@ -12,6 +12,7 @@ import ClotheCharities from "@/views/benefactorUser/ClotheCharities.vue"
 import ClothesCharity from "@/views/benefactorUser/ClothesCharity.vue"
 import NotificationCharities from "@/views/benefactorUser/NotificationCharities.vue";
 import NotificationsCharity from "@/views/benefactorUser/NotificationsCharity.vue"
+import UserEditProfile from "@/views/benefactorUser/Profile.vue"
 // /notifications-charity/${id}
 
 //charity account
@@ -19,13 +20,14 @@ import CharityFood from "@/views/charityUser/Food.vue"
 import CharityMoney from "@/views/charityUser/Money.vue"
 import CharityClothes from "@/views/charityUser/Clothes.vue"
 import CharityNotifications from "@/views/charityUser/Notification.vue"
-import CharityEditProfile from "@/views/Profile.vue"
+import CharityEditProfile from "@/views/charityUser/Profile.vue"
 
 //agent account
 import AgentFoods from "@/views/AgentUser/Food.vue"
 import FoodDonors from "@/views/AgentUser/FoodDonors.vue"
 import AgentClothe from "@/views/AgentUser/Clothe.vue"
 import ClotheDonors from "@/views/AgentUser/ClotheDonors.vue"
+import AgentEditProfile from "@/views/AgentUser/Profile.vue"
 
 import Map from "@/views/Map.vue";
 import Polygon from "@/views/Polygon.vue";
@@ -163,9 +165,21 @@ const routes = [
   },
 
   {
-    path: "/profile",
-    name: "profile",
+    path: "/charity-profile",
+    name: "charity-profile",
     component: CharityEditProfile,
+  },
+
+  {
+    path: "/agent-profile",
+    name: "agent-profile",
+    component: AgentEditProfile,
+  },
+
+  {
+    path: "/user-profile",
+    name: "user-profile",
+    component: UserEditProfile,
   },
 
   {

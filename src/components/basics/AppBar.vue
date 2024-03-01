@@ -49,11 +49,19 @@
           >
         </router-link>
 
-        <router-link to="/profile" class="ml-3">
+        <!-- <router-link to="/profile" class="ml-3">
           <v-icon :color="$vuetify.theme.currentTheme.text" size="22"
             >mdi-account-outline</v-icon
           >
-        </router-link>
+        </router-link> -->
+
+        <a>
+          <div style="display: inline" @click="profileHandler" class="ml-3">
+            <v-icon :color="$vuetify.theme.currentTheme.text" size="22"
+              >mdi-account-outline</v-icon
+            >
+          </div>
+        </a>
 
         <a>
           <div style="display: inline" @click="logoutHandler">
@@ -389,6 +397,16 @@ export default {
     },
     closeDialogOpen() {
       this.dialogOpen = false;
+    },
+
+    profileHandler(){
+      if (this.$store.state.role == 'User'){
+        router.push('/user-profile')
+      } else if (this.$store.state.role == 'Charity'){
+        router.push('/charity-profile')
+      } else{
+        router.push ('/agent-profile')
+      }
     },
 
     logoutHandler() {

@@ -12,7 +12,7 @@
         <v-form @submit.prevent="onSubmit" ref="editProfileForm">
           <v-row class="mb-2 mt-4 justify-start">
             <v-col cols="12" sm="12" md="12" lg="12">
-              <v-badge bottom overlap class="custom-badge">
+              <v-badge bottom overlap class="custom-badge" offset-x="25" offset-y="20">
                 <!-- d-flex justify-center -->
                 <v-icon slot="badge" style="z-index: 1" @click="changeLogo">
                   mdi-account-edit
@@ -249,7 +249,6 @@
                   placeholder="آدرس"
                   hide_details
                   disabled
-                  ref="abcd"
                 />
               </v-col>
 
@@ -272,7 +271,7 @@
               </v-col>
             </v-col>
 
-            <v-col cols="12" sm="12" md="12" lg="12">
+            <!-- <v-col cols="12" sm="12" md="12" lg="12">
               <Input
                 outlined
                 dense
@@ -285,8 +284,8 @@
                 hint="حداقل 8 کاراکتر"
                 class="mb-n2"
               />
-              <!-- :rules="[rules.password]" -->
-            </v-col>
+            </v-col> -->
+            <!-- :rules="[rules.password]" -->
 
             <v-col cols="12" sm="12" md="12">
               <Button
@@ -315,7 +314,6 @@
             </v-col>
           </v-row>
         </v-form>
-        <v-divider class="mt-1 mb-5"></v-divider>
       </div>
     </card-with-image>
   </div>
@@ -329,7 +327,7 @@ import AppBar from "@/components/basics/AppBar.vue";
 import router from "@/router";
 
 export default {
-  name: "RegisterCharity",
+  name: "CharityProfile",
 
   components: {
     CardWithImage,
@@ -421,11 +419,11 @@ export default {
     },
 
     async onSubmit() {
-      console.log(this.formData);
+      console.log(`in profile component: ${this.formData}`);
       const data = this.formData;
 
       try {
-        await this.$store.dispatch("editProfile", { data });
+        await this.$store.dispatch("editCharityProfile", { data });
 
         localStorage.removeItem("charityEditProfile");
         this.$updateCharityProperty("isSetAddress", false);
@@ -433,10 +431,12 @@ export default {
         this.$updateCharityProperty("latitude", 0.0);
         this.$updateCharityProperty("longitude", 0.0);
 
+        this.getCharityProfile();
+
         this.$store.commit("setSnackbar", true);
         this.$store.commit("snackbarMessage", `تغییرات با موفقیت انجام شد.`);
         setTimeout(() => {
-          this.$store.commit('setSnackbar', false);
+          this.$store.commit("setSnackbar", false);
         }, 3000);
       } catch (error) {
         console.error("Error during charity register:", error);
@@ -454,6 +454,24 @@ export default {
         this.coordinates[1] = this.formData.latitude;
 
         this.$updateCharityProperty("isSetAddress", true);
+
+        const path = this.prevRoute.path;
+        if (path.includes("map")) {
+          const formData = JSON.parse(
+            localStorage.getItem("charityEditProfile")
+          );
+          if (formData) {
+            this.formData = formData;
+            this.formData.address = this.$store.state.charity.address;
+            this.formData.latitude = this.$store.state.charity.latitude;
+            this.formData.longitude = this.$store.state.charity.longitude;
+          }
+
+          if (this.$store.state.charity.isSetAddress) {
+            this.coordinates[0] = this.$store.state.charity.longitude;
+            this.coordinates[1] = this.$store.state.charity.latitude;
+          }
+        }
       } catch (error) {
         console.error("Error during getCharityProfile in component:", error);
       }
@@ -468,28 +486,15 @@ export default {
 
   mounted() {
     this.getCharityProfile();
-
-    const path = this.prevRoute.path;
-    if (path.includes("map")) {
-      const formData = JSON.parse(localStorage.getItem("charityEditProfile"));
-      if (formData) {
-        this.formData = formData;
-        this.formData.address = this.$store.state.charity.address;
-        this.formData.latitude = this.$store.state.charity.latitude;
-        this.formData.longitude = this.$store.state.charity.longitude;
-      }
-
-      if (this.$store.state.charity.isSetAddress) {
-        this.coordinates[0] = this.$store.state.charity.longitude;
-        this.coordinates[1] = this.$store.state.charity.latitude;
-      }
-    }
   },
 
   watch: {
     formData: {
       handler() {
-        localStorage.setItem("charityEditProfile", JSON.stringify(this.formData));
+        localStorage.setItem(
+          "charityEditProfile",
+          JSON.stringify(this.formData)
+        );
       },
       deep: true,
     },

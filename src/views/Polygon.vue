@@ -17,7 +17,7 @@
       ></mapMarker>
     </mapir>
 
-    <div class="point-panel ml-2">
+    <div class="point-panel ml-2" v-if="!this.$route.query.disable">
       <Button
         input_value="اضافه کردن نقطه جدید"
         v-if="isAllowToAddPoints"
@@ -107,19 +107,21 @@ export default {
 
   methods: {
     mapOnClick(e) {
-      if (this.isAllowToAddPoints) {
+      if (!this.$route.query.disable) {
         const newPoint = [e.actualEvent.lngLat.lng, e.actualEvent.lngLat.lat];
         this.addPointToMap(newPoint);
       }
     },
 
     onMarkerDragEnd(index, e) {
-      const updatedPoint = [
-        e.actualEvent.target._lngLat.lng,
-        e.actualEvent.target._lngLat.lat,
-      ];
-      this.points.splice(index, 1, updatedPoint);
-      this.updatePolygonGeoJson();
+      if (!this.$route.query.disable) {
+        const updatedPoint = [
+          e.actualEvent.target._lngLat.lng,
+          e.actualEvent.target._lngLat.lat,
+        ];
+        this.points.splice(index, 1, updatedPoint);
+        this.updatePolygonGeoJson();
+      }
     },
 
     addPoint() {
