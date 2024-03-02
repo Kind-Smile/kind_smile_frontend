@@ -174,6 +174,16 @@ export default {
         this.alert = false;
         await this.$store.dispatch("changePass", { data });
         this.$store.commit("updateHasChangePass", true);
+
+        this.$store.commit("setSnackbar", true);
+        this.$store.commit(
+          "snackbarMessage",
+          `تغییر رمز عبور با موفقیت انجام شد.`
+        );
+        setTimeout(() => {
+          this.$store.commit("setSnackbar", false);
+        }, 3000);
+
         this.closeChangePassDialog();
       } catch (error) {
         console.error("Error during changePass in component:", error);

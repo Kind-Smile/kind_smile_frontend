@@ -54,7 +54,7 @@
                           </p>
                         </div>
 
-                        <!-- <div class="mb-1" v-if="food.food.collection > 0">
+                        <div class="mb-1" v-if="food.food.numberOfAllCollected > 0">
                           <v-icon
                             :style="{
                               color: $vuetify.theme.currentTheme.thirdColor,
@@ -66,9 +66,9 @@
                             تعداد غذای جمع‌آوری شده تاکنون:
                           </p>
                           <p style="display: inline">
-                            <b>{{ food.food.collection }} پرس</b>
+                            <b>{{ food.food.numberOfAllCollected }} پرس</b>
                           </p>
-                        </div> -->
+                        </div>
 
                         <div class="mb-1">
                           <p style="display: inline" class="ml-1">

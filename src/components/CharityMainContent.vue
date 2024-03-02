@@ -43,7 +43,7 @@
                   :style="{ color: $vuetify.theme.currentTheme.primary }"
                   class="bold pt-1"
                 >
-                هدیه مهربانی
+                  هدیه مهربانی
                 </div>
               </Card>
             </div>
@@ -147,8 +147,8 @@
             type="text"
             v-model.trim="formData.name"
             labelTag
-            labelText="نام و نام خانوادگی"
-            placeholder="نام و نام خانوادگی"
+            labelText="نام و نام خانوادگی سفیر"
+            placeholder="نام و نام خانوادگی سفیر"
             hide_details
             class="mb-2"
           />
@@ -160,8 +160,8 @@
             type="number"
             v-model.trim="formData.phoneNumber"
             labelTag
-            labelText="تلفن همراه"
-            placeholder="تلفن همراه"
+            labelText="تلفن همراه سفیر"
+            placeholder="تلفن همراه سفیر"
             hide_details
             class="mb-3"
           />
@@ -398,6 +398,16 @@ export default {
         this.changePassAlert = false;
         this.$store.commit("updateHasChangePass", true);
         await this.$store.dispatch("changePass", { data });
+
+        this.$store.commit("setSnackbar", true);
+        this.$store.commit(
+          "snackbarMessage",
+          `تغییر رمز عبور با موفقیت انجام شد.`
+        );
+        setTimeout(() => {
+          this.$store.commit("setSnackbar", false);
+        }, 3000);
+
         this.closeChangePassDialog();
       } catch (error) {
         console.error("Error during changePass in component:", error);
@@ -462,6 +472,15 @@ export default {
         this.$updateAgentProperty("isSetPolygon", false);
         this.$updateAgentProperty("polygonPoints", []);
 
+        this.$store.commit("setSnackbar", true);
+        this.$store.commit(
+          "snackbarMessage",
+          `اطلاعات سفیر جدید با موفقیت ثبت شد.`
+        );
+        setTimeout(() => {
+          this.$store.commit("setSnackbar", false);
+        }, 3000);
+
         this.closeRegisterAgentDialog();
       } catch (error) {
         console.error("Error during benefactor register:", error);
@@ -473,7 +492,7 @@ export default {
 
   created() {
     this.hasChangePass = this.$store.state.hasChangePass;
-    console.log(this.$store.state.hasChangePass)
+    console.log(this.$store.state.hasChangePass);
 
     if (this.$store.state.agent.isClickPolygon) {
       this.registerAgentDialog = true;

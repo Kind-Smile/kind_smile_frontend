@@ -297,16 +297,16 @@
                   this.formData.phoneNumber === '' ||
                   this.formData.selectedState === '' ||
                   this.formData.other === '' ||
-                  this.formData.officer === '' ||
-                  this.formData.officerPhone === '' ||
                   this.formData.cardNumber === '' ||
                   this.formData.code === '' ||
                   this.formData.logo === '' ||
-                  this.formData.institute === '' ||
                   this.formData.address === '' ||
                   this.formData.password === ''
                 "
               >
+                  <!-- this.formData.officer === '' ||
+                  this.formData.officerPhone === '' ||
+                  this.formData.institute === '' || -->
               </Button>
             </v-col>
           </v-row>

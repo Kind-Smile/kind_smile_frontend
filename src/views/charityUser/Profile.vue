@@ -50,7 +50,10 @@
 
             <v-col cols="12" sm="12" md="6" lg="6">
               <a class="ml-3" @click="openAddAgentDialogInProfile">
-                <small :style="{ color: $vuetify.theme.currentTheme.thirdColor }">افزودن نماینده جدید</small>
+                <small
+                  :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
+                  >افزودن نماینده جدید</small
+                >
               </a>
             </v-col>
 
@@ -646,7 +649,10 @@ export default {
     },
 
     clickPolygon() {
-      localStorage.setItem("addAgentFormData", JSON.stringify(this.addAgentFormData));
+      localStorage.setItem(
+        "addAgentFormData",
+        JSON.stringify(this.addAgentFormData)
+      );
       this.$updateAgentProperty("isClickPolygon", true);
     },
 
@@ -662,6 +668,15 @@ export default {
         this.$updateAgentProperty("isClickPolygon", false);
         this.$updateAgentProperty("isSetPolygon", false);
         this.$updateAgentProperty("polygonPoints", []);
+
+        this.$store.commit("setSnackbar", true);
+        this.$store.commit(
+          "snackbarMessage",
+          `اطلاعات سفیر جدید با موفقیت ثبت شد.`
+        );
+        setTimeout(() => {
+          this.$store.commit("setSnackbar", false);
+        }, 3000);
 
         this.closeAddAgentDialogInProfile();
       } catch (error) {
