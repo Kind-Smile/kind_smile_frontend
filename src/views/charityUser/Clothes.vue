@@ -293,7 +293,7 @@
               v-model="formData.agent"
               :items="this.$store.state.charityAgentList"
               item-text="name"
-              item-value="id"
+              item-value="id" 
               hide-details
               placeholder="سفیر مهربانی خود را انتخاب کنید"
               class="ma-2"

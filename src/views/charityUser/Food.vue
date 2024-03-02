@@ -46,10 +46,22 @@
 
                         <div class="mb-1" v-if="foodCharity.collection > 0">
                           <p style="display: inline" class="ml-1">
-                            تعداد مشارکت ثبت‌شده:
+                            تعدادغذای ثبت‌شده:
                           </p>
                           <p style="display: inline">
                             <b>{{ foodCharity.collection }} پرس</b>
+                          </p>
+                        </div>
+
+                        <div
+                          class="mb-1"
+                          v-if="foodCharity.numberOfAllCollected > 0"
+                        >
+                          <p style="display: inline" class="ml-1">
+                            تعداد غذای جمع‌آوری شده:
+                          </p>
+                          <p style="display: inline">
+                            <b>{{ foodCharity.numberOfAllCollected }} پرس</b>
                           </p>
                         </div>
 
@@ -104,7 +116,8 @@
                               :class="{
                                 'text-lg-left': foodCharity.recreate,
                                 'text-md-left': foodCharity.recreate,
-                              }" class="ma-0"
+                              }"
+                              class="ma-0"
                             >
                               <small>
                                 <a @click="openEditFoodDialog(foodCharity.id)">
@@ -115,7 +128,10 @@
                           </v-col>
                         </v-row>
 
-                        <small v-else style="display: block" class="gray mt-2 my-auto"
+                        <small
+                          v-else
+                          style="display: block"
+                          class="gray mt-2 my-auto"
                           >منقضی شده</small
                         >
                       </div>
