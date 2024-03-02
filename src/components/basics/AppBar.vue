@@ -153,17 +153,6 @@
               class="mb-3"
             />
 
-            <!-- <Button
-              input_value="تایید"
-              type="button"
-              block
-              large
-              class="mb-3 mt-7"
-              @click="checkVerifycode"
-              :disabled="formData.verifycode === ''"
-            >
-            </Button> -->
-
             <v-row no-gutters class="justify-space-between mb-3 mt-7">
               <v-col lg="5" md="12" sm="12" cols="12">
                 <Button
@@ -211,105 +200,6 @@
         </v-col>
       </v-row> -->
     </v-app-bar>
-
-    <!-- <Dialog
-      :dialogOpen="registerAgentDialog"
-      @update:dialogOpen="updateRegisterAgentDialog"
-      title="برای ثبت نماینده جدید، اطلاعات زیر را تکمیل نمایید:"
-    >
-      <v-form @submit.prevent="onSubmit" slot="dialogText" class="mb-n4">
-        <Input
-          outlined
-          dense
-          name="name"
-          type="text"
-          v-model.trim="agentFormData.name"
-          labelTag
-          labelText="نام و نام خانوادگی"
-          placeholder="نام و نام خانوادگی"
-          hide_details
-          class="mb-2"
-        />
-
-        <Input
-          outlined
-          dense
-          name="phoneNumber"
-          type="number"
-          v-model.trim="agentFormData.phoneNumber"
-          labelTag
-          labelText="تلفن همراه"
-          placeholder="تلفن همراه"
-          hide_details
-          class="mb-3"
-        />
-
-        <Input
-          outlined
-          dense
-          name="password"
-          type="password"
-          v-model.trim="agentFormData.password"
-          labelTag
-          labelText="رمز عبور"
-          placeholder="رمز عبور"
-          hide_details
-          class="mb-7"
-        />
-
-        <router-link
-          v-if="!this.$store.state.agent.isSetPolygon"
-          to="/polygon"
-          :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
-          class="ma-2 mr-0"
-        >
-          <div
-            @click="clickPolygon"
-            :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
-          >
-            انتخاب محدوده تحت پوشش سفیر مهربانی از روی نقشه
-          </div>
-        </router-link>
-
-        <router-link
-          v-else
-          to="/polygon"
-          :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
-          style="font-size: 0.8rem"
-          class="mb-2"
-          ><div
-            @click="clickPolygon"
-            :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
-          >
-            برای نمایش یا تغییر محدوده تحت پوشش سفیر مهربانی اینجا کلیک کنید.
-          </div>
-        </router-link>
-
-        <div class="my-5">
-          <small
-            :style="{ color: $vuetify.theme.currentTheme.primary }"
-            class="bold"
-            >توجه داشته باشید بایستی رمز عبور مشخص شده در این قسمت را در اختیار
-            سفیر خود با شماره تلفن فوق بگذارید.</small
-          >
-        </div>
-
-        <Button
-          input_value="ثبت‌نام"
-          type="submit"
-          block
-          large
-          class="mb-3 mt-5"
-          :disabled="
-            this.agentFormData.name === '' ||
-            this.agentFormData.phoneNumber === '' ||
-            this.agentFormData.polygon.length === 0 ||
-            this.agentFormData.password === ''
-          "
-        >
-        </Button>
-      </v-form>
-    </Dialog> -->
   </v-card>
 </template>
 
@@ -334,12 +224,7 @@ export default {
     return {
       message: `hello1`,
       dialogOpen: false,
-      // agentFormData: {
-      //   name: "",
-      //   phoneNumber: "",
-      //   polygon: this.$store.state.agent.polygonPoints,
-      //   password: "",
-      // },
+
       formData: {
         phoneNumber: "",
         verifycode: "",
@@ -347,7 +232,6 @@ export default {
       isSendVerifycode: false,
       alert: false,
       alertMessage: "",
-      // registerAgentDialog: false,
     };
   },
 
@@ -355,39 +239,6 @@ export default {
     closeSnackbar() {
       this.$store.commit("setSnackbar", false);
     },
-
-    // openRegisterAgentDialog() {
-    //   this.addAgentDialog = !this.addAgentDialog;
-    //   this.registerAgentDialog = !this.registerAgentDialog;
-    // },
-    // updateRegisterAgentDialog(newVal) {
-    //   this.registerAgentDialog = newVal;
-    // },
-    // closeRegisterAgentDialog() {
-    //   this.registerAgentDialog = false;
-    // },
-    // clickPolygon() {
-    //   localStorage.setItem("agentFormData", JSON.stringify(this.formData));
-    //   this.$updateAgentProperty("isClickPolygon", true);
-    // },
-    // async onSubmit() {
-    //   console.log(this.formData);
-    //   const data = this.formData;
-
-    //   try {
-    //     await this.$store.dispatch("registerAgent", { data });
-
-    //     localStorage.removeItem("agentFormData");
-    //     this.$updateAgentProperty("isClickPolygon", false);
-    //     this.$updateAgentProperty("isSetPolygon", false);
-    //     this.$updateAgentProperty("polygonPoints", []);
-
-    //     this.closeRegisterAgentDialog();
-    //   } catch (error) {
-    //     console.error("Error during benefactor register:", error);
-    //     // Handle error, show error message, etc.
-    //   }
-    // },
 
     openDialog() {
       this.dialogOpen = !this.dialogOpen;

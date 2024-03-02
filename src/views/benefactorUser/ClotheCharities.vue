@@ -24,7 +24,7 @@
                 :style="{ color: $vuetify.theme.currentTheme.primary }"
                 class="bold"
               >
-                پوشاک مهربانی
+              هدیه مهربانی
               </div>
 
               <v-row slot="cardText">
@@ -101,7 +101,7 @@
                           :block="!$vuetify.breakpoint.mdAndUp"
                           dark
                           :color="$vuetify.theme.currentTheme.primary"
-                          input_value="مشاهده پوشاک مهربانی"
+                          input_value="مشاهده هدیه مهربانی"
                           @click="seeClothesCharity(charity.id)"
                         ></Button>
                       </v-row>
@@ -113,7 +113,7 @@
 
             <div v-else>
               <p>
-                در حال حاضر هیچ خیریه‌ای دارای پوشاک مهربانی موجود نمی‌باشد.
+                در حال حاضر هیچ خیریه‌ای دارای هدیه مهربانی موجود نمی‌باشد.
               </p>
               <router-link to="/">بازگشت به صفحه اصلی</router-link>
             </div>

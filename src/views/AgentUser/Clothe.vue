@@ -12,7 +12,7 @@
 
         <v-row v-else>
           <div v-if="this.clothesList.length == 0" class="pa-5">
-            <h6>پوشاک مهربانی‌ای برای شما موجود نیست.</h6>
+            <h6>هدیه مهربانی‌ای برای شما موجود نیست.</h6>
           </div>
 
           <v-col lg="12" md="12" sm="12" cols="12" v-else>
@@ -22,7 +22,7 @@
                 :style="{ color: $vuetify.theme.currentTheme.primary }"
                 class="bold"
               >
-                پوشاک مهربانی
+              هدیه مهربانی
               </div>
 
               <v-row slot="cardText">
@@ -63,7 +63,7 @@
 
                         <div class="mb-1" v-if="clothe.numCollected > 0">
                           <p style="display: inline" class="ml-1">
-                            تعداد پوشاک جمع‌آوری شده تاکنون:
+                            تعداد هدیه ثبت شده تاکنون:
                           </p>
                           <p style="display: inline">
                             <b>{{ clothe.numCollected }} نفر</b>

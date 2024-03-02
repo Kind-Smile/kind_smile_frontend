@@ -13,7 +13,7 @@
         <v-row v-else class="pa-5">
           <div v-if="isFinished">
             <h6>
-              دریافت پوشاک از تمام نیکوکاران مهربان به پایان رسید. با تشکر از
+              دریافت هدیه از تمام نیکوکاران مهربان به پایان رسید. با تشکر از
               زحمات شما
             </h6>
             <router-link to="/clothes-agent">بازگشت به صفحه قبل</router-link>
@@ -26,7 +26,7 @@
                 :style="{ color: $vuetify.theme.currentTheme.primary }"
                 class="bold"
               >
-                پوشاک مهربانی
+              هدیه مهربانی
               </div>
 
               <v-row slot="cardText">

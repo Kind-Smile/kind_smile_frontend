@@ -149,7 +149,7 @@
         <Dialog
           :dialogOpen="donateClotheDialog"
           @update:dialogOpen="updateDonateClotheDialog"
-          title="آیا از ثبت مشارکت در این پوشاک مهربانی اطمینان دارید؟"
+          title="آیا از ثبت مشارکت در این هدیه مهربانی اطمینان دارید؟"
         >
           <Button
             slot="dialogText"

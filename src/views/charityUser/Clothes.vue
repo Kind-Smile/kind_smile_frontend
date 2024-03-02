@@ -22,7 +22,7 @@
                 :style="{ color: $vuetify.theme.currentTheme.primary }"
                 class="bold"
               >
-                پوشاک مهربانی
+              هدیه مهربانی
               </div>
 
               <v-row slot="cardText">
@@ -77,7 +77,7 @@
                               :style="{
                                 color: $vuetify.theme.currentTheme.thirdColor,
                               }"
-                              >این پوشاک مهربانی برای یک ماه آینده تمدید خواهد
+                              >این هدیه مهربانی برای یک ماه آینده تمدید خواهد
                               شد.</small
                             >
                           </v-col>
@@ -137,8 +137,8 @@
             </Card>
 
             <div v-else>
-              <p>در حال حاضر هیچ پوشاک مهربانی توسط شما ثبت نشده است.</p>
-              <a @click="addClothes">اضافه کردن پوشاک مهربانی جدید</a>
+              <p>در حال حاضر هیچ هدیه مهربانی توسط شما ثبت نشده است.</p>
+              <a @click="addClothes">اضافه کردن هدیه مهربانی جدید</a>
             </div>
           </v-col>
         </v-row>
@@ -162,7 +162,7 @@
         <Dialog
           :dialogOpen="editClotheDialog"
           @update:dialogOpen="updateEditClotheDialog"
-          title="ویرایش مشخصات پوشاک مهربانی"
+          title="ویرایش مشخصات هدیه مهربانی"
         >
           <v-form @submit.prevent="onEdit" slot="dialogText" class="mb-n4">
             <div class="mb-5">
@@ -200,7 +200,7 @@
 
             <v-checkbox
               v-model.trim="editedFormData.recreate"
-              label="پوشاک را برای یک ماه آینده تمدید کن."
+              label="هدیه را برای یک ماه آینده تمدید کن."
               :color="$vuetify.theme.currentTheme.thirdColor"
               hide-details
               class="mb-5"
@@ -210,7 +210,7 @@
               <small
                 :style="{ color: $vuetify.theme.currentTheme.primary }"
                 class="bold"
-                >به دلیل ثبت مشارکت برای این پوشاک، تنها امکان ویرایش تمدید آن
+                >به دلیل ثبت مشارکت برای این هدیه، تنها امکان ویرایش تمدید آن
                 وجود دارد و سایر موارد قابل ویرایش نیست.</small
               >
             </div>
@@ -267,7 +267,7 @@
         <Dialog
           :dialogOpen="addClothesDialog"
           @update:dialogOpen="updateaddClothesDialog"
-          title="برای ثبت پوشاک مهربانی جدید اطلاعات زیر را تکمیل نمایید:"
+          title="برای ثبت هدیه مهربانی جدید اطلاعات زیر را تکمیل نمایید:"
         >
           <v-form @submit.prevent="onSubmit" slot="dialogText" class="mb-n4">
             <div class="mb-5">
@@ -302,7 +302,7 @@
 
             <v-checkbox
               v-model.trim="formData.recreate"
-              label="پوشاک را برای یک ماه آینده تمدید کن."
+              label="هدیه را برای یک ماه آینده تمدید کن."
               :color="$vuetify.theme.currentTheme.thirdColor"
               hide-details
               class="mb-5"
@@ -313,7 +313,7 @@
                 :style="{ color: $vuetify.theme.currentTheme.primary }"
                 class="bold"
                 >توجه داشته باشید تنها قبل از ثبت مشارکت نیکوکاران مهربان قادر
-                به حذف یا ویرایش این پوشاک خواهید بود.</small
+                به حذف یا ویرایش این هدیه خواهید بود.</small
               >
             </div>
 
@@ -509,7 +509,7 @@ export default {
         this.$store.commit("setSnackbar", true);
         this.$store.commit(
           "snackbarMessage",
-          `پوشاک مهربانی جدید با موفقیت ایجاد شد.`
+          `هدیه مهربانی جدید با موفقیت ایجاد شد.`
         );
         setTimeout(() => {
           this.$store.commit("setSnackbar", false);

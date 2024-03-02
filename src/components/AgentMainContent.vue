@@ -40,7 +40,7 @@
                 :style="{ color: $vuetify.theme.currentTheme.primary }"
                 class="bold pt-1"
               >
-                پوشاک مهربانی
+                هدیه مهربانی
               </div>
             </Card>
           </v-hover>

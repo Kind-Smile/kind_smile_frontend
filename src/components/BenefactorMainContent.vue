@@ -46,11 +46,11 @@
                 :style="{ color: $vuetify.theme.currentTheme.primary }"
                 class="bold"
               >
-                پوشاک مهربانی
+              هدیه مهربانی
               </div>
 
               <div slot="cardText" class="textColor">
-                شما می‌توانید با ثبت لباس‌های مناسب خود، در تامین پوشاک چندین
+                شما می‌توانید با ثبت اجناس مناسب خود، در تامین هدیه چندین
                 نیازمند سهیم شوید.
               </div>
             </Card>
