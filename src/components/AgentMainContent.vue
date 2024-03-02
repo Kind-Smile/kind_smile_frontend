@@ -96,6 +96,19 @@
             class="mb-n2"
           />
 
+          <Input
+            outlined
+            dense
+            name="password"
+            type="password"
+            v-model.trim="formData.confirmNewPassword"
+            labelTag
+            labelText="تکرار رمز عبور جدید"
+            placeholder="تکرار رمز عبور جدید"
+            hint="رمز عبور جدید را تکرار کنید"
+            class="mb-n2"
+          />
+
           <Button
             input_value="تغییر رمز"
             type="submit"
@@ -104,7 +117,8 @@
             class="mb-3 mt-5"
             :disabled="
               this.formData.oldPassword === '' ||
-              this.formData.newPassword === ''
+              this.formData.newPassword === '' ||
+              this.formData.confirmNewPassword === ''
             "
           >
           </Button>
@@ -130,6 +144,7 @@ export default {
       formData: {
         oldPassword: "",
         newPassword: "",
+        confirmNewPassword: "",
       },
       alert: false,
       alertMessage: "",

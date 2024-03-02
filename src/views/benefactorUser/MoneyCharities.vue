@@ -24,7 +24,7 @@
                 :style="{ color: $vuetify.theme.currentTheme.primary }"
                 class="bold"
               >
-                هدیه مهربانی
+              پویش مهربانی
               </div>
 
               <v-row slot="cardText">
@@ -81,7 +81,7 @@
                           :block="!$vuetify.breakpoint.mdAndUp"
                           dark
                           :color="$vuetify.theme.currentTheme.primary"
-                          input_value="مشاهده هدیه‌های مهربانی"
+                          input_value="مشاهده پویش‌های مهربانی"
                           @click="seeMoniesCharity(charity.id)"
                         ></Button>
                       </v-row>
@@ -92,7 +92,7 @@
             </Card>
 
             <div v-else>
-              <p>در حال حاضر هیچ خیریه‌ای دارای هدیه مهربانی موجود نمی‌باشد.</p>
+              <p>در حال حاضر هیچ خیریه‌ای دارای پویش مهربانی موجود نمی‌باشد.</p>
               <router-link to="/">بازگشت به صفحه اصلی</router-link>
             </div>
           </v-col>

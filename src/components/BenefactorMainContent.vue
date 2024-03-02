@@ -75,7 +75,7 @@
                 :style="{ color: $vuetify.theme.currentTheme.primary }"
                 class="bold"
               >
-                هدیه مهربانی
+                پویش مهربانی
               </div>
 
               <div slot="cardText" class="textColor">

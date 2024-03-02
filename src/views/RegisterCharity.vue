@@ -349,6 +349,8 @@ export default {
 
   data() {
     return {
+      prevRoute: null,
+
       formData: {
         name: "",
         boss: "",
@@ -457,21 +459,25 @@ export default {
   },
 
   mounted() {
-    const formData = JSON.parse(localStorage.getItem("charityFormData"));
-    if (formData) {
-      this.formData = formData;
-      this.formData.address = this.$store.state.charity.address;
-      this.formData.latitude = this.$store.state.charity.latitude;
-      this.formData.longitude = this.$store.state.charity.longitude;
-      if (this.formData.address == "") {
-        this.formData.selectedState = "";
+    const path = this.prevRoute.path;
+    if (path.includes("map")) {
+      const formData = JSON.parse(localStorage.getItem("charityFormData"));
+      console.log(`----------------------- ${JSON.stringify(formData)}`);
+      if (formData) {
+        this.formData = formData;
+        this.formData.address = this.$store.state.charity.address;
+        this.formData.latitude = this.$store.state.charity.latitude;
+        this.formData.longitude = this.$store.state.charity.longitude;
+        if (this.formData.address == "") {
+          this.formData.selectedState = "";
+        }
+        this.stateSelectedName();
       }
-      this.stateSelectedName();
-    }
 
-    if (this.$store.state.charity.isSetAddress) {
-      this.coordinates[0] = this.$store.state.charity.longitude;
-      this.coordinates[1] = this.$store.state.charity.latitude;
+      if (this.$store.state.charity.isSetAddress) {
+        this.coordinates[0] = this.$store.state.charity.longitude;
+        this.coordinates[1] = this.$store.state.charity.latitude;
+      }
     }
   },
 
@@ -482,6 +488,12 @@ export default {
       },
       deep: true,
     },
+  },
+
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.prevRoute = from;
+    });
   },
 };
 </script>

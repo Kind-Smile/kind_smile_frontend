@@ -67,7 +67,7 @@
                 :style="{ color: $vuetify.theme.currentTheme.primary }"
                 class="bold pt-1"
               >
-                هدیه مهربانی
+                پویش مهربانی
               </div>
             </Card>
           </v-hover>
@@ -216,9 +216,10 @@
               @click="clickPolygon"
               :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
             >
-              محدوده مکانی مورد نظر شما انتخاب شده است. برای نمایش یا تغییر محدوده تحت پوشش سفیر مهربانی اینجا کلیک کنید.
+              محدوده مکانی مورد نظر شما انتخاب شده است. برای نمایش یا تغییر
+              محدوده تحت پوشش سفیر مهربانی اینجا کلیک کنید.
             </div>
-          </router-link> 
+          </router-link>
 
           <div class="my-5">
             <small
@@ -296,6 +297,19 @@
             class="mb-n2"
           />
 
+          <Input
+            outlined
+            dense
+            name="password"
+            type="password"
+            v-model.trim="changePassFormData.confirmNewPassword"
+            labelTag
+            labelText="تکرار رمز عبور جدید"
+            placeholder="تکرار رمز عبور جدید"
+            hint="رمز عبور جدید را تکرار کنید"
+            class="mb-n2"
+          />
+
           <Button
             input_value="تغییر رمز"
             type="submit"
@@ -304,7 +318,8 @@
             class="mb-3 mt-5"
             :disabled="
               this.changePassFormData.oldPassword === '' ||
-              this.changePassFormData.newPassword === ''
+              this.changePassFormData.newPassword === '' ||
+              this.changePassFormData.confirmNewPassword === ''
             "
           >
           </Button>
@@ -345,6 +360,7 @@ export default {
       changePassFormData: {
         oldPassword: "",
         newPassword: "",
+        confirmNewPassword: "",
       },
 
       addAgentDialog: false,
@@ -380,6 +396,7 @@ export default {
 
       try {
         this.changePassAlert = false;
+        this.$store.commit("updateHasChangePass", true);
         await this.$store.dispatch("changePass", { data });
         this.closeChangePassDialog();
       } catch (error) {
@@ -456,6 +473,7 @@ export default {
 
   created() {
     this.hasChangePass = this.$store.state.hasChangePass;
+    console.log(this.$store.state.hasChangePass)
 
     if (this.$store.state.agent.isClickPolygon) {
       this.registerAgentDialog = true;

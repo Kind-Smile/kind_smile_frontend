@@ -22,7 +22,7 @@
                 :style="{ color: $vuetify.theme.currentTheme.primary }"
                 class="bold"
               >
-                هدیه مهربانی
+              پویش مهربانی
               </div>
 
               <v-row slot="cardText">
@@ -126,8 +126,8 @@
             </Card>
 
             <div v-else>
-              <p>در حال حاضر هیچ هدیه مهربانی توسط شما ثبت نشده است.</p>
-              <a @click="addMoney">اضافه کردن هدیه مهربانی جدید</a>
+              <p>در حال حاضر هیچ پویش مهربانی توسط شما ثبت نشده است.</p>
+              <a @click="addMoney">اضافه کردن پویش مهربانی جدید</a>
             </div>
           </v-col>
         </v-row>
@@ -194,7 +194,7 @@
         <Dialog
           :dialogOpen="addMoneyDialog"
           @update:dialogOpen="updateAddMoneyDialog"
-          title="برای ثبت هدیه مهربانی جدید اطلاعات زیر را تکمیل نمایید:"
+          title="برای ثبت پویش مهربانی جدید اطلاعات زیر را تکمیل نمایید:"
         >
           <v-form
             @submit.prevent="onSubmit"
@@ -209,8 +209,8 @@
               type="text"
               v-model="formData.name"
               labelTag
-              labelText="نام هدیه نقدی"
-              placeholder="نام هدیه نقدی را وارد نمایید"
+              labelText="نام پویش نقدی"
+              placeholder="نام پویش نقدی را وارد نمایید"
               hide_details
               class="mb-5"
             />
@@ -295,7 +295,7 @@ export default {
       moniesCharity: [],
       benefactorList: [],
 
-      benefactorListMessage: "هنوز مشارکتی برای این هدیه ثبت نشده است.",
+      benefactorListMessage: "هنوز مشارکتی برای این پویش ثبت نشده است.",
 
       addMoneyDialog: false,
       benefactorListDialog: false,
@@ -337,9 +337,9 @@ export default {
       await this.getBenefactorList(id);
       if (this.benefactorList.length != 0) {
         this.benefactorListMessage =
-          "افراد زیر در این هدیه مهربانی مشارکت داشته‌اند:";
+          "افراد زیر در این پویش مهربانی مشارکت داشته‌اند:";
       } else {
-        this.benefactorListMessage = "هنوز مشارکتی برای این هدیه ثبت نشده است.";
+        this.benefactorListMessage = "هنوز مشارکتی برای این پویش ثبت نشده است.";
       }
     },
     updateBenefactorListDialog(newVal) {
@@ -390,7 +390,7 @@ export default {
         this.$store.commit("setSnackbar", true);
         this.$store.commit(
           "snackbarMessage",
-          `هدیه مهربانی جدید با موفقیت ایجاد شد.`
+          `پویش مهربانی جدید با موفقیت ایجاد شد.`
         );
         setTimeout(() => {
           this.$store.commit("setSnackbar", false);

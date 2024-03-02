@@ -72,6 +72,7 @@ export default {
     const role = localStorage.getItem("role");
 
     if (token) {
+      console.log(token)
       state.isAuthenticated = true;
       state.token = token;
       state.role = role;
@@ -102,6 +103,11 @@ export default {
 
   registerAgent(state, data) {
     state.charityAgentList.push(data);
+  },
+
+  updateHasChangePass(state, newstate) {
+    state.hasChangePass = newstate;
+    localStorage.setItem("hasChangePass", newstate);
   },
 
   setSnackbar(state, newVal){

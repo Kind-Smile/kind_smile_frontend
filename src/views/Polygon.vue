@@ -127,11 +127,13 @@ export default {
     addPoint() {
       const newPoint = [...this.coordinates];
       this.addPointToMap(newPoint);
+      console.log(newPoint)
     },
 
     addPointToMap(point) {
       this.points.push(point);
       this.updatePolygonGeoJson();
+      console.log(point)
     },
 
     removeLastPoint() {

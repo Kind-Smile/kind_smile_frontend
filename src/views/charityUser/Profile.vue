@@ -11,8 +11,14 @@
 
         <v-form @submit.prevent="onSubmit" ref="editProfileForm">
           <v-row class="mb-2 mt-4 justify-start">
-            <v-col cols="12" sm="12" md="12" lg="12">
-              <v-badge bottom overlap class="custom-badge" offset-x="25" offset-y="20">
+            <v-col cols="12" sm="12" md="6" lg="6">
+              <v-badge
+                bottom
+                overlap
+                class="custom-badge"
+                offset-x="25"
+                offset-y="20"
+              >
                 <!-- d-flex justify-center -->
                 <v-icon slot="badge" style="z-index: 1" @click="changeLogo">
                   mdi-account-edit
@@ -40,6 +46,12 @@
                 hide-input
                 id="fileUpload"
               ></v-file-input>
+            </v-col>
+
+            <v-col cols="12" sm="12" md="6" lg="6">
+              <a class="ml-3" @click="openAddAgentDialogInProfile">
+                <small :style="{ color: $vuetify.theme.currentTheme.thirdColor }">افزودن نماینده جدید</small>
+              </a>
             </v-col>
 
             <v-col cols="12" sm="12" md="12" lg="4">
@@ -316,6 +328,136 @@
         </v-form>
       </div>
     </card-with-image>
+
+    <Dialog
+      :dialogOpen="addAgentInProfileDialog"
+      @update:dialogOpen="updatAddAgentDialogInProfile"
+      title="برای ثبت نماینده جدید، اطلاعات زیر را تکمیل نمایید:"
+    >
+      <div slot="dialogText">
+        <v-alert
+          v-if="registerAlert"
+          dense
+          :color="
+            this.$hexToRgba(this.$vuetify.theme.currentTheme.primary, 0.3)
+          "
+          type="error"
+          icon="mdi-alert-circle-outline"
+          border="left"
+          class="mb-1"
+        >
+          {{ registerAlertMessage }}
+        </v-alert>
+
+        <v-form @submit.prevent="onSubmitAddAgent" class="mb-n4">
+          <Input
+            outlined
+            dense
+            name="name"
+            type="text"
+            v-model.trim="addAgentFormData.name"
+            labelTag
+            labelText="نام و نام خانوادگی سفیر"
+            placeholder="نام و نام خانوادگی سفیر"
+            hide_details
+            class="mb-2"
+          />
+
+          <Input
+            outlined
+            dense
+            name="phoneNumber"
+            type="number"
+            v-model.trim="addAgentFormData.phoneNumber"
+            labelTag
+            labelText="تلفن همراه سفیر"
+            placeholder="تلفن همراه سفیر"
+            hide_details
+            class="mb-3"
+          />
+
+          <Input
+            outlined
+            dense
+            name="password"
+            type="password"
+            v-model.trim="addAgentFormData.password"
+            labelTag
+            labelText="رمز عبور"
+            placeholder="رمز عبور"
+            hide_details
+            class="mb-3"
+          />
+
+          <Input
+            outlined
+            dense
+            name="confirmPassword"
+            type="password"
+            v-model.trim="addAgentFormData.confirmPassword"
+            labelTag
+            labelText="تکرار رمز عبور"
+            placeholder="تکرار رمز عبور"
+            hide_details
+            class="mb-7"
+          />
+
+          <router-link
+            v-if="!this.$store.state.agent.isSetPolygon"
+            to="/polygon"
+            :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
+            class="ma-2 mr-0"
+          >
+            <div
+              @click="clickPolygon"
+              :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
+            >
+              انتخاب محدوده تحت پوشش سفیر مهربانی از روی نقشه
+            </div>
+          </router-link>
+
+          <router-link
+            v-else
+            to="/polygon"
+            :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
+            style="font-size: 0.8rem"
+            class="mb-2"
+            ><div
+              @click="clickPolygon"
+              :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
+            >
+              محدوده مکانی مورد نظر شما انتخاب شده است. برای نمایش یا تغییر
+              محدوده تحت پوشش سفیر مهربانی اینجا کلیک کنید.
+            </div>
+          </router-link>
+
+          <div class="my-5">
+            <small
+              :style="{ color: $vuetify.theme.currentTheme.primary }"
+              class="bold"
+              >توجه داشته باشید بایستی رمز عبور مشخص شده در این قسمت را در
+              اختیار سفیر خود با شماره تلفن فوق بگذارید.</small
+            >
+          </div>
+
+          <Button
+            input_value="ثبت‌نام"
+            type="submit"
+            block
+            large
+            class="mb-3 mt-5"
+            :disabled="
+              this.addAgentFormData.name === '' ||
+              this.addAgentFormData.phoneNumber === '' ||
+              this.addAgentFormData.polygon.length === 0 ||
+              this.addAgentFormData.password === '' ||
+              this.addAgentFormData.confirmPassword === ''
+            "
+          >
+          </Button>
+        </v-form>
+      </div>
+    </Dialog>
   </div>
 </template>
 
@@ -324,6 +466,7 @@ import CardWithImage from "@/components/basics/CardWithImage.vue";
 import Button from "@/components/basics/Button.vue";
 import Input from "@/components/basics/Input.vue";
 import AppBar from "@/components/basics/AppBar.vue";
+import Dialog from "@/components/basics/Dialog.vue";
 import router from "@/router";
 
 export default {
@@ -334,6 +477,7 @@ export default {
     Button,
     Input,
     AppBar,
+    Dialog,
   },
 
   data() {
@@ -390,6 +534,20 @@ export default {
           },
         ],
       },
+
+      //add agent
+      addAgentInProfileDialog: false,
+
+      addAgentFormData: {
+        name: "",
+        phoneNumber: "",
+        polygon: this.$store.state.agent.polygonPoints,
+        password: "",
+        confirmPassword: "",
+      },
+
+      registerAlert: false,
+      registerAlertMessage: "",
     };
   },
 
@@ -476,6 +634,42 @@ export default {
         console.error("Error during getCharityProfile in component:", error);
       }
     },
+
+    openAddAgentDialogInProfile() {
+      this.addAgentInProfileDialog = !this.addAgentInProfileDialog;
+    },
+    updatAddAgentDialogInProfile(newVal) {
+      this.addAgentInProfileDialog = newVal;
+    },
+    closeAddAgentDialogInProfile() {
+      this.addAgentInProfileDialog = false;
+    },
+
+    clickPolygon() {
+      localStorage.setItem("addAgentFormData", JSON.stringify(this.addAgentFormData));
+      this.$updateAgentProperty("isClickPolygon", true);
+    },
+
+    async onSubmitAddAgent() {
+      console.log(this.addAgentFormData);
+      const data = this.addAgentFormData;
+
+      try {
+        this.registerAlert = false;
+        await this.$store.dispatch("registerAgent", { data });
+
+        localStorage.removeItem("addAgentFormData");
+        this.$updateAgentProperty("isClickPolygon", false);
+        this.$updateAgentProperty("isSetPolygon", false);
+        this.$updateAgentProperty("polygonPoints", []);
+
+        this.closeAddAgentDialogInProfile();
+      } catch (error) {
+        console.error("Error during agent register:", error);
+        this.registerAlert = true;
+        this.registerAlertMessage = error;
+      }
+    },
   },
 
   computed: {
@@ -486,6 +680,15 @@ export default {
 
   mounted() {
     this.getCharityProfile();
+
+    if (this.$store.state.agent.isClickPolygon) {
+      this.addAgentInProfileDialog = true;
+      const formData = JSON.parse(localStorage.getItem("addAgentFormData"));
+      if (formData) {
+        this.addAgentFormData = formData;
+        this.addAgentFormData.polygon = this.$store.state.agent.polygonPoints;
+      }
+    }
   },
 
   watch: {

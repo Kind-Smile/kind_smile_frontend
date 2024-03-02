@@ -99,11 +99,11 @@
           </a>
         </div>
 
-        <div>
+        <!-- <div>
           <router-link class="ml-3" to="/register-charity">
             <small>ثبت‌نام خیریه</small>
           </router-link>
-        </div>
+        </div> -->
       </div>
 
       <Dialog

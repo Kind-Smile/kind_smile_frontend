@@ -93,6 +93,7 @@ export default {
     charityData.append("description", data.description);
     charityData.append("latitude", data.latitude);
     charityData.append("longitude", data.longitude);
+    charityData.append("address", data.address);
     charityData.append("password", data.password);
 
     if (data.logo) {
@@ -938,6 +939,7 @@ export default {
         {
           old_password: data.oldPassword,
           new_password: data.newPassword,
+          repeatPassword: data.confirmNewPassword
         },
         config
       )

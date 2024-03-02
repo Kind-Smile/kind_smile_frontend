@@ -98,7 +98,7 @@ export default {
           this.charityName = this.notificationsList[0].charity.name;
         }
         this.notificationsList.forEach((notification) => {
-          notification.picture = "http://127.0.0.1:8000" + notification.picture;
+          notification.picture = notification.picture;
         });
         this.$store.commit("clearResponseData");
       } catch (error) {
