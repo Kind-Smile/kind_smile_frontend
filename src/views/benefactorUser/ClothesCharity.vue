@@ -217,7 +217,7 @@ export default {
     },
 
     async getClothesCharity() {
-      const id = this.id;
+      const id = this.id; 
       try {
         await this.$store.dispatch("getClothesCharityForBenefactor", { id });
         this.clothesList = this.$store.state.responseData;

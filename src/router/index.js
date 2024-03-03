@@ -37,6 +37,10 @@ import RegisterBenefactor from "@/views/RegisterBenefactor.vue";
 import RegisterCharity from "@/views/RegisterCharity.vue";
 import ForgetPassword from "@/views/ForgetPasswordView.vue";
 
+//admin
+import ViewCharities from "@/views/Admin/ViewCharities.vue"
+import ViewBenefactors from "@/views/Admin/ViewBenefactors.vue"
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -199,6 +203,20 @@ const routes = [
     name: "forget-password",
     component: ForgetPassword,
   },
+
+  //admin
+  {
+    path: "/viewCharities",
+    name: "ViewCharities",
+    component: ViewCharities,
+  },
+
+  {
+    path: "/viewBenefactors",
+    name: "ViewBenefactors",
+    component: ViewBenefactors,
+  },
+
 ];
 
 const router = new VueRouter({

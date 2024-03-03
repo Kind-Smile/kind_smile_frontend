@@ -1215,4 +1215,70 @@ export default {
         throw error.response.data;
       });
   },
+
+  //admin!!!!!!!!
+  async showEventsOfCharityToAdmin({ state, commit }, { id }) {
+    const config = {
+      params: { id: id },
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .get(`${BASE_URL}auth/showEventsOfCharityToAdmin`, config)
+      .then((response) => {
+        let responseMessage = response.data;
+        commit("setResponseData", responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error getClothesCharityForBenefactor:", error.response.data);
+        throw error.response.data;
+      });
+  },
+
+  async showCharitiesToAdmin({ state, commit }) {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .get(`${BASE_URL}auth/showCharitiesToAdmin/`, config)
+      .then((response) => {
+        let responseMessage = response.data;
+        state.isLoading = false;
+        commit("setResponseData", responseMessage);
+      })
+      .catch((error) => {
+        // console.error("Error fetching clotheCharities:", error);
+        console.error("Error showCharitiesToAdmin:", error.response.data);
+        throw error.response.data;
+      });
+  },
+
+  async showPersonsToAdmin({ state, commit }) {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .get(`${BASE_URL}auth/showPersonsToAdmin/`, config)
+      .then((response) => {
+        let responseMessage = response.data;
+        state.isLoading = false;
+        commit("setResponseData", responseMessage);
+      })
+      .catch((error) => {
+        // console.error("Error fetching clotheCharities:", error);
+        console.error("Error showPersonsToAdmin:", error.response.data);
+        throw error.response.data;
+      });
+  },
 };

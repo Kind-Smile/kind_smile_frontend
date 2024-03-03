@@ -176,6 +176,8 @@ export default {
         password: "",
       },
 
+      submitForm: false,
+
       coordinates: [51.420296, 35.732379],
 
       rules: {
@@ -214,8 +216,8 @@ export default {
         localStorage.removeItem("benefactorEditProfile");
         this.$updateBenefactorProperty("isSetAddress", false);
         this.$updateBenefactorProperty("address", "");
-        this.$updateBenefactorProperty("latitude", 0.0);
-        this.$updateBenefactorProperty("longitude", 0.0);
+
+        this.submitForm = true
 
         this.getBenefactorProfile();
 
@@ -243,16 +245,12 @@ export default {
 
         const path = this.prevRoute.path;
         if (path.includes("map")) {
-          console.log(`************** ${this.$store.state.benefactor.address}`);
           const formData = JSON.parse(
             localStorage.getItem("benefactorEditProfile")
           );
           if (formData) {
             this.formData = formData;
             this.formData.address = this.$store.state.benefactor.address;
-            console.log(
-              `////////////////////// ${this.$store.state.benefactor.address}`
-            );
             this.formData.latitude = this.$store.state.benefactor.latitude;
             this.formData.longitude = this.$store.state.benefactor.longitude;
           }
@@ -261,6 +259,12 @@ export default {
             this.coordinates[0] = this.$store.state.benefactor.longitude;
             this.coordinates[1] = this.$store.state.benefactor.latitude;
           }
+        } if (this.submitForm) {
+          this.$updateBenefactorProperty("address", this.formData.address);
+          this.$updateBenefactorProperty("latitude", this.coordinates[1]);
+          this.$updateBenefactorProperty("longitude", this.coordinates[0]);
+          
+          this.submitForm = false
         }
       } catch (error) {
         console.error("Error during getBenefactorProfile in component:", error);
