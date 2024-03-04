@@ -63,21 +63,19 @@
           </div>
         </a>
 
-        <a>
-          <div style="display: inline" @click="logoutHandler">
-            <v-icon :color="$vuetify.theme.currentTheme.text" size="22"
-              >mdi-logout-variant</v-icon
-            >
-          </div>
-        </a>
+        <div style="display: inline">
+          <router-link class="ml-3" to="/guide">
+            <small>راهنمای کار با سامانه</small>
+          </router-link>
+        </div>
 
-        <!-- <a
-          class="mr-3"
-          @click="openRegisterAgentDialog"
-          v-if="this.$store.state.role == 'Charity'"
-        >
-          <small>ثبت‌ نماینده جدید</small>
-        </a> -->
+        <a>
+            <div style="display: inline" @click="logoutHandler">
+              <v-icon :color="$vuetify.theme.currentTheme.text" size="22"
+                >mdi-logout-variant</v-icon
+              >
+            </div>
+          </a>
       </div>
 
       <div v-else class="pt-3 mr-2 d-flex justify-between">
@@ -97,6 +95,12 @@
           <a class="ml-3" @click="openDialog">
             <small>ثبت‌نام</small>
           </a>
+        </div>
+
+        <div>
+          <router-link class="ml-3" to="/guide">
+            <small>راهنمای کار با سامانه</small>
+          </router-link>
         </div>
 
         <!-- <div>
@@ -250,13 +254,13 @@ export default {
       this.dialogOpen = false;
     },
 
-    profileHandler(){
-      if (this.$store.state.role == 'User'){
-        router.push('/user-profile')
-      } else if (this.$store.state.role == 'Charity'){
-        router.push('/charity-profile')
-      } else{
-        router.push ('/agent-profile')
+    profileHandler() {
+      if (this.$store.state.role == "User") {
+        router.push("/user-profile");
+      } else if (this.$store.state.role == "Charity") {
+        router.push("/charity-profile");
+      } else {
+        router.push("/agent-profile");
       }
     },
 
@@ -302,9 +306,10 @@ export default {
       this.$store.dispatch("checkVerifycode", { data });
       if (this.$route.path !== "/register-benefactor") {
         router.push("/register-benefactor");
-      }if (this.$route.path === "/register-benefactor") {
+      }
+      if (this.$route.path === "/register-benefactor") {
         router.go();
-      }else {
+      } else {
         this.closeDialogOpen();
       }
     },

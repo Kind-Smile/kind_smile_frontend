@@ -36,6 +36,7 @@ import Login from "@/views/LoginView.vue";
 import RegisterBenefactor from "@/views/RegisterBenefactor.vue";
 import RegisterCharity from "@/views/RegisterCharity.vue";
 import ForgetPassword from "@/views/ForgetPasswordView.vue";
+import Guide from "@/views/Guide.vue";
 
 //admin
 import ViewCharities from "@/views/Admin/ViewCharities.vue"
@@ -166,6 +167,12 @@ const routes = [
     path: "/login",
     name: "login",
     component: Login,
+  },
+
+  {
+    path: "/guide",
+    name: "guide",
+    component: Guide,
   },
 
   {
