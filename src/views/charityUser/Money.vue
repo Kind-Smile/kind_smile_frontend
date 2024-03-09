@@ -22,7 +22,7 @@
                 :style="{ color: $vuetify.theme.currentTheme.primary }"
                 class="bold"
               >
-              پویش مهربانی
+                پویش مهربانی
               </div>
 
               <v-row slot="cardText">
@@ -185,6 +185,20 @@
                       >
                     </p>
                   </div>
+
+                  <a
+                    :style="{
+                      color: $vuetify.theme.currentTheme.thirdColor,
+                    }"
+                    @click="
+                      openReceiptDialog(
+                        donor.receipt_image,
+                        donor.receipt_text,
+                        donor.user.name
+                      )
+                    "
+                    >مشاهده رسید واریز</a
+                  >
                 </div>
               </Card>
             </v-col>
@@ -267,6 +281,17 @@
             </Button>
           </v-form>
         </Dialog>
+
+        <Dialog
+          :dialogOpen="receiptDialog"
+          @update:dialogOpen="updateReceiptDialog"
+          :title="donerName"
+        >
+          <div slot="dialogText" class="mb-n4">
+            <v-img :src="receiptImage" v-if="receiptText == null" />
+            <p v-html="receiptText"></p>
+          </div>
+        </Dialog>
       </v-main>
     </div>
   </div>
@@ -299,6 +324,11 @@ export default {
 
       addMoneyDialog: false,
       benefactorListDialog: false,
+
+      receiptDialog: false,
+      receiptImage: null,
+      receiptText: "",
+      donerName: "",
 
       formData: {
         name: "",
@@ -349,6 +379,19 @@ export default {
       this.benefactorListDialog = false;
     },
 
+    //handle receiptDialog
+    openReceiptDialog(image, text, name) {
+      this.receiptDialog = !this.receiptDialog;
+      this.receiptImage = image;
+      this.receiptText = text;
+      this.donerName = "نام نیکوکار: " + name;
+      console.log(this.receiptText == null);
+      console.log(image);
+    },
+    updateReceiptDialog(newVal) {
+      this.receiptDialog = newVal;
+    },
+
     async getBenefactorList(id) {
       try {
         await this.$store.dispatch("moneyDonorsList", { id });
@@ -395,7 +438,6 @@ export default {
         setTimeout(() => {
           this.$store.commit("setSnackbar", false);
         }, 3000);
-
       } catch (error) {
         console.error("Error during add Money in component:", error);
       }
