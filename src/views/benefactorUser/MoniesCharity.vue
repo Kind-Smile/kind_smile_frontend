@@ -113,7 +113,7 @@
 
                         <div v-if="money.money_collect != null">
                           <v-divider class="my-3"></v-divider>
-                          <div class="mb-1">
+                          <div class="mb-2">
                             <p style="display: inline" class="ml-1">
                               میزان مشارکت شما:
                             </p>
@@ -127,7 +127,15 @@
                             </p>
                           </div>
 
-                          <div class="mt-3 mb-1">
+                          <a
+                            :style="{
+                              color: $vuetify.theme.currentTheme.thirdColor,
+                            }"
+                          @click="openReceiptDialog(money.receipt_image, money.receipt_text)"
+                            >مشاهده رسید واریز</a
+                          >
+
+                          <div class="mt-4 mb-1">
                             <p
                               style="display: inline"
                               :style="{
@@ -209,6 +217,7 @@
                 hide-details
                 clear-icon="mdi-close"
                 v-model="formData.receiptText"
+                @input="handleInput"
                 class="my-3"
               ></v-textarea>
 
@@ -241,6 +250,17 @@
             </v-form>
           </div>
         </Dialog>
+
+        <Dialog
+          :dialogOpen="receiptDialog"
+          @update:dialogOpen="updateReceiptDialog"
+          title="رسید واریز شما:"
+        >
+          <div slot="dialogText" class="mb-n4">
+            <v-img :src="receiptImage" v-if="receiptText == null"/>
+            <p v-html="receiptText"></p>
+          </div>
+        </Dialog>
       </v-main>
     </div>
   </div>
@@ -269,6 +289,7 @@ export default {
         receiptText: "",
         receiptImage: null,
       },
+      formattedReceiptText: "",
 
       rules: {
         fileInput: [
@@ -283,6 +304,10 @@ export default {
       },
 
       donateMoneyDialog: false,
+
+      receiptDialog: false,
+      receiptImage: null,
+      receiptText: "",
 
       alert: false,
       alertMessage: "",
@@ -309,6 +334,21 @@ export default {
       this.donateMoneyDialog = false;
     },
 
+    openReceiptDialog(image, text) {
+      this.receiptDialog = !this.receiptDialog;
+      this.receiptImage = image;
+      this.receiptText = text;
+      console.log(this.receiptText == null)
+      console.log(image)
+    },
+    updateReceiptDialog(newVal) {
+      this.receiptDialog = newVal;
+    },
+
+    handleInput() {
+      this.formattedReceiptText = this.formData.receiptText.replace(/\n/g, '<br>');
+    },
+
     async getMoniesCharity() {
       const id = this.id;
       try {
@@ -325,13 +365,15 @@ export default {
     },
 
     async onSubmit() {
+      this.formData.receiptText = this.formattedReceiptText
+      console.log(this.formData.receiptText)
       const data = this.formData;
       console.log(this.formData);
-      console.log(`1111111111111111111 ${typeof this.formData.receiptImage}`)
+
 
       try {
         this.alert = false;
-        
+
         await this.$store.dispatch("donateMoney", { data });
         this.getMoniesCharity();
         this.closeDonateMoneyDialog();
