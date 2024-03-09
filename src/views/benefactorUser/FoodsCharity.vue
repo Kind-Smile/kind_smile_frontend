@@ -345,6 +345,8 @@ export default {
       return (food) => {
         const agent = food.agent;
 
+        console.log(JSON.stringify(agent.polygon))
+
         const coordinatesArray = [];
 
         for (const point of agent.polygon) {

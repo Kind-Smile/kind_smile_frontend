@@ -236,7 +236,7 @@ export default {
         await this.$store.dispatch("getNotificationsCharity");
         this.notificationsCharity = this.$store.state.responseData;
         this.notificationsCharity.forEach((notification) => {
-          notification.picture = "http://127.0.0.1:8000" + notification.picture;
+          notification.picture = notification.picture;
         });
         this.$store.commit("clearResponseData");
       } catch (error) {

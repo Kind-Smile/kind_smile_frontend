@@ -1,5 +1,9 @@
 <template>
   <div>
+    <div v-if="this.$store.state.token != ''">
+      <v-img src="@/assets/images/401error.png"></v-img>
+    </div>
+    <template v-else>
     <AppBar></AppBar>
     <card-with-image>
       <div slot="rightPart">
@@ -59,22 +63,24 @@
           >
           </Button>
         </v-form>
-        <!-- <v-divider class="mt-1 mb-5"></v-divider>
+
+        <v-divider class="mt-1 mb-5"></v-divider>
 
         <p class="ma-0 text-center text--secondary">
-          <small>حسابی ندارید؟</small>
+          <small>رمز عبور خود را فراموش کرده اید؟</small>
           <small>
             <router-link
-              to="/register-benefactor"
+              to="/forget-password"
               :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
-              title="Register"
+              title="forgetPassword"
             >
-              ثبت نام
+            فراموشی رمز عبور
             </router-link>
           </small>
-        </p> -->
+        </p>
       </div>
     </card-with-image>
+    </template>
   </div>
 </template>
 

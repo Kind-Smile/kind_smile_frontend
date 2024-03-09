@@ -313,6 +313,56 @@ export default {
       });
   },
 
+  async getVerifycodeForResetPassword({ commit }, { data }) {
+    await axios
+      .post(`${BASE_URL}auth/sendSMSForResetPassword/`, {
+        phoneNumber: data,
+      })
+      .then((response) => {
+        let responseMessage = response.data;
+        console.log(`this is response of getVerifycodeForResetPassword: ${responseMessage}`);
+      })
+      .catch((error) => {
+        console.error("Error getVerifycodeForResetPassword:", error.response.data);
+        throw error.response.data;
+      });
+  },
+
+  async checkVerifycodeForResetPassword({ commit }, { data }) {
+    await axios
+      .post(`${BASE_URL}auth/validateCode/`, {
+        validationCode: data.verifyCode,
+        phoneNumber: data.phoneNumber,
+      })
+      .then((response) => {
+        let responseMessage = response.data;
+        console.log(responseMessage);
+      })
+      .catch((error) => {
+        // console.error("Error:", error);
+        console.error("Error checkVerifycodeForResetPassword:", error.response.data);
+        throw error.response.data;
+      });
+  },
+
+  async resetPassword({ commit }, { data }) {
+    // console.log("I am in: action->resetPassword");
+    await axios
+      .post(`${BASE_URL}auth/resetPassword/`, {
+        phoneNumber: data.phoneNumber,
+        new_password: data.password,
+        repeatPassword: data.confirmPassword,
+      })
+      .then((response) => {
+        let responseMessage = response.data;
+        console.log(`this is response of resetPassword: ${responseMessage}`);
+      })
+      .catch((error) => {
+        console.error("Error resetPassword:", error.response.data);
+        throw error.response.data
+      });
+  },
+
   async charityAgentList({ state, commit }) {
     const config = {
       headers: {
@@ -1111,22 +1161,25 @@ export default {
 
   async donateMoney({ state, commit }, { data }) {
     // console.log("I am in: action->donateMoney");
+    const donateData = new FormData();
+
+    donateData.append("money_collect", parseInt(data.moneyCollect, 10));
+    donateData.append("receipt_text", data.receiptText);
+    donateData.append("money", parseInt(data.id, 10));
+
+    if (data.receiptImage) {
+      donateData.append("receipt_image", data.receiptImage);
+    }
+
     const config = {
       headers: {
         Authorization: `Bearer ${state.token}`,
-        Accept: "application/json",
+        "Content-Type": "multipart/form-data",
       },
     };
 
     await axios
-      .post(
-        `${BASE_URL}money/createDonor/`,
-        {
-          money_collect: parseInt(data.moneyCollect, 10),
-          money: parseInt(data.id, 10),
-        },
-        config
-      )
+      .post(`${BASE_URL}money/createDonor/`, donateData, config)
       .then((response) => {
         let responseMessage = response.data;
         console.log(responseMessage);

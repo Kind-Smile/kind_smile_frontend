@@ -197,13 +197,45 @@
                 class="mb-5"
               />
 
+              <v-divider class="mb-5"></v-divider>
+
+              <p>رسید واریز خود را به صورت متنی با تصویری ارسال کنید:</p>
+
+              <label> رسید واریز متنی </label>
+              <v-textarea
+                outlined
+                clearable
+                placeholder="رسید واریز خود را به صورت متنی در این قسمت وارد نمایید."
+                hide-details
+                clear-icon="mdi-close"
+                v-model="formData.receiptText"
+                class="my-3"
+              ></v-textarea>
+
+              <label class="mr-3"> رسید واریز تصویری </label>
+              <v-file-input
+                v-model="formData.receiptImage"
+                :rules="rules.fileInput"
+                outlined
+                color="#ffcc66"
+                accept="image/png, image/jpeg, image/jpg"
+                placeholder="رسید واریز خود را به صورت تصویری بارگذاری کنید"
+                prepend-icon="mdi-camera"
+                @change="handleReceiptChange"
+                class="my-2"
+              ></v-file-input>
+
               <Button
                 input_value="ثبت‌"
                 type="submit"
                 block
                 large
                 class="mb-3 mt-5"
-                :disabled="this.formData.moneyCollect === ''"
+                :disabled="
+                  this.formData.moneyCollect === '' ||
+                  (this.formData.receiptText === '' &&
+                    this.formData.receiptImage == null)
+                "
               >
               </Button>
             </v-form>
@@ -234,6 +266,20 @@ export default {
       formData: {
         id: "",
         moneyCollect: "",
+        receiptText: "",
+        receiptImage: null,
+      },
+
+      rules: {
+        fileInput: [
+          (value) => {
+            return (
+              !value ||
+              value.size < 5000000 ||
+              "حجم فایل لوگوی شما باید کمتر از ۵ مگابایت باشد."
+            );
+          },
+        ],
       },
 
       donateMoneyDialog: false,
@@ -281,18 +327,29 @@ export default {
     async onSubmit() {
       const data = this.formData;
       console.log(this.formData);
+      console.log(`1111111111111111111 ${typeof this.formData.receiptImage}`)
 
       try {
         this.alert = false;
+        
         await this.$store.dispatch("donateMoney", { data });
         this.getMoniesCharity();
         this.closeDonateMoneyDialog();
         this.formData.id = "";
         this.formData.moneyCollect = "";
+        this.formData.receiptText = "";
+        this.formData.receiptImage = null;
       } catch (error) {
         console.error("Error during onSubmit in component:", error);
         this.alert = true;
         this.alertMessage = error;
+      }
+    },
+
+    handleReceiptChange(event) {
+      const file = event;
+      if (file) {
+        this.formData.receiptImage = file;
       }
     },
   },

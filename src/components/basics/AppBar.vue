@@ -302,6 +302,7 @@ export default {
         "verificatedPhoneNumber",
         JSON.stringify(this.formData.phoneNumber)
       );
+      console.log(`appbarrrrr ${JSON.parse(localStorage.getItem("verificatedPhoneNumber"))}`)
       const data = this.formData;
       this.$store.dispatch("checkVerifycode", { data });
       if (this.$route.path !== "/register-benefactor") {

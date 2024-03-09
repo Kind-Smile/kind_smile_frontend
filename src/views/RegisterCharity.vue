@@ -1,332 +1,337 @@
 <template>
   <div>
-    <AppBar></AppBar>
-    <card-with-image class="my-3" :image="false">
-      <div slot="rightPart">
-        <v-toolbar class="elevation-0 ma-0">
-          <v-toolbar-title class="mx-auto semi-larg"
-            >ثبت‌نام خیریه</v-toolbar-title
-          >
-        </v-toolbar>
+    <div v-if="this.$store.state.token != ''">
+      <v-img src="@/assets/images/401error.png"></v-img>
+    </div>
+    <template v-else>
+      <AppBar></AppBar>
+      <card-with-image class="my-3" :image="false">
+        <div slot="rightPart">
+          <v-toolbar class="elevation-0 ma-0">
+            <v-toolbar-title class="mx-auto semi-larg"
+              >ثبت‌نام خیریه</v-toolbar-title
+            >
+          </v-toolbar>
 
-        <v-form @submit.prevent="onSubmit" ref="charityForm">
-          <v-row class="mb-2 mt-4 justify-start">
-            <v-col cols="12" sm="12" md="12" lg="4">
-              <Input
-                outlined
-                dense
-                name="name"
-                type="text"
-                v-model.trim="formData.name"
-                labelTag
-                labelText="نام خیریه"
-                placeholder="نام خیریه"
-                prefix=" خیریه"
-                hide_details
-                class="mb-2 mx-2"
-              />
-            </v-col>
-
-            <v-col cols="12" sm="12" md="12" lg="4">
-              <Input
-                outlined
-                dense
-                name="boss"
-                type="text"
-                v-model.trim="formData.boss"
-                labelTag
-                labelText="نام مدیر"
-                placeholder="نام مدیر"
-                hide_details
-                class="mb-2 mx-2"
-              />
-            </v-col>
-
-            <v-col cols="12" sm="12" md="12" lg="4">
-              <div class="custom-input-suffix">
+          <v-form @submit.prevent="onSubmit" ref="charityForm">
+            <v-row class="mb-2 mt-4 justify-start">
+              <v-col cols="12" sm="12" md="12" lg="4">
                 <Input
                   outlined
                   dense
-                  name="phoneNumber"
-                  type="number"
-                  v-model.trim="formData.phoneNumber"
+                  name="name"
+                  type="text"
+                  v-model.trim="formData.name"
                   labelTag
-                  labelText="شماره تلفن"
-                  placeholder="شماره تلفن"
+                  labelText="نام خیریه"
+                  placeholder="نام خیریه"
+                  prefix=" خیریه"
                   hide_details
                   class="mb-2 mx-2"
                 />
-              </div>
-            </v-col>
+              </v-col>
 
-            <v-col cols="12" sm="12" md="12" lg="4">
-              <Input
-                outlined
-                dense
-                name="correlation"
-                type="text"
-                v-model.trim="formData.correlation"
-                labelTag
-                labelText="وابسته به"
-                placeholder="وابسته به"
-                hide_details
-                class="mb-2 mx-2"
-              />
-            </v-col>
+              <v-col cols="12" sm="12" md="12" lg="4">
+                <Input
+                  outlined
+                  dense
+                  name="boss"
+                  type="text"
+                  v-model.trim="formData.boss"
+                  labelTag
+                  labelText="نام مدیر"
+                  placeholder="نام مدیر"
+                  hide_details
+                  class="mb-2 mx-2"
+                />
+              </v-col>
 
-            <v-col cols="12" sm="12" md="12" lg="4">
-              <label> استان </label>
-              <v-autocomplete
-                outlined
-                v-model="formData.selectedState"
-                :items="this.$store.state.states"
-                item-text="name"
-                item-value="id"
-                hide-details
-                placeholder="استان خود را انتخاب کنید"
-                @change="stateSelectedName"
-                class="ma-2"
-              >
-              </v-autocomplete>
-            </v-col>
-
-            <v-col cols="12" sm="12" md="12" lg="4">
-              <Input
-                outlined
-                dense
-                name="address"
-                type="text"
-                v-model.trim="formData.other"
-                labelTag
-                labelText="آدرس"
-                placeholder="آدرس خود را وارد نمایید"
-                hide_details
-                class="mb-2 mx-2"
-              />
-            </v-col>
-
-            <v-col cols="12" sm="12" md="12" lg="4">
-              <Input
-                outlined
-                dense
-                name="officer"
-                type="text"
-                v-model.trim="formData.officer"
-                labelTag
-                labelText="نام مسئول ارتباط مردمی"
-                placeholder="نام مسئول ارتباط مردمی"
-                hide_details
-                class="mb-2 mx-2"
-              />
-            </v-col>
-
-            <v-col cols="12" sm="12" md="12" lg="4">
-              <Input
-                outlined
-                dense
-                name="officerPhone"
-                type="number"
-                v-model.trim="formData.officerPhone"
-                labelTag
-                labelText="شماره ارتباط مردمی"
-                placeholder="شماره ارتباط مردمی"
-                hide_details
-                append-icon="''"
-                class="mb-2 mx-2 custom-input"
-              />
-            </v-col>
-
-            <v-col cols="12" sm="12" md="12" lg="4">
-              <Input
-                outlined
-                dense
-                name="cardNumber"
-                type="number"
-                v-model.trim="formData.cardNumber"
-                labelTag
-                labelText="شماره کارت خیریه"
-                placeholder="شماره کارت خیریه"
-                hide_details
-                class="mb-2 mx-2"
-              />
-            </v-col>
-
-            <v-col cols="12" sm="12" md="12" lg="4">
-              <Input
-                outlined
-                dense
-                name="code"
-                type="number"
-                v-model.trim="formData.code"
-                labelTag
-                labelText="شماره ثبت"
-                placeholder="شماره ثبت"
-                hide_details
-                class="mb-2 mx-2"
-              />
-            </v-col>
-
-            <v-col cols="12" sm="12" md="12" lg="4">
-              <label class="mr-3"> لوگوی خیریه </label>
-              <v-file-input
-                v-model="formData.logo"
-                :rules="rules.fileInput"
-                outlined
-                color="#ffcc66"
-                accept="image/png, image/jpeg, image/jpg"
-                placeholder="لوگوی خود را بارگذاری کنید"
-                prepend-icon="mdi-camera"
-                @change="handleLogoChange"
-                class="my-2"
-              ></v-file-input
-            ></v-col>
-
-            <v-col lg="12" md="12" sm="12" cols="12">
-              <v-row>
-                <v-col cols="12" sm="12" md="12" lg="4">
-                  <label> هیئت امنا </label>
-                  <v-textarea
+              <v-col cols="12" sm="12" md="12" lg="4">
+                <div class="custom-input-suffix">
+                  <Input
                     outlined
-                    clearable
-                    hide-details
-                    clear-icon="mdi-close"
-                    v-model="formData.institute"
-                    class="my-2"
-                  ></v-textarea>
-                </v-col>
-
-                <v-col cols="12" sm="12" md="12" lg="4">
-                  <label> توضیحات </label>
-                  <v-textarea
-                    outlined
-                    clearable
-                    hide-details
-                    clear-icon="mdi-close"
-                    v-model="formData.description"
-                    class="my-2"
-                  ></v-textarea>
-                </v-col>
-              </v-row>
-            </v-col>
-
-            <v-col
-              cols="12"
-              sm="12"
-              md="12"
-              lg="4"
-              v-if="!this.$store.state.charity.isSetAddress"
-              class="ma-2 mr-0"
-            >
-              <router-link
-                :to="{
-                  path: '/map',
-                  query: { coordinates: this.coordinates },
-                }"
-              >
-                <div
-                  @click="clickAddress"
-                  :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
-                >
-                  انتخاب آدرس خیریه از روی نقشه
+                    dense
+                    name="phoneNumber"
+                    type="number"
+                    v-model.trim="formData.phoneNumber"
+                    labelTag
+                    labelText="شماره تلفن"
+                    placeholder="شماره تلفن"
+                    hide_details
+                    class="mb-2 mx-2"
+                  />
                 </div>
-              </router-link>
-            </v-col>
+              </v-col>
 
-            <v-col cols="12" sm="12" md="12" lg="12" v-else class="pa-0">
-              <v-col cols="12" sm="12" md="12" lg="12">
+              <v-col cols="12" sm="12" md="12" lg="4">
+                <Input
+                  outlined
+                  dense
+                  name="correlation"
+                  type="text"
+                  v-model.trim="formData.correlation"
+                  labelTag
+                  labelText="وابسته به"
+                  placeholder="وابسته به"
+                  hide_details
+                  class="mb-2 mx-2"
+                />
+              </v-col>
+
+              <v-col cols="12" sm="12" md="12" lg="4">
+                <label> استان </label>
+                <v-autocomplete
+                  outlined
+                  v-model="formData.selectedState"
+                  :items="this.$store.state.states"
+                  item-text="name"
+                  item-value="id"
+                  hide-details
+                  placeholder="استان خود را انتخاب کنید"
+                  @change="stateSelectedName"
+                  class="ma-2"
+                >
+                </v-autocomplete>
+              </v-col>
+
+              <v-col cols="12" sm="12" md="12" lg="4">
                 <Input
                   outlined
                   dense
                   name="address"
                   type="text"
-                  v-model="formData.address"
-                  :value="this.$store.state.charity.address"
+                  v-model.trim="formData.other"
                   labelTag
                   labelText="آدرس"
-                  placeholder="آدرس"
+                  placeholder="آدرس خود را وارد نمایید"
                   hide_details
-                  disabled
+                  class="mb-2 mx-2"
                 />
               </v-col>
 
-              <v-col cols="12" sm="12" md="12" lg="12" class="pt-0">
+              <v-col cols="12" sm="12" md="12" lg="4">
+                <Input
+                  outlined
+                  dense
+                  name="officer"
+                  type="text"
+                  v-model.trim="formData.officer"
+                  labelTag
+                  labelText="نام مسئول ارتباط مردمی"
+                  placeholder="نام مسئول ارتباط مردمی"
+                  hide_details
+                  class="mb-2 mx-2"
+                />
+              </v-col>
+
+              <v-col cols="12" sm="12" md="12" lg="4">
+                <Input
+                  outlined
+                  dense
+                  name="officerPhone"
+                  type="number"
+                  v-model.trim="formData.officerPhone"
+                  labelTag
+                  labelText="شماره ارتباط مردمی"
+                  placeholder="شماره ارتباط مردمی"
+                  hide_details
+                  append-icon="''"
+                  class="mb-2 mx-2 custom-input"
+                />
+              </v-col>
+
+              <v-col cols="12" sm="12" md="12" lg="4">
+                <Input
+                  outlined
+                  dense
+                  name="cardNumber"
+                  type="number"
+                  v-model.trim="formData.cardNumber"
+                  labelTag
+                  labelText="شماره کارت خیریه"
+                  placeholder="شماره کارت خیریه"
+                  hide_details
+                  class="mb-2 mx-2"
+                />
+              </v-col>
+
+              <v-col cols="12" sm="12" md="12" lg="4">
+                <Input
+                  outlined
+                  dense
+                  name="code"
+                  type="number"
+                  v-model.trim="formData.code"
+                  labelTag
+                  labelText="شماره ثبت"
+                  placeholder="شماره ثبت"
+                  hide_details
+                  class="mb-2 mx-2"
+                />
+              </v-col>
+
+              <v-col cols="12" sm="12" md="12" lg="4">
+                <label class="mr-3"> لوگوی خیریه </label>
+                <v-file-input
+                  v-model="formData.logo"
+                  :rules="rules.fileInput"
+                  outlined
+                  color="#ffcc66"
+                  accept="image/png, image/jpeg, image/jpg"
+                  placeholder="لوگوی خود را بارگذاری کنید"
+                  prepend-icon="mdi-camera"
+                  @change="handleLogoChange"
+                  class="my-2"
+                ></v-file-input
+              ></v-col>
+
+              <v-col lg="12" md="12" sm="12" cols="12">
+                <v-row>
+                  <v-col cols="12" sm="12" md="12" lg="4">
+                    <label> هیئت امنا </label>
+                    <v-textarea
+                      outlined
+                      clearable
+                      hide-details
+                      clear-icon="mdi-close"
+                      v-model="formData.institute"
+                      class="my-2"
+                    ></v-textarea>
+                  </v-col>
+
+                  <v-col cols="12" sm="12" md="12" lg="4">
+                    <label> توضیحات </label>
+                    <v-textarea
+                      outlined
+                      clearable
+                      hide-details
+                      clear-icon="mdi-close"
+                      v-model="formData.description"
+                      class="my-2"
+                    ></v-textarea>
+                  </v-col>
+                </v-row>
+              </v-col>
+
+              <v-col
+                cols="12"
+                sm="12"
+                md="12"
+                lg="4"
+                v-if="!this.$store.state.charity.isSetAddress"
+                class="ma-2 mr-0"
+              >
                 <router-link
                   :to="{
                     path: '/map',
                     query: { coordinates: this.coordinates },
                   }"
-                  style="font-size: 0.8rem"
-                  class="mb-2"
                 >
                   <div
                     @click="clickAddress"
                     :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
                   >
-                    برای تغییر آدرس اینجا کلیک کنید.
+                    انتخاب آدرس خیریه از روی نقشه
                   </div>
                 </router-link>
               </v-col>
-            </v-col>
 
-            <v-col cols="12" sm="12" md="12" lg="12">
-              <Input
-                outlined
-                dense
-                name="password"
-                type="password"
-                v-model.trim="formData.password"
-                labelTag
-                labelText="رمز عبور"
-                placeholder="رمز عبور"
-                hint="حداقل 8 کاراکتر"
-                class="mb-n2"
-              />
-              <!-- :rules="[rules.password]" -->
-            </v-col>
+              <v-col cols="12" sm="12" md="12" lg="12" v-else class="pa-0">
+                <v-col cols="12" sm="12" md="12" lg="12">
+                  <Input
+                    outlined
+                    dense
+                    name="address"
+                    type="text"
+                    v-model="formData.address"
+                    :value="this.$store.state.charity.address"
+                    labelTag
+                    labelText="آدرس"
+                    placeholder="آدرس"
+                    hide_details
+                    disabled
+                  />
+                </v-col>
 
-            <v-col cols="12" sm="12" md="12">
-              <Button
-                input_value="ثبت نام"
-                type="submit"
-                block
-                large
-                class="my-2"
-                :disabled="
-                  this.formData.name === '' ||
-                  this.formData.boss === '' ||
-                  this.formData.phoneNumber === '' ||
-                  this.formData.selectedState === '' ||
-                  this.formData.other === '' ||
-                  this.formData.cardNumber === '' ||
-                  this.formData.code === '' ||
-                  this.formData.logo === '' ||
-                  this.formData.address === '' ||
-                  this.formData.password === ''
-                "
-              >
+                <v-col cols="12" sm="12" md="12" lg="12" class="pt-0">
+                  <router-link
+                    :to="{
+                      path: '/map',
+                      query: { coordinates: this.coordinates },
+                    }"
+                    style="font-size: 0.8rem"
+                    class="mb-2"
+                  >
+                    <div
+                      @click="clickAddress"
+                      :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
+                    >
+                      برای تغییر آدرس اینجا کلیک کنید.
+                    </div>
+                  </router-link>
+                </v-col>
+              </v-col>
+
+              <v-col cols="12" sm="12" md="12" lg="12">
+                <Input
+                  outlined
+                  dense
+                  name="password"
+                  type="password"
+                  v-model.trim="formData.password"
+                  labelTag
+                  labelText="رمز عبور"
+                  placeholder="رمز عبور"
+                  hint="حداقل 8 کاراکتر"
+                  class="mb-n2"
+                />
+                <!-- :rules="[rules.password]" -->
+              </v-col>
+
+              <v-col cols="12" sm="12" md="12">
+                <Button
+                  input_value="ثبت نام"
+                  type="submit"
+                  block
+                  large
+                  class="my-2"
+                  :disabled="
+                    this.formData.name === '' ||
+                    this.formData.boss === '' ||
+                    this.formData.phoneNumber === '' ||
+                    this.formData.selectedState === '' ||
+                    this.formData.other === '' ||
+                    this.formData.cardNumber === '' ||
+                    this.formData.code === '' ||
+                    this.formData.logo === '' ||
+                    this.formData.address === '' ||
+                    this.formData.password === ''
+                  "
+                >
                   <!-- this.formData.officer === '' ||
                   this.formData.officerPhone === '' ||
                   this.formData.institute === '' || -->
-              </Button>
-            </v-col>
-          </v-row>
-        </v-form>
-        <v-divider class="mt-1 mb-5"></v-divider>
+                </Button>
+              </v-col>
+            </v-row>
+          </v-form>
+          <v-divider class="mt-1 mb-5"></v-divider>
 
-        <p class="ma-0 text-center text--secondary">
-          <small>حساب کاربری دارید؟</small>
-          <small>
-            <router-link
-              to="/login"
-              title="login"
-              :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
-            >
-              ورود
-            </router-link>
-          </small>
-        </p>
-      </div>
-    </card-with-image>
+          <p class="ma-0 text-center text--secondary">
+            <small>حساب کاربری دارید؟</small>
+            <small>
+              <router-link
+                to="/login"
+                title="login"
+                :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
+              >
+                ورود
+              </router-link>
+            </small>
+          </p>
+        </div>
+      </card-with-image>
+    </template>
   </div>
 </template>
 

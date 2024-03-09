@@ -277,6 +277,8 @@ export default {
         for (const agent of agents) {
           const coordinatesArray = [];
 
+          console.log(JSON.stringify(agent.polygon))
+
           for (const point of agent.polygon) {
             coordinatesArray.push([point.longitude, point.latitude]);
           }
@@ -290,6 +292,7 @@ export default {
 
           // const poly = { type: "Polygon", coordinates: coordinatesArray };
           const poly = turf.polygon([coordinatesArray]);
+
 
           const isInside = turf.booleanPointInPolygon(
             turf.point([lng, lat]),

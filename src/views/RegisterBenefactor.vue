@@ -1,218 +1,222 @@
 <template>
   <div>
-    <AppBar></AppBar>
-    <card-with-image class="my-3">
-      <div slot="rightPart">
-        <v-alert
-          v-if="alert"
-          dense
-          :color="
-            this.$hexToRgba(this.$vuetify.theme.currentTheme.primary, 0.3)
-          "
-          type="error"
-          icon="mdi-alert-circle-outline"
-          border="left"
-          class="mb-1"
-        >
-          {{ this.alertMessage }}.
-        </v-alert>
-
-
-        <v-toolbar class="elevation-0 ma-0">
-          <v-toolbar-title class="mx-auto semi-larg"
-            >ثبت‌نام نیکوکار مهربان</v-toolbar-title
+    <div v-if="this.$store.state.token != ''">
+      <v-img src="@/assets/images/401error.png"></v-img>
+    </div>
+    <template v-else>
+      <AppBar></AppBar>
+      <card-with-image class="my-3">
+        <div slot="rightPart">
+          <v-alert
+            v-if="alert"
+            dense
+            :color="
+              this.$hexToRgba(this.$vuetify.theme.currentTheme.primary, 0.3)
+            "
+            type="error"
+            icon="mdi-alert-circle-outline"
+            border="left"
+            class="mb-1"
           >
-        </v-toolbar>
+            {{ this.alertMessage }}.
+          </v-alert>
 
-        <v-form @submit.prevent="onSubmit" ref="benefactorForm">
-          <v-row class="mb-2 mt-4 justify-space-between">
-            <v-col cols="12" sm="12" md="12" lg="6">
-              <Input
-                outlined
-                dense
-                name="name"
-                type="text"
-                v-model.trim="formData.name"
-                labelTag
-                labelText="نام و نام خانوادگی"
-                placeholder="نام و نام خانوادگی"
-                hide_details
-                class="mb-2"
-              />
-            </v-col>
-
-            <v-col cols="12" sm="12" md="12" lg="6">
-              <Input
-                outlined
-                dense
-                name="phoneNumber"
-                type="number"
-                v-model="formData.phoneNumber"
-                labelTag
-                labelText="شماره تماس"
-                placeholder="شماره تماس"
-                hide_details
-                disabled
-                class="mb-2"
-              />
-            </v-col>
-
-            <v-col cols="12" sm="12" md="12" lg="12">
-              <label> معرفی شده توسط </label>
-              <v-autocomplete
-                outlined
-                v-model="formData.selectedRecommender"
-                :items="this.charityList"
-                hide-details
-                placeholder="معرف خود را انتخاب کنید"
-                class="ma-2"
-              >
-              </v-autocomplete>
-            </v-col>
-
-            <v-col cols="12" sm="12" md="12" lg="12">
-              <label> استان </label>
-              <v-autocomplete
-                outlined
-                v-model="formData.selectedState"
-                :items="this.$store.state.states"
-                item-text="name"
-                item-value="id"
-                hide-details
-                placeholder="استان خود را انتخاب کنید"
-                @change="stateSelectedName"
-                class="ma-2"
-              >
-              </v-autocomplete>
-            </v-col>
-
-            <v-col
-              cols="12"
-              sm="12"
-              md="12"
-              lg="6"
-              v-if="!this.$store.state.benefactor.isSetAddress"
-              class="my-3"
+          <v-toolbar class="elevation-0 ma-0">
+            <v-toolbar-title class="mx-auto semi-larg"
+              >ثبت‌نام نیکوکار مهربان</v-toolbar-title
             >
-              <router-link
-                :to="{
-                  path: '/map',
-                  query: { coordinates: this.coordinates },
-                }"
-              >
-                <div
-                  @click="clickAddress"
-                  :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
-                >
-                  انتخاب آدرس از روی نقشه
-                </div>
-              </router-link>
-            </v-col>
+          </v-toolbar>
 
-            <v-col cols="12" sm="12" md="12" lg="12" v-else>
-              <v-col cols="12" sm="12" md="12" lg="12">
+          <v-form @submit.prevent="onSubmit" ref="benefactorForm">
+            <v-row class="mb-2 mt-4 justify-space-between">
+              <v-col cols="12" sm="12" md="12" lg="6">
                 <Input
                   outlined
                   dense
-                  name="address"
+                  name="name"
                   type="text"
-                  v-model="formData.address"
-                  :value="this.$store.state.benefactor.address"
+                  v-model.trim="formData.name"
                   labelTag
-                  labelText="آدرس"
-                  placeholder="آدرس"
+                  labelText="نام و نام خانوادگی"
+                  placeholder="نام و نام خانوادگی"
+                  hide_details
+                  class="mb-2"
+                />
+              </v-col>
+
+              <v-col cols="12" sm="12" md="12" lg="6">
+                <Input
+                  outlined
+                  dense
+                  name="phoneNumber"
+                  type="number"
+                  v-model="formData.phoneNumber"
+                  labelTag
+                  labelText="شماره تماس"
+                  placeholder="شماره تماس"
                   hide_details
                   disabled
+                  class="mb-2"
                 />
               </v-col>
 
               <v-col cols="12" sm="12" md="12" lg="12">
+                <label> معرفی شده توسط </label>
+                <v-autocomplete
+                  outlined
+                  v-model="formData.selectedRecommender"
+                  :items="this.charityList"
+                  hide-details
+                  placeholder="معرف خود را انتخاب کنید"
+                  class="ma-2"
+                >
+                </v-autocomplete>
+              </v-col>
+
+              <v-col cols="12" sm="12" md="12" lg="12">
+                <label> استان </label>
+                <v-autocomplete
+                  outlined
+                  v-model="formData.selectedState"
+                  :items="this.$store.state.states"
+                  item-text="name"
+                  item-value="id"
+                  hide-details
+                  placeholder="استان خود را انتخاب کنید"
+                  @change="stateSelectedName"
+                  class="ma-2"
+                >
+                </v-autocomplete>
+              </v-col>
+
+              <v-col
+                cols="12"
+                sm="12"
+                md="12"
+                lg="6"
+                v-if="!this.$store.state.benefactor.isSetAddress"
+                class="my-3"
+              >
                 <router-link
                   :to="{
                     path: '/map',
                     query: { coordinates: this.coordinates },
                   }"
-                  style="font-size: 0.8rem"
-                  class="mb-2"
-                  @click="clickAddress"
                 >
                   <div
                     @click="clickAddress"
                     :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
                   >
-                    برای تغییر آدرس اینجا کلیک کنید.
+                    انتخاب آدرس از روی نقشه
                   </div>
                 </router-link>
               </v-col>
-            </v-col>
 
-            <v-col cols="12" sm="12" md="12" lg="12">
-              <Input
-                outlined
-                dense
-                name="password"
-                type="password"
-                v-model.trim="formData.password"
-                labelTag
-                labelText="رمز عبور"
-                placeholder="رمز عبور"
-                hint="حداقل 8 کاراکتر و دارای حداقل یک حرف"
-                class="mb-n2"
-              />
-              <!-- :rules="[rules.password]" -->
-            </v-col>
+              <v-col cols="12" sm="12" md="12" lg="12" v-else>
+                <v-col cols="12" sm="12" md="12" lg="12">
+                  <Input
+                    outlined
+                    dense
+                    name="address"
+                    type="text"
+                    v-model="formData.address"
+                    :value="this.$store.state.benefactor.address"
+                    labelTag
+                    labelText="آدرس"
+                    placeholder="آدرس"
+                    hide_details
+                    disabled
+                  />
+                </v-col>
 
-            <v-col cols="12" sm="12" md="12" lg="12">
-              <Input
-                outlined
-                dense
-                name="confirmPassword"
-                type="password"
-                v-model.trim="formData.confirmPassword"
-                labelTag
-                labelText="تکرار رمز عبور"
-                placeholder="تکرار رمز عبور"
-                hint="رمز عبور را تکرار کنید"
-                class="mb-n2"
-              />
-              <!-- :rules="[rules.password]" -->
-            </v-col>
+                <v-col cols="12" sm="12" md="12" lg="12">
+                  <router-link
+                    :to="{
+                      path: '/map',
+                      query: { coordinates: this.coordinates },
+                    }"
+                    style="font-size: 0.8rem"
+                    class="mb-2"
+                    @click="clickAddress"
+                  >
+                    <div
+                      @click="clickAddress"
+                      :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
+                    >
+                      برای تغییر آدرس اینجا کلیک کنید.
+                    </div>
+                  </router-link>
+                </v-col>
+              </v-col>
 
-            <v-col cols="12" sm="12" md="12">
-              <Button
-                input_value="ثبت نام"
-                type="submit"
-                block
-                large
-                class="my-2"
-                :disabled="
-                  this.formData.name === '' ||
-                  this.formData.phoneNumber === '' ||
-                  this.formData.address === '' ||
-                  this.formData.password === '' ||
-                  this.formData.confirmPassword === ''
-                "
+              <v-col cols="12" sm="12" md="12" lg="12">
+                <Input
+                  outlined
+                  dense
+                  name="password"
+                  type="password"
+                  v-model.trim="formData.password"
+                  labelTag
+                  labelText="رمز عبور"
+                  placeholder="رمز عبور"
+                  hint="حداقل 8 کاراکتر و دارای حداقل یک حرف"
+                  class="mb-n2"
+                />
+                <!-- :rules="[rules.password]" -->
+              </v-col>
+
+              <v-col cols="12" sm="12" md="12" lg="12">
+                <Input
+                  outlined
+                  dense
+                  name="confirmPassword"
+                  type="password"
+                  v-model.trim="formData.confirmPassword"
+                  labelTag
+                  labelText="تکرار رمز عبور"
+                  placeholder="تکرار رمز عبور"
+                  hint="رمز عبور را تکرار کنید"
+                  class="mb-n2"
+                />
+                <!-- :rules="[rules.password]" -->
+              </v-col>
+
+              <v-col cols="12" sm="12" md="12">
+                <Button
+                  input_value="ثبت نام"
+                  type="submit"
+                  block
+                  large
+                  class="my-2"
+                  :disabled="
+                    this.formData.name === '' ||
+                    this.formData.phoneNumber === '' ||
+                    this.formData.address === '' ||
+                    this.formData.password === '' ||
+                    this.formData.confirmPassword === ''
+                  "
+                >
+                </Button>
+              </v-col>
+            </v-row>
+          </v-form>
+          <v-divider class="mt-1 mb-5"></v-divider>
+
+          <p class="ma-0 text-center text--secondary">
+            <small>حساب کاربری دارید؟</small>
+            <small>
+              <router-link
+                to="/login"
+                title="login"
+                :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
               >
-              </Button>
-            </v-col>
-          </v-row>
-        </v-form>
-        <v-divider class="mt-1 mb-5"></v-divider>
-
-        <p class="ma-0 text-center text--secondary">
-          <small>حساب کاربری دارید؟</small>
-          <small>
-            <router-link
-              to="/login"
-              title="login"
-              :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
-            >
-              ورود
-            </router-link>
-          </small>
-        </p>
-      </div>
-    </card-with-image>
+                ورود
+              </router-link>
+            </small>
+          </p>
+        </div>
+      </card-with-image>
+    </template>
   </div>
 </template>
 
@@ -237,7 +241,7 @@ export default {
     return {
       formData: {
         name: "",
-        phoneNumber: JSON.parse(localStorage.getItem("benefactorFormData")),
+        phoneNumber: JSON.parse(localStorage.getItem("verificatedPhoneNumber")),
         selectedState: "",
         address: this.$store.state.benefactor.address,
         latitude: this.$store.state.benefactor.latitude,
@@ -311,7 +315,7 @@ export default {
         await this.$store.dispatch("registerBenefactor", { data });
 
         localStorage.removeItem("benefactorFormData");
-        this.$refs.benefactorForm.reset();
+        // this.$refs.benefactorForm.reset();
         this.formData.selectedState = "";
         this.formData.selectedRecommender = "";
         this.$updateBenefactorProperty("isSetAddress", false);
@@ -332,7 +336,7 @@ export default {
         router.push("/");
       } catch (error) {
         this.alert = true;
-        this.alertMessage = error
+        this.alertMessage = error;
         console.error("Error during benefactor register:", error);
       }
     },
@@ -348,7 +352,6 @@ export default {
     this.getCharityList();
     const formData = JSON.parse(localStorage.getItem("benefactorFormData"));
     const phone = JSON.parse(localStorage.getItem("verificatedPhoneNumber"));
-    this.formData.phoneNumber = phone;
     if (formData) {
       this.formData = formData;
       this.formData.address = this.$store.state.benefactor.address;
@@ -364,6 +367,7 @@ export default {
       this.coordinates[0] = this.$store.state.benefactor.longitude;
       this.coordinates[1] = this.$store.state.benefactor.latitude;
     }
+    this.formData.phoneNumber = phone;
   },
 };
 </script>

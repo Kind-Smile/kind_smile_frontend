@@ -1,114 +1,160 @@
 <template>
   <div>
-    <AppBar></AppBar>
-    <card-with-image>
-      <div slot="rightPart">
-        <v-toolbar class="elevation-0 mb-3">
-          <v-toolbar-title class="mx-auto semi-larg"
-            >رمز عبورتان را فراموش کرده اید؟</v-toolbar-title
-          >
-        </v-toolbar>
-
-        <v-row class="justify-space-around mb-1">
-          <v-col cols="5" sm="5" md="5">
-            <Button
-              input_value="ورود"
-              to="/login"
-              color="info"
-              dark
-              block
-              outlined
-              large
-            ></Button>
-          </v-col>
-          <v-col cols="5" sm="5" md="5">
-            <Button
-              input_value="ثبت نام"
-              to="/register"
-              color="#5a8dee"
-              dark
-              block
-              outlined
-              large
-            ></Button>
-          </v-col>
-        </v-row>
-
-        <p class="text-center">
-          <small class="text-center">
-            ایمیل و یا شماره تماسی که برای ثبت نام استفاده کرده اید را وارد کنید
-            تا رمز عبور موقت برای شما ارسال شود
-          </small>
-        </p>
-
-        <v-form @submit.prevent="" class="mt-4 mb-5">
-          <Input
-            outlined
-            dense
-            name="email-tellphone"
-            type="text"
-            v-model.trim="email"
-            labelTag
-            labelText="ایمیل یا تلفن"
-            placeholder="ایمیل یا تلفن"
-            class="mb-3"
-          />
-          <Button
-            input_value="ارسال رمز عبور"
-            color="#5a8dee"
-            to="/"
-            dark
-            block
-            large
-            class="px-0"
-          >
-            <v-icon small left slot="buttonSlotAfter"> mdi-arrow-left </v-icon>
-          </Button>
-        </v-form>
-
-        <p class="text-center mb-8">
-          <small>
-            <a
-              href="/login"
-              style="color: gray"
-              title="Remember Password"
-              class="text-decoration-none"
+    <div v-if="this.$store.state.token != ''">
+      <v-img src="@/assets/images/401error.png"></v-img>
+    </div>
+    <template v-else>
+      <AppBar></AppBar>
+      <card-with-image>
+        <div slot="rightPart">
+          <v-toolbar class="elevation-0 mb-3">
+            <v-toolbar-title class="mx-auto semi-larg"
+              >رمز عبورتان را فراموش کرده اید؟</v-toolbar-title
             >
-              رمز عبورم را به خاطر آوردم
-            </a>
-          </small>
-        </p>
+          </v-toolbar>
 
-        <v-row>
-          <v-col cols="2" sm="2" md="3">
-            <v-divider></v-divider>
-          </v-col>
+          <p>
+            <small>
+              شماره تماسی که برای ثبت نام استفاده کرده اید را وارد کنید تا کد
+              تایید برای شما ارسال شود.
+            </small>
+          </p>
 
-          <v-col cols="8" sm="8" md="6" class="mt-n3">
-            <p class="text-center text--secondary">
-              <small>یا توسط گزینه‌های زیر وارد شوید</small>
-            </p>
-          </v-col>
+          <v-form @submit.prevent="onSubmit" class="mt-4 mb-5">
+            <v-alert
+              v-if="alert"
+              dense
+              :color="
+                this.$hexToRgba(this.$vuetify.theme.currentTheme.primary, 0.3)
+              "
+              type="error"
+              icon="mdi-alert-circle-outline"
+              border="left"
+              class="mb-1"
+            >
+              {{ alertMessage }}
+            </v-alert>
 
-          <v-col cols="2" sm="2" md="3">
-            <v-divider></v-divider>
-          </v-col>
-        </v-row>
+            <Input
+              outlined
+              dense
+              name="phoneNumber"
+              type="number"
+              v-model.trim="formData.phoneNumber"
+              labelTag
+              labelText="تلفن همراه"
+              placeholder="تلفن همراه"
+              hide_details
+              :disabled="isSendVerifycode"
+              class="mb-3"
+            />
 
-        <v-row class="mb-3">
-          <v-col cols="12" sm="12" md="6">
-            <Button input_value="گوگل" color="#dd4b39" dark block large>
-              <v-icon small left slot="buttonSlotBefor"> mdi-google </v-icon>
+            <div v-if="isSendVerifycode">
+              <Input
+                outlined
+                dense
+                name="verifycode"
+                type="number"
+                v-model.trim="formData.verifyCode"
+                labelTag
+                labelText="کد تایید"
+                placeholder="کد تایید ارسال شده را وارد نمایید"
+                hide_details
+                class="mb-3"
+              />
+
+              <v-row no-gutters class="justify-space-between mb-3 mt-7">
+                <v-col lg="5" md="12" sm="12" cols="12">
+                  <Button
+                    block
+                    small
+                    input_value="تایید"
+                    @click="checkVerifycode"
+                    :disabled="formData.verifyCode === ''"
+                  ></Button>
+                </v-col>
+
+                <v-col lg="5" md="12" sm="12" cols="12">
+                  <Button
+                    block
+                    small
+                    :color="$vuetify.theme.currentTheme.primary"
+                    input_value="ویرایش"
+                    :class="{ 'mt-3': !$vuetify.breakpoint.mdAndUp }"
+                    @click="isSendVerifycode = false"
+                  ></Button>
+                </v-col>
+              </v-row>
+            </div>
+
+            <Button
+              v-if="!(isCheckVerifycode || isSendVerifycode)"
+              input_value="دریافت کد تایید"
+              type="button"
+              block
+              large
+              class="mb-3 mt-10"
+              @click="getVerifycode"
+              :disabled="formData.phoneNumber === ''"
+            >
             </Button>
-          </v-col>
-          <v-col cols="12" sm="12" md="6">
-            <Button input_value="فیسبوک" color="#3b5998" dark block large>
-              <v-icon small left slot="buttonSlotBefor"> mdi-facebook </v-icon>
-            </Button>
-          </v-col>
-        </v-row>
-      </div>
-    </card-with-image>
+
+            <div v-if="isCheckVerifycode">
+              <Input
+                outlined
+                dense
+                name="password"
+                type="password"
+                v-model.trim="formData.password"
+                labelTag
+                labelText="رمز عبور جدید"
+                placeholder="رمز عبور جدید"
+                hide_details
+                class="mb-3"
+              />
+
+              <Input
+                outlined
+                dense
+                name="password"
+                type="password"
+                v-model.trim="formData.confirmPassword"
+                labelTag
+                labelText="تکرار رمز عبور جدید"
+                placeholder="تکرار رمز عبور جدید"
+                hide_details
+              />
+
+              <Button
+                :disabled="this.formData.phoneNumber === ''"
+                input_value="تغییر رمز عبور"
+                type="submit"
+                block
+                large
+                class="mb-3 mt-10"
+              >
+              </Button>
+            </div>
+
+          </v-form>
+
+          <v-divider class="mt-1 mb-5"></v-divider>
+
+          <p class="ma-0 text-center text--secondary">
+            <small>رمز عبور خود را به خاطر آوردید؟</small>
+            <small>
+              <router-link
+                to="/login"
+                :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
+                title="forgetPassword"
+              >
+                ورود
+              </router-link>
+            </small>
+          </p>
+        </div>
+      </card-with-image>
+    </template>
   </div>
 </template>
 
@@ -117,6 +163,8 @@ import CardWithImage from "@/components/basics/CardWithImage.vue";
 import Button from "@/components/basics/Button.vue";
 import Input from "@/components/basics/Input.vue";
 import AppBar from "@/components/basics/AppBar.vue";
+import router from "@/router";
+
 export default {
   name: "ForgetPassword",
   components: {
@@ -127,7 +175,19 @@ export default {
   },
   data() {
     return {
-      email: "",
+      alert: false,
+      alertMessage: "",
+
+      isSendVerifycode: false,
+      isCheckVerifycode: false,
+
+      formData: {
+        phoneNumber: "",
+        verifyCode: "",
+        password: "",
+        confirmPassword: "",
+      },
+
       items: [
         {
           src: require("../assets/images/clothes.png"),
@@ -141,6 +201,56 @@ export default {
       ],
     };
   },
-  methods: {},
+  methods: {
+    async getVerifycode() {
+      const data = this.formData.phoneNumber;
+
+      try {
+        await this.$store.dispatch("getVerifycodeForResetPassword", { data });
+        this.isSendVerifycode = true;
+      } catch (error) {
+        console.error("Error during get verify code:", error);
+      }
+    },
+
+    async checkVerifycode() {
+      const data = this.formData;
+
+      try {
+        this.alert = false;
+        await this.$store.dispatch("checkVerifycodeForResetPassword", { data });
+        this.isCheckVerifycode = true;
+        this.isSendVerifycode= false
+      } catch (error) {
+        this.alert = true;
+        console.log(this.alert);
+        this.alertMessage = error;
+        console.error("Error during checkVerifycode:", error);
+      }
+    },
+
+    async onSubmit() {
+      console.log(this.formData);
+      const data = this.formData;
+
+      try {
+        this.alert = false;
+        await this.$store.dispatch("resetPassword", { data });
+
+        this.$store.commit("setSnackbar", true);
+        this.$store.commit("snackbarMessage", `تغییر رمز با موفقیت انجام شد. با رمز جدید وارد شوید.`);
+        setTimeout(() => {
+          this.$store.commit("setSnackbar", false);
+        }, 3000);
+
+        router.push("/login");
+      } catch (error) {
+        this.alert = true;
+        this.alertMessage = error;
+        console.error("Error during resetPassword:", error);
+        // Handle error, show error message, etc.
+      }
+    },
+  },
 };
 </script>
