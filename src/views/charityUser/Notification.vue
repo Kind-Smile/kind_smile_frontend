@@ -42,6 +42,7 @@
                       :imageNewLine="notificationCharity.picture != null"
                       :cardImage="notificationCharity.picture"
                       :cardColor="notificationCardColor(notificationCharity)"
+                      @expandImage="openExpandImageDialog(notificationCharity.picture)"
                     >
                       <div
                         slot="cardTitle"
@@ -174,11 +175,20 @@
               large
               class="mb-3 mt-5"
               :disabled="
-                this.formData.name === '' || this.formData.expireDate === ''
+                this.formData.name === '' || this.formData.expireDate === '' || this.formData.picture === null
               "
             >
             </Button>
           </v-form>
+        </Dialog>
+
+        <Dialog
+          :dialogOpen="expandImageDialog"
+          @update:dialogOpen="updateExpandImageDialog"
+        >
+          <div slot="dialogText" class="mb-n4">
+            <v-img :src="expandImage"/>
+          </div>
         </Dialog>
       </v-main>
     </div>
@@ -208,6 +218,9 @@ export default {
       notificationsCharity: [],
 
       addNotificationDialog: false,
+
+      expandImageDialog: false,
+      expandImage: null,
 
       formData: {
         name: "",
@@ -256,6 +269,15 @@ export default {
     },
     closeAddNotificationDialog() {
       this.addNotificationDialog = false;
+    },
+
+    //handle expandImageDialog
+    openExpandImageDialog(image) {
+      this.expandImageDialog = !this.expandImageDialog;
+      this.expandImage = image;
+    },
+    updateExpandImageDialog(newVal) {
+      this.expandImageDialog = newVal;
     },
 
     addNotification() {

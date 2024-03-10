@@ -183,12 +183,15 @@ export default {
     charityData.append("description", data.description);
     charityData.append("latitude", data.latitude);
     charityData.append("longitude", data.longitude);
+    charityData.append("address", data.address);
 
     if (data.newLogo) {
       charityData.append("logo", data.newLogo);
     }
 
-    console.log(`--------------- lat: ${data.latitude} +++++++ lng: ${data.longitude}`)
+    console.log(
+      `--------------- lat: ${data.latitude} +++++++ lng: ${data.longitude}`
+    );
 
     const config = {
       headers: {
@@ -201,7 +204,9 @@ export default {
       .put(`${BASE_URL}auth/editProfile/`, charityData, config)
       .then((response) => {
         let data = response.data;
-        console.log(`editCharityProfile successfully! this is response: ${data}`);
+        console.log(
+          `editCharityProfile successfully! this is response: ${data}`
+        );
       })
       .catch((error) => {
         // console.error("Error:", error);
@@ -220,15 +225,21 @@ export default {
     };
 
     await axios
-      .put(`${BASE_URL}auth/editProfile/`, {
-        name: data.name,
-        address: data.address,
-        latitude: data.latitude,
-        longitude: data.longitude,
-      }, config)
+      .put(
+        `${BASE_URL}auth/editProfile/`,
+        {
+          name: data.name,
+          address: data.address,
+          latitude: data.latitude,
+          longitude: data.longitude,
+        },
+        config
+      )
       .then((response) => {
         let data = response.data;
-        console.log(`editBenefactorProfile successfully! this is response: ${data}`);
+        console.log(
+          `editBenefactorProfile successfully! this is response: ${data}`
+        );
       })
       .catch((error) => {
         // console.error("Error:", error);
@@ -247,9 +258,13 @@ export default {
     };
 
     await axios
-      .put(`${BASE_URL}auth/editProfile/`, {
-        name: data.name,
-      }, config)
+      .put(
+        `${BASE_URL}auth/editProfile/`,
+        {
+          name: data.name,
+        },
+        config
+      )
       .then((response) => {
         let data = response.data;
         console.log(`editAgentProfile successfully! this is response: ${data}`);
@@ -320,10 +335,15 @@ export default {
       })
       .then((response) => {
         let responseMessage = response.data;
-        console.log(`this is response of getVerifycodeForResetPassword: ${responseMessage}`);
+        console.log(
+          `this is response of getVerifycodeForResetPassword: ${responseMessage}`
+        );
       })
       .catch((error) => {
-        console.error("Error getVerifycodeForResetPassword:", error.response.data);
+        console.error(
+          "Error getVerifycodeForResetPassword:",
+          error.response.data
+        );
         throw error.response.data;
       });
   },
@@ -340,7 +360,10 @@ export default {
       })
       .catch((error) => {
         // console.error("Error:", error);
-        console.error("Error checkVerifycodeForResetPassword:", error.response.data);
+        console.error(
+          "Error checkVerifycodeForResetPassword:",
+          error.response.data
+        );
         throw error.response.data;
       });
   },
@@ -359,7 +382,7 @@ export default {
       })
       .catch((error) => {
         console.error("Error resetPassword:", error.response.data);
-        throw error.response.data
+        throw error.response.data;
       });
   },
 
@@ -465,6 +488,7 @@ export default {
   async editFood({ state }, { data }) {
     // console.log("I am in: action->editFood");
     const config = {
+      params: { id: data.id },
       headers: {
         Authorization: `Bearer ${state.token}`,
         Accept: "application/json",
@@ -475,7 +499,6 @@ export default {
       .put(
         `${BASE_URL}food/editFood/`,
         {
-          id: data.id,
           request: parseInt(data.request, 10),
           eventDate: data.eventDate.replace("/", "-").replace("/", "-"),
           eventTime: data.eventTime,
@@ -693,6 +716,7 @@ export default {
     console.log(data.id);
     // console.log("I am in: action->editClothe");
     const config = {
+      // params: { id: data.id },
       headers: {
         Authorization: `Bearer ${state.token}`,
         Accept: "application/json",
@@ -821,6 +845,38 @@ export default {
       });
   },
 
+  async editMoneyForCharity({ state }, { data }) {
+    // console.log("I am in: action->editFood");
+    const config = {
+      params: { id: data.id },
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .put(
+        `${BASE_URL}money/editMoney/`,
+        {
+          name: data.name,
+          money_need: parseInt(data.moneyNeed, 10),
+          expireDate: data.expireDate.replace("/", "-").replace("/", "-"),
+          description: data.description,
+        },
+        config
+      )
+      .then((response) => {
+        let data = response.data;
+        console.log(`editMoney successfully! this is response: ${data}`);
+      })
+      .catch((error) => {
+        // console.error("Error:", error);
+        console.error("Error:", error.response.data);
+        throw error.response.data;
+      });
+  },
+
   async removeMoney({ state }, { id }) {
     // console.log("I am in: action->removeMoney");
     const config = {
@@ -896,7 +952,6 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        // console.error("Error fetching getNotificationsCharity:", error);
         console.error("Error:", error.response.data);
         throw error.response.data;
       });
@@ -918,7 +973,6 @@ export default {
         console.log(responseMessage);
       })
       .catch((error) => {
-        // console.error("Error removeNotification:", error);
         console.error("Error:", error.response.data);
         throw error.response.data;
       });
@@ -962,10 +1016,6 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        // console.error(
-        //   "Error fetching getNotificationsCharityForBenefactor:",
-        //   error
-        // );
         console.error("Error:", error.response.data);
         throw error.response.data;
       });
@@ -989,7 +1039,7 @@ export default {
         {
           old_password: data.oldPassword,
           new_password: data.newPassword,
-          repeatPassword: data.confirmNewPassword
+          repeatPassword: data.confirmNewPassword,
         },
         config
       )
@@ -1161,6 +1211,7 @@ export default {
 
   async donateMoney({ state, commit }, { data }) {
     // console.log("I am in: action->donateMoney");
+    console.log(data)
     const donateData = new FormData();
 
     donateData.append("money_collect", parseInt(data.moneyCollect, 10));
@@ -1188,6 +1239,40 @@ export default {
         // console.error("Error:", error);
         // throw error;
         console.error("Error:", error.response.data);
+        throw error.response.data;
+      });
+  },
+
+  async editMoneyForBenefactor({ state }, { data }) {
+    // console.log("I am in: action->editMoneyForBenefactor");
+    const editMoneyData = new FormData();
+
+    editMoneyData.append("money_collect", parseInt(data.moneyCollect, 10));
+    editMoneyData.append("receipt_text", data.receiptText);
+    editMoneyData.append("money", parseInt(data.id, 10));
+
+    if (data.receiptImage) {
+      editMoneyData.append("receipt_image", data.receiptImage);
+    }
+
+    const config = {
+      params: { id: data.id },
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    await axios
+      .put(`${BASE_URL}money/editDoner/`, editMoneyData, config)
+      .then((response) => {
+        let data = response.data;
+        console.log(
+          `editMoneyForBenefactor successfully! this is response: ${data}`
+        );
+      })
+      .catch((error) => {
+        console.error("Error editMoneyForBenefactor:", error.response.data);
         throw error.response.data;
       });
   },
@@ -1286,7 +1371,10 @@ export default {
         commit("setResponseData", responseMessage);
       })
       .catch((error) => {
-        console.error("Error getClothesCharityForBenefactor:", error.response.data);
+        console.error(
+          "Error getClothesCharityForBenefactor:",
+          error.response.data
+        );
         throw error.response.data;
       });
   },

@@ -127,13 +127,36 @@
                             </p>
                           </div>
 
-                          <a
-                            :style="{
-                              color: $vuetify.theme.currentTheme.thirdColor,
-                            }"
-                          @click="openReceiptDialog(money.receipt_image, money.receipt_text)"
-                            >مشاهده رسید واریز</a
-                          >
+                          <v-row>
+                            <v-col lg="6" md="6" sm="12" cols="12">
+                              <a
+                                :style="{
+                                  color: $vuetify.theme.currentTheme.thirdColor,
+                                }"
+                                @click="
+                                  openReceiptDialog(
+                                    money.receipt_image,
+                                    money.receipt_text
+                                  )
+                                "
+                                >مشاهده رسید واریز</a
+                              >
+                            </v-col>
+
+                            <v-col lg="6" md="6" sm="12" cols="12">
+                              <Button
+                                :block="!$vuetify.breakpoint.mdAndUp"
+                                dark
+                                small
+                                :color="$vuetify.theme.currentTheme.primary"
+                                input_value="ویرایش واریز"
+                                :class="{
+                                  'mt-3': !$vuetify.breakpoint.mdAndUp,
+                                }"
+                                @click="openEditMoneyDialog(money)"
+                              ></Button>
+                            </v-col>
+                          </v-row>
 
                           <div class="mt-4 mb-1">
                             <p
@@ -207,7 +230,7 @@
 
               <v-divider class="mb-5"></v-divider>
 
-              <p>رسید واریز خود را به صورت متنی با تصویری ارسال کنید:</p>
+              <p>رسید واریز خود را به صورت متنی یا تصویری ارسال کنید:</p>
 
               <label> رسید واریز متنی </label>
               <v-textarea
@@ -252,13 +275,89 @@
         </Dialog>
 
         <Dialog
+          :dialogOpen="editMoneyDialog"
+          @update:dialogOpen="updateEditMoneyDialog"
+          title="ویرایش واریز"
+        >
+          <v-form
+            @submit.prevent="onEdit"
+            slot="dialogText"
+            class="mb-n4"
+            ref="editReceipt"
+          >
+            <Input
+              outlined
+              dense
+              name="moneyCollect"
+              type="number"
+              v-model.trim="editFormData.moneyCollect"
+              labelTag
+              labelText="مبلغ اهدایی"
+              placeholder="مبلغ اهدایی"
+              hide_details
+              suffix="تومان"
+              class="mb-5"
+            />
+
+            <v-divider class="mb-5"></v-divider>
+
+            <p>رسید واریز خود را به صورت متنی یا تصویری ارسال کنید:</p>
+
+            <label> رسید واریز متنی </label>
+            <v-textarea
+              outlined
+              clearable
+              placeholder="رسید واریز خود را به صورت متنی در این قسمت وارد نمایید."
+              hide-details
+              clear-icon="mdi-close"
+              v-model="editFormData.receiptText"
+              @input="handleInputForEdit"
+              class="my-3"
+            ></v-textarea>
+
+            <div class="mt-5">
+              <a
+                :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
+                @click="changeLogo"
+                >{{ receiptFileText }}</a
+              >
+            </div>
+
+            <v-file-input
+              v-model="editFormData.receiptImage"
+              :rules="rules.fileInput"
+              outlined
+              color="#ffcc66"
+              accept="image/png, image/jpeg, image/jpg"
+              placeholder="رسید واریز خود را به صورت تصویری بارگذاری کنید"
+              prepend-icon=""
+              @change="handleReceiptChange"
+              hide-input
+              id="receiptFile"
+              class="my-2"
+            ></v-file-input>
+
+            <Button
+              input_value="ویرایش"
+              type="submit"
+              dark
+              block
+              large
+              class="mb-3 mt-5"
+            >
+            </Button>
+          </v-form>
+        </Dialog>
+
+        <Dialog
           :dialogOpen="receiptDialog"
           @update:dialogOpen="updateReceiptDialog"
           title="رسید واریز شما:"
         >
           <div slot="dialogText" class="mb-n4">
-            <v-img :src="receiptImage" v-if="receiptText == null"/>
-            <p v-html="receiptText"></p>
+            <v-img :src="receiptImage" v-if="receiptImage != null"/>
+            <p v-if="receiptText != null" class="mt-4">رسید متنی شما:</p>
+            <p v-html="receiptText" v-if="receiptText != null" class="mt-2"></p>
           </div>
         </Dialog>
       </v-main>
@@ -291,6 +390,15 @@ export default {
       },
       formattedReceiptText: "",
 
+      editFormData: {
+        id: 0,
+        moneyCollect: "",
+        receiptText: "",
+        receiptImage: null,
+      },
+
+      receiptFileText: "بارگزاری رسید تصویری",
+
       rules: {
         fileInput: [
           (value) => {
@@ -304,6 +412,8 @@ export default {
       },
 
       donateMoneyDialog: false,
+
+      editMoneyDialog: false,
 
       receiptDialog: false,
       receiptImage: null,
@@ -323,6 +433,7 @@ export default {
   },
 
   methods: {
+    //handle donateMoneyDialog
     openDonateMoneyDialog(id) {
       this.donateMoneyDialog = !this.donateMoneyDialog;
       this.formData.id = id;
@@ -334,19 +445,62 @@ export default {
       this.donateMoneyDialog = false;
     },
 
+    //handle editMoneyDialog
+    openEditMoneyDialog(passedMoney) {
+      const id = passedMoney.money.id;
+      if (passedMoney.receipt_image != null) {
+        this.receiptFileText = "تغییر رسید تصویری";
+      }
+      console.log(passedMoney);
+      this.editMoneyDialog = !this.editMoneyDialog;
+      const money = this.moniesList.find((item) => item.money.id == id);
+      console.log(money);
+      money.moneyCollect = money.money_collect.toString();
+      money.receiptText = money.receipt_text;
+      if (money.receiptText != null) {
+        money.receiptText = money.receiptText.replace(/<br>/g, "\n");
+      }
+      // money.receiptImage = money.receipt_image;
+      this.editFormData = { ...money, id };
+    },
+    updateEditMoneyDialog(newVal) {
+      this.editMoneyDialog = newVal;
+    },
+    closeEditMoneyDialog() {
+      this.editMoneyDialog = false;
+    },
+
+    //handle receiptDialog
     openReceiptDialog(image, text) {
       this.receiptDialog = !this.receiptDialog;
       this.receiptImage = image;
       this.receiptText = text;
-      console.log(this.receiptText == null)
-      console.log(image)
+      console.log(this.receiptText == null);
+      console.log(image);
     },
     updateReceiptDialog(newVal) {
       this.receiptDialog = newVal;
     },
 
     handleInput() {
-      this.formattedReceiptText = this.formData.receiptText.replace(/\n/g, '<br>');
+      this.formattedReceiptText = this.formData.receiptText.replace(
+        /\n/g,
+        "<br>"
+      );
+    },
+
+    handleInputForEdit(){
+      this.formattedReceiptText = this.editFormData.receiptText.replace(
+        /\n/g,
+        "<br>"
+      );
+    },
+
+    changeLogo() {
+      let receiptFile = document.getElementById("receiptFile");
+      if (receiptFile != null) {
+        receiptFile.click();
+      }
     },
 
     async getMoniesCharity() {
@@ -365,11 +519,10 @@ export default {
     },
 
     async onSubmit() {
-      this.formData.receiptText = this.formattedReceiptText
-      console.log(this.formData.receiptText)
+      this.formData.receiptText = this.formattedReceiptText;
+      // console.log(this.formData.receiptText);
       const data = this.formData;
-      console.log(this.formData);
-
+      // console.log(this.formData);
 
       try {
         this.alert = false;
@@ -392,6 +545,25 @@ export default {
       const file = event;
       if (file) {
         this.formData.receiptImage = file;
+      }
+    },
+
+    async onEdit() {
+      if (
+        this.formattedReceiptText != "" ||
+        this.formattedReceiptText != null
+      ) {
+        this.editFormData.receiptText = this.formattedReceiptText;
+      }
+      console.log(this.editFormData);
+      const data = this.editFormData;
+
+      try {
+        await this.$store.dispatch("editMoneyForBenefactor", { data });
+        this.getMoniesCharity();
+        this.closeEditMoneyDialog();
+      } catch (error) {
+        console.error("Error during onEdit money in component:", error);
       }
     },
   },

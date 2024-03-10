@@ -90,6 +90,14 @@
                             <b>{{ moneyCharity.description }}</b>
                           </small>
                         </div>
+
+                        <p class="ma-0">
+                          <small>
+                            <a @click="openEditMoneyDialog(moneyCharity.id)">
+                              ویرایش
+                            </a>
+                          </small>
+                        </p>
                       </div>
 
                       <v-row
@@ -97,6 +105,8 @@
                         slot="cardActions"
                         class="justify-space-between"
                       >
+                        
+                      
                         <Button
                           :block="!$vuetify.breakpoint.mdAndUp"
                           dark
@@ -283,13 +293,86 @@
         </Dialog>
 
         <Dialog
+          :dialogOpen="editMoneyDialog"
+          @update:dialogOpen="updateEditMoneyDialog"
+          title="ویرایش پویش مهربانی"
+        >
+          <v-form
+            @submit.prevent="onEdit"
+            slot="dialogText"
+            class="mb-n4"
+            ref="editMoney"
+          >
+            <Input
+              outlined
+              dense
+              name="name"
+              type="text"
+              v-model="editFormData.name"
+              labelTag
+              labelText="نام پویش نقدی"
+              placeholder="نام پویش نقدی را وارد نمایید"
+              hide_details
+              class="mb-5"
+            />
+
+            <Input
+              outlined
+              dense
+              name="request"
+              type="number"
+              v-model.trim="editFormData.moneyNeed"
+              labelTag
+              labelText="هزینه مورد نیاز"
+              placeholder="هزینه مورد نیاز را وارد نمایید"
+              hide_details
+              suffix="تومان"
+              class="mb-5"
+            />
+
+            <div class="mb-5">
+              <label> تاریخ پایان نیازمندی </label>
+              <div class="mt-2">
+                <custom-date-picker
+                  v-model="editFormData.expireDate"
+                  auto-submit
+                  placeholder="تاریخ پایان نیازمندی را انتخاب نمایید"
+                  :min="getDate"
+                />
+              </div>
+            </div>
+
+            <label> توضیحات </label>
+            <v-textarea
+              outlined
+              clearable
+              hide-details
+              clear-icon="mdi-close"
+              v-model="editFormData.description"
+              class="my-2"
+            ></v-textarea>
+
+            <Button
+              input_value="ویرایش"
+              type="submit"
+              dark
+              block
+              large
+              class="mb-3 mt-5"
+            >
+            </Button>
+          </v-form>
+        </Dialog>
+
+        <Dialog
           :dialogOpen="receiptDialog"
           @update:dialogOpen="updateReceiptDialog"
           :title="donerName"
         >
           <div slot="dialogText" class="mb-n4">
-            <v-img :src="receiptImage" v-if="receiptText == null" />
-            <p v-html="receiptText"></p>
+            <v-img :src="receiptImage" v-if="receiptImage != null"/>
+            <p v-if="receiptText != null" class="mt-4">رسید متنی:</p>
+            <p v-html="receiptText" v-if="receiptText != null" class="mt-2"></p>
           </div>
         </Dialog>
       </v-main>
@@ -324,6 +407,7 @@ export default {
 
       addMoneyDialog: false,
       benefactorListDialog: false,
+      editMoneyDialog: false,
 
       receiptDialog: false,
       receiptImage: null,
@@ -331,6 +415,14 @@ export default {
       donerName: "",
 
       formData: {
+        name: "",
+        moneyNeed: "",
+        expireDate: "",
+        description: "",
+      },
+
+      editFormData: {
+        id: 0,
         name: "",
         moneyNeed: "",
         expireDate: "",
@@ -359,6 +451,20 @@ export default {
     },
     closeAddMoneyDialog() {
       this.addMoneyDialog = false;
+    },
+
+    //handle editMoneyDialog
+    openEditMoneyDialog(id) {
+      this.editMoneyDialog = !this.editMoneyDialog;
+      const money = this.moniesCharity.find((item) => item.id == id);
+      money.moneyNeed = money.money_need.toString();
+      this.editFormData = { ...money, id };
+    },
+    updateEditMoneyDialog(newVal) {
+      this.editMoneyDialog = newVal;
+    },
+    closeEditMoneyDialog() {
+      this.editMoneyDialog = false;
     },
 
     //handle benefactorListDialog
@@ -440,6 +546,19 @@ export default {
         }, 3000);
       } catch (error) {
         console.error("Error during add Money in component:", error);
+      }
+    },
+
+    async onEdit() {
+      console.log(this.editFormData);
+      const data = this.editFormData;
+
+      try {
+        await this.$store.dispatch("editMoneyForCharity", { data });
+        this.getMoneyCharity();
+        this.closeEditMoneyDialog();
+      } catch (error) {
+        console.error("Error during onEdit money in component:", error);
       }
     },
   },

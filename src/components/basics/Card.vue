@@ -5,6 +5,7 @@
     class="rounded-lg pa-3"
     :elevation="elevation"
     :class="{ 'on-hover': hover, 'show-border': showBorder }"
+    @expandImage="expandImage"
   >
     <v-row no-gutters>
       <v-col
@@ -20,6 +21,7 @@
           max-height="100px"
           :src="getImagePath(cardImage)"
           class="mr-3"
+          @click="onClick"
         ></v-img>
       </v-col>
 
@@ -105,8 +107,12 @@ export default {
     },
 
     onClick() {
-      this.$emit("click");
+      this.$emit("expandImage");
     },
+
+    expandImage(){
+      this.$emit("expandImage")
+    }
   },
 
   computed: {

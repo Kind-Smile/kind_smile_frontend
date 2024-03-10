@@ -33,6 +33,7 @@
                       title
 
                       :cardImage="notification.picture"
+                      @expandImage="openExpandImageDialog(notification.picture)"
                     >
                       <div
                         slot="cardTitle"
@@ -56,6 +57,15 @@
             </Card>
           </v-col>
         </v-row>
+
+        <Dialog
+          :dialogOpen="expandImageDialog"
+          @update:dialogOpen="updateExpandImageDialog"
+        >
+          <div slot="dialogText" class="mb-n4">
+            <v-img :src="expandImage"/>
+          </div>
+        </Dialog>
       </v-main>
     </div>
   </div>
@@ -66,6 +76,7 @@ import AppBar from "@/components/basics/AppBar.vue";
 import Card from "@/components/basics/Card.vue";
 import Input from "@/components/basics/Input.vue";
 import Button from "@/components/basics/Button.vue";
+import Dialog from "@/components/basics/Dialog.vue"
 
 export default {
   name: "NotificationsCharity",
@@ -75,6 +86,9 @@ export default {
       id: 0,
       charityName: "",
       notificationsList: [],
+
+      expandImageDialog: false,
+      expandImage: null,
     };
   },
 
@@ -83,9 +97,18 @@ export default {
     Card,
     Input,
     Button,
+    Dialog,
   },
 
   methods: {
+    openExpandImageDialog(image) {
+      this.expandImageDialog = !this.expandImageDialog;
+      this.expandImage = image;
+    },
+    updateExpandImageDialog(newVal) {
+      this.expandImageDialog = newVal;
+    }, 
+
     async getNotificationsCharity() {
       const id = this.id;
       try {
