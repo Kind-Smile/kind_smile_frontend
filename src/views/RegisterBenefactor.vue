@@ -27,7 +27,7 @@
             >
           </v-toolbar>
 
-          <v-form @submit.prevent="onSubmit" ref="benefactorForm">
+          <v-form @submit.prevent="onSubmit" id="benefactorForm">
             <v-row class="mb-2 mt-4 justify-space-between">
               <v-col cols="12" sm="12" md="12" lg="6">
                 <Input
@@ -159,7 +159,7 @@
                   labelTag
                   labelText="رمز عبور"
                   placeholder="رمز عبور"
-                  hint="حداقل 8 کاراکتر و دارای حداقل یک حرف"
+                  hint="رمز شما باید شامل ترکیبی از اعداد و حروف با حداقل طول ۸ باشد"
                   class="mb-n2"
                 />
                 <!-- :rules="[rules.password]" -->
@@ -250,6 +250,8 @@ export default {
         password: "",
         confirmPassword: "",
       },
+
+      selectedState: "",
 
       charityList: [],
       selectedRecommender: "",

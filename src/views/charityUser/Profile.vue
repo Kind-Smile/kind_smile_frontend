@@ -49,12 +49,24 @@
             </v-col>
 
             <v-col cols="12" sm="12" md="6" lg="6">
-              <a class="ml-3" @click="openAddAgentDialogInProfile">
-                <small
-                  :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
-                  >افزودن نماینده جدید</small
-                >
-              </a>
+              <v-row>
+                <v-col cols="12" sm="12" md="12" lg="12">
+                  <a class="ml-3" @click="openAgentListDialog">
+                    <small
+                      :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
+                      >مشاهده لیست نماینده‌های خیریه</small
+                    >
+                  </a>
+                </v-col>
+                <v-col cols="12" sm="12" md="12" lg="12">
+                  <a class="ml-3" @click="openAddAgentDialogInProfile">
+                    <small
+                      :style="{ color: $vuetify.theme.currentTheme.thirdColor }"
+                      >افزودن نماینده جدید</small
+                    >
+                  </a>
+                </v-col>
+              </v-row>
             </v-col>
 
             <v-col cols="12" sm="12" md="12" lg="4">
@@ -296,7 +308,7 @@
                 labelTag
                 labelText="رمز عبور"
                 placeholder="رمز عبور"
-                hint="حداقل 8 کاراکتر"
+                hint="رمز شما باید شامل ترکیبی از اعداد و حروف با حداقل طول ۸ باشد"
                 class="mb-n2"
               />
             </v-col> -->
@@ -309,22 +321,18 @@
                 block
                 large
                 class="my-2"
-              >
-                <!-- :disabled="
+                :disabled="
                     this.formData.name === '' ||
                     this.formData.boss === '' ||
                     this.formData.phoneNumber === '' ||
-                    this.formData.selectedState === '' ||
-                    this.formData.other === '' ||
                     this.formData.officer === '' ||
                     this.formData.officerPhone === '' ||
                     this.formData.cardNumber === '' ||
                     this.formData.code === '' ||
-                    this.formData.logo === '' ||
-                    this.formData.institute === '' ||
-                    this.formData.address === '' ||
-                    this.formData.password === ''
-                  " -->
+                    this.formData.logo === null ||
+                    this.formData.institute === ''
+                  "
+              >
               </Button>
             </v-col>
           </v-row>
@@ -461,6 +469,49 @@
         </v-form>
       </div>
     </Dialog>
+
+    <Dialog
+      :dialogOpen="agentListDialog"
+      @update:dialogOpen="updateAgentListDialog"
+    >
+      <template v-for="agent in agentList" slot="dialogText">
+        <v-col lg="12" md="12" sm="12" cols="12" :key="agent.id">
+          <Card title text :image="false">
+            <div
+              slot="cardTitle"
+              :style="{ color: $vuetify.theme.currentTheme.primary }"
+              class="semiSmall bold mt-n5"
+            >
+              {{ agent.name }}
+            </div>
+
+            <div slot="cardText">
+              <v-row>
+                <v-col cols="12" sm="6" md="6" lg="6">
+                  <div class="mb-1">
+                    <p style="display: inline" class="ml-1">شماره تماس:</p>
+                    <p style="display: inline">
+                      <b>{{ agent.phoneNumber }}</b>
+                    </p>
+                  </div>
+                </v-col>
+                <v-col cols="12" sm="6" md="6" lg="6">
+                  <Button
+                    input_value="حذف"
+                    :color="$vuetify.theme.currentTheme.primary"
+                    type="button"
+                    small
+                    dark
+                    :block="!$vuetify.breakpoint.mdAndUp"
+                    @click="deleteAgent(agent.id)"
+                  ></Button>
+                </v-col>
+              </v-row>
+            </div>
+          </Card>
+        </v-col>
+      </template>
+    </Dialog>
   </div>
 </template>
 
@@ -470,6 +521,7 @@ import Button from "@/components/basics/Button.vue";
 import Input from "@/components/basics/Input.vue";
 import AppBar from "@/components/basics/AppBar.vue";
 import Dialog from "@/components/basics/Dialog.vue";
+import Card from "@/components/basics/Card.vue";
 import router from "@/router";
 
 export default {
@@ -481,6 +533,7 @@ export default {
     Input,
     AppBar,
     Dialog,
+    Card,
   },
 
   data() {
@@ -540,6 +593,11 @@ export default {
 
       //add agent
       addAgentInProfileDialog: false,
+
+      //agentList
+      agentListDialog: false,
+
+      agentList: [],
 
       addAgentFormData: {
         name: "",
@@ -638,6 +696,7 @@ export default {
       }
     },
 
+    //handle AddAgent
     openAddAgentDialogInProfile() {
       this.addAgentInProfileDialog = !this.addAgentInProfileDialog;
     },
@@ -646,6 +705,38 @@ export default {
     },
     closeAddAgentDialogInProfile() {
       this.addAgentInProfileDialog = false;
+    },
+
+    //handle AgentList
+    openAgentListDialog() {
+      this.getAgentList();
+      this.agentListDialog = !this.agentListDialog;
+    },
+    updateAgentListDialog(newVal) {
+      this.agentListDialog = newVal;
+    },
+    closeAgentListDialog() {
+      this.agentListDialog = false;
+    },
+
+    async getAgentList() {
+      try {
+        await this.$store.dispatch("getAgentList");
+        this.agentList = this.$store.state.responseData;
+        console.log(this.$store.state.responseData);
+        this.$store.commit("clearResponseData");
+      } catch (error) {
+        console.error("Error during getAgentList in component:", error);
+      }
+    },
+
+    async deleteAgent(id) {
+      try {
+        await this.$store.dispatch("deleteAgent", { id });
+        this.getAgentList();
+      } catch (error) {
+        console.error("Error during getAgentList in component:", error);
+      }
     },
 
     clickPolygon() {

@@ -359,6 +359,12 @@
               block
               large
               class="mb-3 mt-5"
+              :disabled="
+                this.editFormData.name === '' ||
+                this.editFormData.moneyNeed === '' ||
+                this.editFormData.expireDate === '' ||
+                this.editFormData.description === ''
+              "
             >
             </Button>
           </v-form>

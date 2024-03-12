@@ -72,7 +72,7 @@
                     labelTag
                     labelText="رمز عبور"
                     placeholder="رمز عبور"
-                    hint="حداقل 8 کاراکتر"
+                    hint="رمز شما باید شامل ترکیبی از اعداد و حروف با حداقل طول ۸ باشد"
                     class="mb-n2"
                   />
                 </v-col> -->
@@ -85,12 +85,8 @@
                 block
                 large
                 class="my-2"
+                :disabled="this.formData.name === ''"
               >
-                <!-- :disabled="
-                        this.formData.name === '' ||
-                        this.formData.phoneNumber === '' ||
-                        this.formData.password === ''
-                      " -->
               </Button>
             </v-col>
           </v-row>

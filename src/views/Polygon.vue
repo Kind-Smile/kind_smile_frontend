@@ -34,7 +34,7 @@
         v-else
         class="mb-1"
       >
-        نقاط مجاز شما برای نشانه‌گذاری تا سقف ۱۰ نقطه است.
+        نقاط مجاز شما برای نشانه‌گذاری حداقل ۳ و حداکثر ۱۰ نقطه است.
       </v-alert>
 
       <Button
@@ -51,7 +51,7 @@
         class="mb-4"
       ></Button>
 
-      <Button input_value="ثبت محدوده" @click="savePolygon"></Button>
+      <Button v-if="isCompleteRequiredPoints" input_value="ثبت محدوده" @click="savePolygon"></Button>
     </div>
   </div>
 </template>
@@ -102,6 +102,7 @@ export default {
       },
       points: [],
       isAllowToAddPoints: true,
+      isCompleteRequiredPoints: false,
     };
   },
 
@@ -161,6 +162,7 @@ export default {
   watch: {
     points(newPoints) {
       this.isAllowToAddPoints = newPoints.length < 10;
+      this.isCompleteRequiredPoints = newPoints.length >= 3;
     },
   },
 

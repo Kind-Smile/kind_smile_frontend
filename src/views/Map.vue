@@ -35,7 +35,26 @@
               readonly
             />
           </v-col>
-          <v-col lg="2" md="2" sm="2" cols="12" class="pa-2 py-auto">
+          <v-alert
+            dense
+            :color="
+              this.$hexToRgba(this.$vuetify.theme.currentTheme.thirdColor, 0.3)
+            "
+            type="error"
+            border="left"
+            v-if="this.markerCoordinates == null"
+            class="mb-1"
+          >
+          روی قسمتی از نقشه که نشان‌دهنده آدرس شما است، کلیک کنید تا مکان‌نما در آنجا نمایش داده شود.
+          </v-alert>
+          <v-col
+            lg="2"
+            md="2"
+            sm="2"
+            cols="12"
+            class="pa-2 py-auto"
+            v-else
+          >
             <Button input_value="ثبت" @click="saveMap" block></Button>
           </v-col>
         </v-row> </v-col
@@ -90,7 +109,7 @@ export default {
           );
 
           this.address = response.data.address;
-          console.log(this.address)
+          console.log(this.address);
         } catch (error) {
           console.error("Error fetching reverse geocoding data:", error);
         }
@@ -116,7 +135,7 @@ export default {
           );
 
           this.address = response.data.address;
-          console.log(this.address)
+          console.log(this.address);
         } catch (error) {
           console.error("Error fetching reverse geocoding data:", error);
         }
@@ -137,31 +156,39 @@ export default {
   watch: {
     address(newValue) {
       if (this.$store.state.benefactor.isClickAddress) {
-        console.log(`in watcher local address ${this.address}`)
+        console.log(`in watcher local address ${this.address}`);
 
         this.$updateBenefactorProperty("isSetAddress", true);
         this.$updateBenefactorProperty("address", newValue);
         this.$updateBenefactorProperty("latitude", this.coordinates[1]);
         this.$updateBenefactorProperty("longitude", this.coordinates[0]);
 
-        console.log(`in watcher vuex address ${this.$store.state.benefactor.address}`)
+        console.log(
+          `in watcher vuex address ${this.$store.state.benefactor.address}`
+        );
       } else if (this.$store.state.charity.isClickAddress) {
-        console.log(`in watcher local address ${this.address}`)
+        console.log(`in watcher local address ${this.address}`);
 
         this.$updateCharityProperty("isSetAddress", true);
         this.$updateCharityProperty("address", newValue);
         this.$updateCharityProperty("latitude", this.coordinates[1]);
         this.$updateCharityProperty("longitude", this.coordinates[0]);
 
-        console.log(`in watcher vuex address ${this.$store.state.charity.address}`)
+        console.log(
+          `in watcher vuex address ${this.$store.state.charity.address}`
+        );
       }
     },
   },
 
   created() {
-    console.log(`charity.isClickAddress ${this.$store.state.charity.isClickAddress}`)
-    console.log(`benefactor.isClickAddress ${this.$store.state.benefactor.isClickAddress}`)
-    
+    console.log(
+      `charity.isClickAddress ${this.$store.state.charity.isClickAddress}`
+    );
+    console.log(
+      `benefactor.isClickAddress ${this.$store.state.benefactor.isClickAddress}`
+    );
+
     this.coordinates = this.$route.query.coordinates;
     this.disable = this.$route.query.disable;
     if (

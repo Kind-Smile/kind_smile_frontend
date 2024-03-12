@@ -282,7 +282,7 @@
                   labelTag
                   labelText="رمز عبور"
                   placeholder="رمز عبور"
-                  hint="حداقل 8 کاراکتر"
+                  hint="رمز شما باید شامل ترکیبی از اعداد و حروف با حداقل طول ۸ باشد"
                   class="mb-n2"
                 />
                 <!-- :rules="[rules.password]" -->

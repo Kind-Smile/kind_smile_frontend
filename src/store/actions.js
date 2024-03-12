@@ -215,6 +215,49 @@ export default {
       });
   },
 
+  async getAgentList({ state, commit }) {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+
+    await axios
+      .get(`${BASE_URL}auth/agentList/`, config)
+      .then((response) => {
+        let responseMessage = response.data;
+        state.isLoading = false;
+        commit("setResponseData", responseMessage);
+      })
+      .catch((error) => {
+        console.error("Error fetching getAgentList:", error.response.data);
+        throw error.response.data;
+      });
+  },
+
+  async deleteAgent({ state }, { id }) {
+    // console.log("I am in: action->deleteAgent");
+    const config = {
+      data: { id },
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/json",
+      },
+    };
+    await axios
+      .delete(`${BASE_URL}auth/deleteAgent/`, config)
+      .then((response) => {
+        let responseMessage = response.data;
+        console.log(responseMessage);
+      })
+      .catch((error) => {
+        // console.error("Error deleteAgent:", error);
+        console.error("Error deleteAgent:", error.response.data);
+        throw error.response.data;
+      });
+  },
+
   async editBenefactorProfile({ state }, { data }) {
     // console.log("I am in: action->editBenefactorProfile");
     const config = {

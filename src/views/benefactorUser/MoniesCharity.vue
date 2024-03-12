@@ -196,7 +196,7 @@
         <Dialog
           :dialogOpen="donateMoneyDialog"
           @update:dialogOpen="updateDonateMoneyDialog"
-          title="برای ثبت مشارکت در این سفره، اطلاعات زیر را تکمیل نمایید:"
+          :title="donateMoneyText"
         >
           <div slot="dialogText" class="mb-n4">
             <v-alert
@@ -344,6 +344,11 @@
               block
               large
               class="mb-3 mt-5"
+              :disabled="
+                this.editFormData.moneyCollect === '' ||
+                (this.editFormData.receiptText === '' &&
+                  this.editFormData.receiptImage == null)
+              "
             >
             </Button>
           </v-form>
@@ -355,7 +360,7 @@
           title="رسید واریز شما:"
         >
           <div slot="dialogText" class="mb-n4">
-            <v-img :src="receiptImage" v-if="receiptImage != null"/>
+            <v-img :src="receiptImage" v-if="receiptImage != null" />
             <p v-if="receiptText != null" class="mt-4">رسید متنی شما:</p>
             <p v-html="receiptText" v-if="receiptText != null" class="mt-2"></p>
           </div>
@@ -398,6 +403,7 @@ export default {
       },
 
       receiptFileText: "بارگزاری رسید تصویری",
+      donateMoneyText: "",
 
       rules: {
         fileInput: [
@@ -489,7 +495,7 @@ export default {
       );
     },
 
-    handleInputForEdit(){
+    handleInputForEdit() {
       this.formattedReceiptText = this.editFormData.receiptText.replace(
         /\n/g,
         "<br>"
@@ -511,6 +517,10 @@ export default {
         if (this.moniesList.length > 0) {
           this.charityName = this.moniesList[0].money.charity.name;
           this.cardNumber = this.moniesList[0].money.charity.cardNumber;
+          this.donateMoneyText =
+            "برای ثبت مشارکت در این سفره، مبلغ مورد نظر خود را به شماره حساب خیریه به شماره: " +
+            this.cardNumber +
+            " واریز و موارد زیر را تکمیل نمایید:";
         }
         this.$store.commit("clearResponseData");
       } catch (error) {

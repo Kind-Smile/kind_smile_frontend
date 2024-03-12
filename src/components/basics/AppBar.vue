@@ -308,7 +308,7 @@ export default {
       if (this.$route.path !== "/register-benefactor") {
         router.push("/register-benefactor");
       }
-      if (this.$route.path === "/register-benefactor") {
+      else if (this.$route.path === "/register-benefactor") {
         router.go();
       } else {
         this.closeDialogOpen();
