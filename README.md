@@ -1,4 +1,4 @@
-# bachelor_project
+# labkhandemehr
 
 ## Project setup
 ```
