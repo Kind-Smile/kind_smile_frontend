@@ -355,7 +355,6 @@
             <Button
               input_value="ویرایش"
               type="submit"
-              dark
               block
               large
               class="mb-3 mt-5"

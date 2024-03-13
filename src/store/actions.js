@@ -239,7 +239,7 @@ export default {
   async deleteAgent({ state }, { id }) {
     // console.log("I am in: action->deleteAgent");
     const config = {
-      data: { id },
+      params: { id },
       headers: {
         Authorization: `Bearer ${state.token}`,
         Accept: "application/json",

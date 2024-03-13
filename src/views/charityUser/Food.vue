@@ -270,7 +270,6 @@
             <Button
               input_value="ثبت‌"
               type="submit"
-              dark
               block
               large
               class="mb-3 mt-5"

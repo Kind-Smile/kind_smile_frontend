@@ -503,7 +503,7 @@
                     small
                     dark
                     :block="!$vuetify.breakpoint.mdAndUp"
-                    @click="deleteAgent(agent.id)"
+                    @click="deleteAgent(agent)"
                   ></Button>
                 </v-col>
               </v-row>
@@ -730,7 +730,10 @@ export default {
       }
     },
 
-    async deleteAgent(id) {
+    async deleteAgent(agent) {
+      console.log(agent)
+      console.log(agent.id)
+      const id = agent.id
       try {
         await this.$store.dispatch("deleteAgent", { id });
         this.getAgentList();

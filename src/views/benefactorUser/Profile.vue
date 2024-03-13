@@ -119,9 +119,7 @@
                 block
                 large
                 class="my-2"
-                :disabled="
-                      this.formData.name === ''
-                    "
+                :disabled="this.formData.name === ''"
               >
               </Button>
             </v-col>
@@ -205,7 +203,7 @@ export default {
         this.$updateBenefactorProperty("isSetAddress", false);
         this.$updateBenefactorProperty("address", "");
 
-        this.submitForm = true
+        this.submitForm = true;
 
         this.getBenefactorProfile();
 
@@ -247,12 +245,13 @@ export default {
             this.coordinates[0] = this.$store.state.benefactor.longitude;
             this.coordinates[1] = this.$store.state.benefactor.latitude;
           }
-        } if (this.submitForm) {
+        }
+        if (this.submitForm) {
           this.$updateBenefactorProperty("address", this.formData.address);
           this.$updateBenefactorProperty("latitude", this.coordinates[1]);
           this.$updateBenefactorProperty("longitude", this.coordinates[0]);
-          
-          this.submitForm = false
+
+          this.submitForm = false;
         }
       } catch (error) {
         console.error("Error during getBenefactorProfile in component:", error);
