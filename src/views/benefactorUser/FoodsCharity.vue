@@ -29,7 +29,8 @@
                       :actions="
                         food.food_collect == null &&
                         food.food.isInside &&
-                        !food.food.isDone
+                        !food.food.isDone &&
+                        !food.food.isExpired
                       "
                       :image="false"
                       :cardColor="getFoodCardColors(food.food)"
@@ -106,6 +107,15 @@
                           </small>
                         </div>
 
+                        <div class="mt-3" v-if="food.food.isExpired">
+                          <small
+                            style="display: inline"
+                            class="ml-1 bold gray"
+                          >
+                            منقضی شده
+                          </small>
+                        </div>
+
                         <div v-if="food.food.isDone">
                           <div class="mt-3 mb-1">
                             <v-icon
@@ -178,7 +188,8 @@
                         v-if="
                           food.food_collect == null &&
                           food.food.isInside &&
-                          !food.food.isDone
+                          !food.food.isDone &&
+                          !food.food.isExpired
                         "
                       >
                         <Button

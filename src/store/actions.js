@@ -545,7 +545,7 @@ export default {
           request: parseInt(data.request, 10),
           eventDate: data.eventDate.replace("/", "-").replace("/", "-"),
           eventTime: data.eventTime,
-          agent: data.agent.id,
+          agent: data.agent,
           recreate: data.recreate,
         },
         config
@@ -773,7 +773,7 @@ export default {
           id: data.id,
           eventDate: data.eventDate.replace("/", "-").replace("/", "-"),
           eventTime: data.eventTime,
-          agent: data.agent.id,
+          agent: data.agent,
           recreate: data.recreate,
         },
         config
