@@ -32,9 +32,13 @@ export default {
       state.isAuthenticated = true;
       state.token = data.access;
       state.role = data.role;
+      state.recommenderId = data.recommenderId;
+      state.isPrivate = state.charitiesList.find(charity => charity.id === data.recommenderId);
 
       localStorage.setItem("token", data.access);
       localStorage.setItem("role", data.role);
+      localStorage.setItem("recommenderId", data.recommenderId);
+      localStorage.setItem("isPrivate", state.isPrivate);
 
       if (data.role == "User") {
         state.benefactorLat = data.completeData.latitude;
@@ -42,18 +46,20 @@ export default {
 
         localStorage.setItem("benefactorLat", data.completeData.latitude);
         localStorage.setItem("benefactorLng", data.completeData.longitude);
-      }
-
-      else  {
-        state.hasChangePass = data.completeData.hasChangePass
+      } else {
+        state.hasChangePass = data.completeData.hasChangePass;
         localStorage.setItem("hasChangePass", data.completeData.hasChangePass);
       }
     } else {
       state.isAuthenticated = false;
       state.token = "";
       state.role = "";
+      state.recommenderId = 0;
+      state.isPrivate = false
       localStorage.removeItem("token");
       localStorage.removeItem("role");
+      localStorage.removeItem("recommenderId");
+      localStorage.removeItem("isPrivate");
     }
   },
 
@@ -61,8 +67,12 @@ export default {
     state.isAuthenticated = false;
     state.token = "";
     state.role = "";
+    state.recommenderId = 0;
+    state.isPrivate = false
     localStorage.removeItem("token");
     localStorage.removeItem("role");
+    localStorage.removeItem("recommenderId");
+    localStorage.removeItem("isPrivate");
     localStorage.removeItem("benefactorLat");
     localStorage.removeItem("benefactorLng");
   },
@@ -70,26 +80,31 @@ export default {
   checkAuthState(state) {
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
+    const recommenderId = localStorage.getItem("recommenderId");
+    const isPrivate = localStorage.getItem("isPrivate");
+
 
     if (token) {
-      console.log(token)
+      console.log(token);
       state.isAuthenticated = true;
       state.token = token;
       state.role = role;
+      state.recommenderId = recommenderId;
+      state.isPrivate = isPrivate
 
       if (role == "User") {
         state.benefactorLat = localStorage.getItem("benefactorLat");
         state.benefactorLng = localStorage.getItem("benefactorLng");
-      }
-
-      else {
+      } else {
         state.hasChangePass = localStorage.getItem("hasChangePass");
-        console.log(state.hasChangePass)
+        console.log(state.hasChangePass);
       }
     } else {
       state.isAuthenticated = false;
       state.token = "";
       state.role = "";
+      state.recommenderId = 0;
+      state.isPrivate = false
     }
   },
 
@@ -110,12 +125,12 @@ export default {
     localStorage.setItem("hasChangePass", newstate);
   },
 
-  setSnackbar(state, newVal){
-    state.snackbar = newVal
+  setSnackbar(state, newVal) {
+    state.snackbar = newVal;
   },
 
-  snackbarMessage(state, newVal){
-    state.snackbarMessage = newVal
+  snackbarMessage(state, newVal) {
+    state.snackbarMessage = newVal;
   },
 
   setCharityAgentList(state, data) {

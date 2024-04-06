@@ -2,6 +2,8 @@ export default {
   isAuthenticated: false,
   token: "",
   role: "",
+  recommenderId: 0,
+  isPrivate: false,
 
   benefactorLng: 0.0,
   benefactorLat: 0.0,
@@ -270,5 +272,36 @@ export default {
     "لازانیا",
     "همبرگر",
     "سایر",
+  ],
+
+  charitiesList: [
+    {
+      id: 1,
+      isPrivate: true
+    },
+    // {
+    //   id: 2,
+    //   isPrivate: true
+    // },
+    // {
+    //   id: 3,
+    //   isPrivate: false
+    // },
+    // {
+    //   id: 4,
+    //   isPrivate: false
+    // },
+    // {
+    //   id: 5,
+    //   isPrivate: false
+    // },
+    // {
+    //   id: 14,
+    //   isPrivate: true
+    // },
+    {
+      id: 7,
+      isPrivate: true
+    },
   ],
 };

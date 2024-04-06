@@ -12,7 +12,7 @@
 
         <v-row v-else>
           <v-col lg="12" md="12" sm="12" cols="12">
-            <Card :cardColor="getCardColor" title text :image="false">
+            <Card :cardColor="getCardColor" title text :image="false" v-if="this.foodsList.length > 0">
               <div
                 slot="cardTitle"
                 :style="{ color: $vuetify.theme.currentTheme.primary }"
@@ -205,6 +205,13 @@
                 </template>
               </v-row>
             </Card>
+
+            <div v-else>
+              <p>
+                در حال حاضر برای این خیریه سفره مهربانی موجود نمی‌باشد.
+              </p>
+              <router-link to="/">بازگشت به صفحه اصلی</router-link>
+            </div>
           </v-col>
         </v-row>
 

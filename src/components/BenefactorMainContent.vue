@@ -179,6 +179,8 @@ export default {
     handleFood() {
       if (this.$store.state.token == "") {
         this.openNotAuthenticatedDialog();
+      } else if (this.$store.state.isPrivate){
+        router.push(`/foods-charity/${this.$store.state.recommenderId}`);
       } else {
         router.push(`/food-charities`);
       }
@@ -187,6 +189,8 @@ export default {
     handleClothe() {
       if (this.$store.state.token == "") {
         this.openNotAuthenticatedDialog();
+      } else if (this.$store.state.isPrivate){
+        router.push(`/clothes-charity/${this.$store.state.recommenderId}`);
       } else {
         router.push(`/clothe-charities`);
       }
@@ -195,6 +199,8 @@ export default {
     handleMoney() {
       if (this.$store.state.token == "") {
         this.openNotAuthenticatedDialog();
+      } else if (this.$store.state.isPrivate){
+        router.push(`/monies-charity/${this.$store.state.recommenderId}`);
       } else {
         router.push(`/money-charities`);
       }
@@ -203,6 +209,8 @@ export default {
     handleNotification() {
       if (this.$store.state.token == "") {
         this.openNotAuthenticatedDialog();
+      } else if (this.$store.state.isPrivate){
+        router.push(`/notifications-charity/${this.$store.state.recommenderId}`);
       } else {
         router.push(`/notification-charities`);
       }

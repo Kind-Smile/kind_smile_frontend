@@ -12,7 +12,7 @@
 
         <v-row v-else>
           <v-col lg="12" md="12" sm="12" cols="12">
-            <Card :cardColor="getCardColor" title text :image="false">
+            <Card :cardColor="getCardColor" title text :image="false" v-if="this.notificationsList.length > 0">
               <v-row
                 slot="cardTitle"
                 class="d-flex justify-space-between pb-5 px-5"
@@ -55,6 +55,13 @@
                 </template>
               </v-row>
             </Card>
+
+            <div v-else>
+              <p>
+                در حال حاضر برای این خیریه اخبار مهربانی موجود نمی‌باشد.
+              </p>
+              <router-link to="/">بازگشت به صفحه اصلی</router-link>
+            </div>
           </v-col>
         </v-row>
 

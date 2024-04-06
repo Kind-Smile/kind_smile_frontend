@@ -14,6 +14,7 @@ export default {
         commit("login", {
           access: responseMessage.access,
           role: responseMessage.role,
+          recommenderId: responseMessage.recommenderId,
           completeData: responseMessage,
         });
       })
@@ -64,6 +65,7 @@ export default {
         commit("login", {
           access: responseMessage.access,
           role: responseMessage.role,
+          recommenderId: responseMessage.recommenderId,
           completeData: responseMessage,
         });
         console.log(`registerBenefactor and login successfully!`);
