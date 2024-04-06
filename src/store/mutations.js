@@ -33,7 +33,7 @@ export default {
       state.token = data.access;
       state.role = data.role;
       state.recommenderId = data.recommenderId;
-      state.isPrivate = state.charitiesList.find(charity => charity.id === data.recommenderId);
+      state.isPrivate = state.charitiesList.find(charity => charity.id === data.recommenderId).isPrivate;
 
       localStorage.setItem("token", data.access);
       localStorage.setItem("role", data.role);

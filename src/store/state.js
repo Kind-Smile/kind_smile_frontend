@@ -276,31 +276,23 @@ export default {
 
   charitiesList: [
     {
-      id: 1,
+      id: 2,
       isPrivate: true
     },
-    // {
-    //   id: 2,
-    //   isPrivate: true
-    // },
-    // {
-    //   id: 3,
-    //   isPrivate: false
-    // },
-    // {
-    //   id: 4,
-    //   isPrivate: false
-    // },
-    // {
-    //   id: 5,
-    //   isPrivate: false
-    // },
-    // {
-    //   id: 14,
-    //   isPrivate: true
-    // },
     {
-      id: 7,
+      id: 3,
+      isPrivate: false
+    },
+    {
+      id: 4,
+      isPrivate: false
+    },
+    {
+      id: 5,
+      isPrivate: false
+    },
+    {
+      id: 14,
       isPrivate: true
     },
   ],

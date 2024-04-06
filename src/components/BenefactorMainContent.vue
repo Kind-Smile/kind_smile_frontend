@@ -216,5 +216,10 @@ export default {
       }
     },
   },
+
+  mounted() {
+    console.log(this.$store.state.recommenderId)
+    console.log(this.$store.state.isPrivate)
+  },
 };
 </script>
