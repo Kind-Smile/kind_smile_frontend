@@ -10,6 +10,7 @@ export default {
         password: data.password,
       })
       .then((response) => {
+        console.log("hello in login store action")
         let responseMessage = response.data;
         commit("login", {
           access: responseMessage.access,
@@ -19,6 +20,7 @@ export default {
         });
       })
       .catch((error) => {
+        console.log("bye in login store action")
         console.error("Error:", error.response.data.non_field_errors[0]);
         throw error.response.data.non_field_errors[0];
       });

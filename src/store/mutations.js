@@ -38,7 +38,7 @@ export default {
       localStorage.setItem("token", data.access);
       localStorage.setItem("role", data.role);
       localStorage.setItem("recommenderId", data.recommenderId);
-      localStorage.setItem("isPrivate", state.isPrivate);
+      localStorage.setItem("isPrivate", state.charitiesList.find(charity => charity.id === data.recommenderId).isPrivate);
 
       if (data.role == "User") {
         state.benefactorLat = data.completeData.latitude;

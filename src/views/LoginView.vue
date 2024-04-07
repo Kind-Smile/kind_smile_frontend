@@ -124,11 +124,11 @@ export default {
         
         this.$store.commit("setSnackbar", true);
         this.$store.commit("snackbarMessage", `ورود شما با موفقیت انجام شد.`);
+        router.push("/");
         setTimeout(() => {
           this.$store.commit('setSnackbar', false);
         }, 3000);
 
-        router.push("/");
       } catch (error) {
         this.alert = true;
         this.alertMessage = error

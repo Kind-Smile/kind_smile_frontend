@@ -228,8 +228,8 @@ export default {
       try {
         await this.$store.dispatch("getClothesCharityForBenefactor", { id });
         this.clothesList = this.$store.state.responseData;
-        console.log(this.clothesList[0].clothes.id);
         if (this.clothesList.length > 0) {
+          console.log(this.clothesList[0].clothes.id);
           this.charityName = this.clothesList[0].clothes.charity.name;
         }
         this.$store.commit("clearResponseData");

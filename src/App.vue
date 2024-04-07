@@ -27,7 +27,7 @@ export default {
 </script>
 
 <style>
-@import "./font.css?data=1234";
+@import "./font.css?data=v1";
 .app {
   font-family: "IranSanse" !important;
   height: 100%;
