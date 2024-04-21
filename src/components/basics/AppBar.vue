@@ -69,13 +69,26 @@
           </router-link>
         </div>
 
+        <div style="display: inline">
+          <router-link class="ml-3" to="/contact-us">
+            <small>ارتباط با ما</small>
+          </router-link>
+        </div>
+
         <a>
-            <div style="display: inline" @click="logoutHandler">
-              <v-icon :color="$vuetify.theme.currentTheme.text" size="22"
-                >mdi-logout-variant</v-icon
-              >
-            </div>
-          </a>
+          <div style="display: inline" @click="logoutHandler">
+            <v-icon :color="$vuetify.theme.currentTheme.text" size="22"
+              >mdi-logout-variant</v-icon
+            >
+          </div>
+        </a>
+
+        <v-snackbar bottom right :value="updateExists" :timeout="3000" color="primary">
+          نسخه جدید در دسترس است
+          <v-btn text @click="refreshApp" small>
+            به‌روزرسانی
+          </v-btn>
+        </v-snackbar>
       </div>
 
       <div v-else class="pt-3 mr-2 d-flex justify-between">
@@ -102,6 +115,23 @@
             <small>راهنمای کار با سامانه</small>
           </router-link>
         </div>
+
+        <div style="display: inline">
+          <router-link class="ml-3" to="/contact-us">
+            <small>ارتباط با ما</small>
+          </router-link>
+        </div>
+
+        <v-snackbar
+          bottom
+          right
+          :value="updateExists"
+          :timeout="3000"
+          color="primary"
+        >
+          نسخه جدید در دسترس است
+          <v-btn text @click="refreshApp" small> به‌روزرسانی </v-btn>
+        </v-snackbar>
 
         <!-- <div>
           <router-link class="ml-3" to="/register-charity">
@@ -208,6 +238,8 @@
 </template>
 
 <script>
+import update from "../../mixins/update";
+
 import Dialog from "@/components/basics/Dialog.vue";
 import Card from "@/components/basics/Card.vue";
 import Input from "@/components/basics/Input.vue";
@@ -238,6 +270,8 @@ export default {
       alertMessage: "",
     };
   },
+
+  mixins: [update],
 
   methods: {
     closeSnackbar() {
@@ -302,13 +336,16 @@ export default {
         "verificatedPhoneNumber",
         JSON.stringify(this.formData.phoneNumber)
       );
-      console.log(`appbarrrrr ${JSON.parse(localStorage.getItem("verificatedPhoneNumber"))}`)
+      console.log(
+        `appbarrrrr ${JSON.parse(
+          localStorage.getItem("verificatedPhoneNumber")
+        )}`
+      );
       const data = this.formData;
       this.$store.dispatch("checkVerifycode", { data });
       if (this.$route.path !== "/register-benefactor") {
         router.push("/register-benefactor");
-      }
-      else if (this.$route.path === "/register-benefactor") {
+      } else if (this.$route.path === "/register-benefactor") {
         router.go();
       } else {
         this.closeDialogOpen();

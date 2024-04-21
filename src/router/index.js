@@ -37,6 +37,7 @@ import RegisterBenefactor from "@/views/RegisterBenefactor.vue";
 import RegisterCharity from "@/views/RegisterCharity.vue";
 import ForgetPassword from "@/views/ForgetPasswordView.vue";
 import Guide from "@/views/Guide.vue";
+import ContactUs from "@/views/ContactUs.vue";
 
 //admin
 import ViewCharities from "@/views/Admin/ViewCharities.vue"
@@ -173,6 +174,12 @@ const routes = [
     path: "/guide",
     name: "guide",
     component: Guide,
+  },
+
+  {
+    path: "/contact-us",
+    name: "contact-us",
+    component: ContactUs,
   },
 
   {

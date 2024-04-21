@@ -46,7 +46,7 @@
                 :style="{ color: $vuetify.theme.currentTheme.primary }"
                 class="bold"
               >
-              هدیه مهربانی
+                هدیه مهربانی
               </div>
 
               <div slot="cardText" class="textColor">
@@ -123,16 +123,16 @@
       title="برای ادامه باید وارد سامانه شوید."
     >
       <div slot="dialogText" class="mb-n4 mt-2">
-          <Button
-            input_value="ورود"
-            type="button"
-            :color="this.$vuetify.theme.currentTheme.primary"
-            dark
-            block
-            large
-            to="/login"
-          >
-          </Button>
+        <Button
+          input_value="ورود"
+          type="button"
+          :color="this.$vuetify.theme.currentTheme.primary"
+          dark
+          block
+          large
+          to="/login"
+        >
+        </Button>
       </div>
     </Dialog>
   </v-main>
@@ -179,7 +179,7 @@ export default {
     handleFood() {
       if (this.$store.state.token == "") {
         this.openNotAuthenticatedDialog();
-      } else if (this.$store.state.isPrivate){
+      } else if (this.$store.state.isPrivate == 'true') {
         router.push(`/foods-charity/${this.$store.state.recommenderId}`);
       } else {
         router.push(`/food-charities`);
@@ -189,7 +189,7 @@ export default {
     handleClothe() {
       if (this.$store.state.token == "") {
         this.openNotAuthenticatedDialog();
-      } else if (this.$store.state.isPrivate){
+      } else if (this.$store.state.isPrivate == 'true') {
         router.push(`/clothes-charity/${this.$store.state.recommenderId}`);
       } else {
         router.push(`/clothe-charities`);
@@ -199,7 +199,7 @@ export default {
     handleMoney() {
       if (this.$store.state.token == "") {
         this.openNotAuthenticatedDialog();
-      } else if (this.$store.state.isPrivate){
+      } else if (this.$store.state.isPrivate == 'true') {
         router.push(`/monies-charity/${this.$store.state.recommenderId}`);
       } else {
         router.push(`/money-charities`);
@@ -209,8 +209,10 @@ export default {
     handleNotification() {
       if (this.$store.state.token == "") {
         this.openNotAuthenticatedDialog();
-      } else if (this.$store.state.isPrivate){
-        router.push(`/notifications-charity/${this.$store.state.recommenderId}`);
+      } else if (this.$store.state.isPrivate == 'true') {
+        router.push(
+          `/notifications-charity/${this.$store.state.recommenderId}`
+        );
       } else {
         router.push(`/notification-charities`);
       }
@@ -218,8 +220,8 @@ export default {
   },
 
   mounted() {
-    console.log(this.$store.state.recommenderId)
-    console.log(this.$store.state.isPrivate)
+    console.log(`store recommenderId: ${this.$store.state.recommenderId}`);
+    console.log(`store isPrivate: ${this.$store.state.isPrivate}`);
   },
 };
 </script>

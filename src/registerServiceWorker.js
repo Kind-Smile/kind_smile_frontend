@@ -2,10 +2,8 @@
 
 import { register } from "register-service-worker";
 
-const version = 'v2';
-
 if (process.env.NODE_ENV === "production") {
-  register(`${process.env.BASE_URL}service-worker-${version}.js`, {
+  register(`${process.env.BASE_URL}service-worker.js`, {
     ready() {
       console.log(
         "App is being served from cache by a service worker.\n" +
@@ -21,10 +19,11 @@ if (process.env.NODE_ENV === "production") {
     updatefound() {
       console.log("New content is downloading.");
     },
-    updated() {
+    updated(registration) {
       console.log("New content is available; please refresh.");
-      registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-      window.location.reload(true);
+      document.dispatchEvent(
+        new CustomEvent('swUpdated', { detail: registration })
+      )
     },
     offline() {
       console.log(

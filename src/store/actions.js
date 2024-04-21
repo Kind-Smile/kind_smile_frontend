@@ -763,7 +763,7 @@ export default {
     console.log(data.id);
     // console.log("I am in: action->editClothe");
     const config = {
-      // params: { id: data.id },
+      params: { id: data.id },
       headers: {
         Authorization: `Bearer ${state.token}`,
         Accept: "application/json",
@@ -774,7 +774,7 @@ export default {
       .put(
         `${BASE_URL}clothes/editClothes/`,
         {
-          id: data.id,
+          // id: data.id,
           eventDate: data.eventDate.replace("/", "-").replace("/", "-"),
           eventTime: data.eventTime,
           agent: data.agent,
