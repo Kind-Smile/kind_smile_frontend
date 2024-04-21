@@ -388,7 +388,7 @@ export default {
         if (!isInside || food.isExpired) {
           return this.$hexToRgba(this.$vuetify.theme.currentTheme.text, 0.15);
         }
-
+ 
         if (food.isDone && food.isAllCollected) {
           return this.$hexToRgba(
             this.$vuetify.theme.currentTheme.thirdColor,

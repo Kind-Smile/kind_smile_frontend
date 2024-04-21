@@ -12,7 +12,13 @@
 
         <v-row v-else>
           <v-col lg="12" md="12" sm="12" cols="12">
-            <Card :cardColor="getCardColor" title text :image="false" v-if="this.clothesList.length > 0">
+            <Card
+              :cardColor="getCardColor"
+              title
+              text
+              :image="false"
+              v-if="this.clothesList.length > 0"
+            >
               <div
                 slot="cardTitle"
                 :style="{ color: $vuetify.theme.currentTheme.primary }"
@@ -35,7 +41,10 @@
                     <Card
                       text
                       :actions="
-                        clothe.donateDate == null && clothe.clothes.isInside
+                        clothe.donateDate == null &&
+                        clothe.clothes.isInside &&
+                        !clothe.clothes.isDone &&
+                        !clothe.clothes.isExpired
                       "
                       :image="false"
                       :cardColor="getClotheCardColors(clothe.clothes)"
@@ -87,6 +96,12 @@
                           </small>
                         </div>
 
+                        <div class="mt-3" v-if="clothe.clothes.isExpired">
+                          <small style="display: inline" class="ml-1 bold gray">
+                            منقضی شده
+                          </small>
+                        </div>
+
                         <div v-if="clothe.donateDate != null">
                           <v-divider class="my-3"></v-divider>
 
@@ -127,7 +142,10 @@
                         slot="cardActions"
                         class="justify-end px-4 pt-5 pb-3"
                         v-if="
-                          clothe.donateDate == null && clothe.clothes.isInside
+                          clothe.donateDate == null &&
+                          clothe.clothes.isInside &&
+                          !clothe.clothes.isExpired &&
+                          !clothe.clothes.isDone
                         "
                       >
                         <Button
@@ -145,9 +163,7 @@
             </Card>
 
             <div v-else>
-              <p>
-                در حال حاضر برای این خیریه هدیه مهربانی موجود نمی‌باشد.
-              </p>
+              <p>در حال حاضر برای این خیریه هدیه مهربانی موجود نمی‌باشد.</p>
               <router-link to="/">بازگشت به صفحه اصلی</router-link>
             </div>
           </v-col>
@@ -224,7 +240,7 @@ export default {
     },
 
     async getClothesCharity() {
-      const id = this.id; 
+      const id = this.id;
       try {
         await this.$store.dispatch("getClothesCharityForBenefactor", { id });
         this.clothesList = this.$store.state.responseData;
@@ -284,7 +300,7 @@ export default {
 
         clothe.isInside = isInside;
 
-        if (!isInside) {
+        if (!isInside || clothe.isExpired) {
           return this.$hexToRgba(this.$vuetify.theme.currentTheme.text, 0.15);
         }
 
